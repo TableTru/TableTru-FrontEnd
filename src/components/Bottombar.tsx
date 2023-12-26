@@ -7,50 +7,37 @@ import HomeIcon from '@mui/icons-material/Home';
 import HistoryIcon from '@mui/icons-material/History';
 import PersonIcon from '@mui/icons-material/Person';
 import {NextLinkComposed} from '@/components/Link';
-
-
-
+import Link from 'next/link';
 
 export default function Bottombar() {
-    
-
-    const [value, setValue] = React.useState('recents');
-  
+    const [value, setValue] = React.useState("home");
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-      setValue(newValue);
+        setValue(newValue);
     };
-  
     return (
     <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-      <BottomNavigation className="w-full" value={value} onChange={handleChange}>
+      <BottomNavigation
+          showLabels
+          className="w-full"
+          onChange={handleChange}
+      >
         <BottomNavigationAction
-          component={NextLinkComposed}
-          to={
-            {
-                pathname:'/'
-            }
-          }
-          label="หน้าแรก"
-          value="Home"
-          icon={<HomeIcon />
-        }
-        />
+            LinkComponent={Link}
+            href={"/"}
+            label="หน้าแรก"
+            icon={<HomeIcon />}
+            />
         <BottomNavigationAction
+          LinkComponent={Link}
+          href={"/activity"}
           label="คำสั่งซื้อ"
-          value="Activite"
           icon={<HistoryIcon />}
         />
         <BottomNavigationAction
-            component={NextLinkComposed}
-                to={
-                    {
-                        pathname:'/login'
-                    }
-                }
-          label="โปรไฟล์"
-          value="Profile"
-          icon={<PersonIcon />}
-        />
+            LinkComponent={Link}
+            href={"/login"}
+            label="โปรไฟล์"
+            icon={<PersonIcon />}/>
       </BottomNavigation >
       </Paper>
     );
