@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
-import {getCategory, getTest} from '../../services/category.service'
-import { Button } from '@mui/material'
+import {getCategory, getTest, createCategory} from '../../services/category.service'
+import { Button, Input } from '@mui/material'
 
 interface Category {
     id: number
@@ -11,15 +11,10 @@ interface Category {
     updateAt: Date
 }
 
-interface TestData {
-    id: number
-    name: string
-    detail: string
-}
-
 export default function CategoryTest() {
     const [categoryData, setCategoryData] = useState<Category[]>([]);
     const [testData, setTestData] = useState<any>([])
+    const [value, setValue] = useState<any>([]);
 
     const fetchData = async () => {
         const category = await getCategory()
@@ -29,11 +24,25 @@ export default function CategoryTest() {
         setTestData(test)
     }
 
+    const postCategory = async () => {
+        const categoryObj = {
+            category_name: value
+        }
+        const res = await createCategory(categoryObj)
+        // console.log(categoryObj);
+    }
+
     const onClick = () => {
+        fetchData()
         console.log(testData);
         console.log(categoryData);
-        
     }
+
+    const handleChange = (event: { target: { value: any } }) => {
+        setValue(event.target.value);
+        console.log(value);
+        
+      };
 
     useEffect(() => {
         fetchData()
@@ -42,8 +51,12 @@ export default function CategoryTest() {
 
     return (
         <div className='test'>
-            <h1>page2</h1>
+            <h1>Get Test</h1>
             <Button onClick={onClick}>Test</Button>
+
+            <h1>Post Test</h1>
+            <Input value={value} onChange={handleChange}></Input>
+            <Button onClick={postCategory}>PostCategory</Button>
         </div>
     )
 }
