@@ -9,6 +9,9 @@ import Typography from '@mui/material/Typography';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
 
 export default function ListCard() {
   const theme = useTheme();
@@ -34,6 +37,9 @@ export default function ListCard() {
           <IconButton aria-label="next">
             {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
           </IconButton>
+            <Stack direction="row" spacing={1}>
+              <Chip label="Chip Filled" />
+            </Stack>
         </Box>
       </Box>
       <CardMedia

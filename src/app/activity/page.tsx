@@ -6,7 +6,6 @@ function Activity() {
     return (
         <>
             <Appbar />
-            <h1>Activity</h1>
                 <TabSelect/>
             <BottomNavigationbar />
         </>

@@ -7,9 +7,8 @@ function PromoCode() {
   return (
     <>
       <Appbar />
-      <Box>
+        <BackgroundCard/>
         <ListCode />
-      </Box>
     </>
   );
 }
