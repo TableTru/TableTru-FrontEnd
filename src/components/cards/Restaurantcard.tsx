@@ -17,6 +17,10 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
+import { CardActionArea } from '@mui/material';
+import { useRouter,useParams } from 'next/navigation';
+import { useState } from 'react';
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -32,6 +36,22 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
+//list Card Routing
+const products = [
+  {
+    id: "1",
+    name: "Product 1"
+  },
+  {
+    id: "2",
+    name: "Product 2"
+  },
+  {
+    id: "3",
+    name: "Product 3"
+  }
+];
+
 export default function Restaurantcard() {
   const [expanded, setExpanded] = React.useState(false);
 
@@ -41,27 +61,29 @@ export default function Restaurantcard() {
 
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        component="img"
-        height="194"
-        image="./images/Wineconnection.jpg"
-        alt="Paella dish"
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the mussels,
-          if you like.
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-      </CardActions>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="194"
+          image="./images/Wineconnection.jpg"
+          alt="Paella dish"
+        />
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            This impressive paella is a perfect party dish and a fun meal to cook
+            together with your guests. Add 1 cup of frozen peas along with the mussels,
+            if you like.
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="share">
+            <ShareIcon />
+          </IconButton>
+        </CardActions>
+      </CardActionArea>
     </Card>
   );
 }

@@ -11,7 +11,7 @@ import Historical from "@/components/activity/Historical";
 
 
 
-export default function LabTabs() {
+export default function TabSelect() {
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -23,8 +23,8 @@ export default function LabTabs() {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange}  textColor="primary" indicatorColor="primary" centered aria-label="lab API tabs example">
-            <Tab label="Item One" value="1" />
-            <Tab label="Item Two" value="2" />
+            <Tab label="Ongoing" value="1" />
+            <Tab label="Historical" value="2" />
           </TabList>
 
         </Box>
