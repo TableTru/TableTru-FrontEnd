@@ -3,22 +3,19 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
+
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+
 
 import { CardActionArea } from '@mui/material';
 import { useRouter,useParams } from 'next/navigation';
+import Link from 'next/link'
 import { useState } from 'react';
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -52,15 +49,15 @@ const products = [
   }
 ];
 
-export default function Restaurantcard() {
+export default function Restaurantcard({products}) {
   const [expanded, setExpanded] = React.useState(false);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
   return (
     <Card sx={{ maxWidth: 345 }}>
+      <Link href={`/products/${products}`}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -84,6 +81,7 @@ export default function Restaurantcard() {
           </IconButton>
         </CardActions>
       </CardActionArea>
+      </Link>
     </Card>
   );
 }
