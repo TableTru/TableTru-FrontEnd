@@ -1,25 +1,28 @@
 import * as React from 'react';
 import Checkbox from '@mui/material/Checkbox';
+
 import FormGroup from '@mui/material/FormGroup';
-import DeleteIcon from '@mui/icons-material/Delete';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import IconButton from '@mui/material/IconButton';
-const IconBottonSelect = () => {
+
+
+const MyLocation = () => {
     return (
         <>
             <FormControl component="fieldset">
-                <FormLabel component="legend">Label placement</FormLabel>
                 <FormGroup aria-label="position" row>
             <FormControlLabel
-                value="bottom"
+                value="end"
                 control={
-                <IconButton aria-label="delete" color="primary">
-                    <DeleteIcon />
+                <IconButton aria-label="locationOn" color="primary">
+                    <LocationOnIcon fontSize="large" />
                 </IconButton>}
-                label="Bottom"
-                labelPlacement="bottom"
+                label="MyLocation"
+                labelPlacement="end"
             />
                 </FormGroup>
             </FormControl>
@@ -27,4 +30,4 @@ const IconBottonSelect = () => {
     );
 };
 
-export default IconBottonSelect;
+export default MyLocation;

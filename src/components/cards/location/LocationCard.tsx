@@ -5,35 +5,32 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import NextImage from "next/image";
 
-
-
-
-const CategoryCard = () => {
+const LocationCard = () => {
 
     const list = [
         {
-            title: "ไทย",
-            img:"https://images.unsplash.com/photo-1554054204-b2f70b09d031?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            title: "สีลม",
+            img:"https://cdn-images.prod.thinkofliving.com/wp-content/uploads/1/2021/11/03150807/Silom_Skyline-1.jpg"
         },
         {
-            title: "นานาชาติ",
-            img:"https://images.unsplash.com/photo-1485921325833-c519f76c4927?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            title: "สาทร",
+            img:"https://app01.bhirajburi.co.th/uploads/community_1675147926372_%E0%B8%AA%E0%B8%B2%E0%B8%97%E0%B8%A3%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%99%E0%B8%A8%E0%B8%B9%E0%B8%99%E0%B8%A2%E0%B9%8C%E0%B8%81%E0%B8%A5%E0%B8%B2%E0%B8%87%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%B4%E0%B8%88%20(5).png"
         },
         {
-            title: "ญิ่ปุ่น",
-            img:"https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            title: "พร้อมพงษ์",
+            img:"https://park.co.th/wp-content/uploads/2020/03/rsz_shutterstock_788969065-768x512.jpg"
         },
         {
-            title: "จีน",
-            img:"https://images.unsplash.com/photo-1544601284-7fe39c93d4d4?q=80&w=1654&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            title: "ราชเทวี",
+            img:"https://origin.co.th/wp-content/uploads/2019/08/light-rails-459064_1920-696x464.jpg"
         },
         {
-            title: "อิตาเลี่ยน",
-            img:"https://images.unsplash.com/photo-1627042633145-b780d842ba45?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            title: "ห้าแยกลาดพร้าว",
+            img:"https://static.estopolis.com/article/591e58ce15f02071ef23a882_591e81b315f02071ef23a8c9.jpg"
         },
         {
-            title: "ฟิวชั่น",
-            img:"https://api2.krua.co/wp-content/uploads/2022/06/ArticlePic_1670x1095-02-8-734x1024.jpg"
+            title: "อโศก",
+            img:"https://cdn-cms.pgimgs.com/areainsider/2019/05/Asoke_09.jpg"
         },
 
     ];
@@ -55,6 +52,7 @@ const CategoryCard = () => {
                             <CardBody className="overflow-visible p-0">
                             <Image
                                 isBlurred
+                                removeWrapper
                                 alt={item.title}
                                 className="z-0 w-full h-full object-cover"
                                 src={item.img}
@@ -68,4 +66,4 @@ const CategoryCard = () => {
         </>
     );
 };
-export default CategoryCard;
+export default LocationCard;
