@@ -1,5 +1,5 @@
-import RestaurantCard from "@/components/cards/Restaurantcard.tsx"
-import Appbar from "@/components/Appbar.tsx"
+import RestaurantCard from "@/components/cards/Restaurantcard"
+import Appbar from "@/components/Appbar"
 const FoodDetail = () => {
     return (
         <>

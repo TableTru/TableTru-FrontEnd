@@ -29,19 +29,19 @@ export default function Home() {
           </h1>
           <CategoriesScrollCards />
         </div>
-        <div className="flex flex-col bg-white m-auto p-auto">
-                    <h1 className="flex py-5 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-4xl text-gray-800">
+        <div className="flex bg-white m-auto p-auto">
+                    <h1 className="flex py-5 lg:px-20 md:px-20 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-4xl text-gray-800">
                         ที่อยู่
                     </h1>
                     {/* <Button
                       color="primary"
-                      className={"bg-red-700 w-96"}
-                      onPress={() => router.push("/products")}
+                      className={"bg-red-700"}
+                      onPress={() => router.push("/products/locarions")}
                       >
                     ดูทั้งหมด
                     </Button> */}
-          <LocationScrollCards />
-        </div> 
+            </div>
+        <LocationScrollCards />
         
         <div className="flex flex-col bg-white m-auto p-auto">
           <h1 className="flex py-4 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-4xl text-gray-800">
