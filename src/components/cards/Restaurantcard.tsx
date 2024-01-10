@@ -49,8 +49,8 @@ const products = [
   }
 ];
 
-export default function Restaurantcard({products}) {
-  const [expanded, setExpanded] = React.useState(false);
+export default function Restaurantcard() {
+  const [expanded, setExpanded] = useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
