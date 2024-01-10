@@ -13,7 +13,7 @@ export const getTest = async () => {
 
 export const getCategory = async () => {
   return await axios.get(url + '/categories/').then((res: AxiosResponse) => {
-    return res.data.data;
+    return res.data.data.rows;
   }).catch((err: any) => {
     catchError(err, null, "getCategory");
     return [];
