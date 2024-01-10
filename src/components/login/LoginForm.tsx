@@ -49,7 +49,7 @@ export default function SignIn() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <div className="bg-zinc-50 my-8">
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -70,7 +70,7 @@ export default function SignIn() {
             component="form"
             onSubmit={handleSubmit}
             noValidate
-            sx={{ mt: 1 }}
+            sx={{ mt: 1}}
           >
             <TextField
               margin="normal"
@@ -98,7 +98,7 @@ export default function SignIn() {
             />
             <Button
               component={NextLinkComposed}
-              to={ { pathname: '/',} }
+              to={{ pathname: "/" }}
               type="submit"
               fullWidth
               variant="contained"
@@ -122,6 +122,6 @@ export default function SignIn() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-    </ThemeProvider>
+    </div>
   );
 }
