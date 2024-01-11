@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Appbar from "@/components/Appbar";
 import BottomNavigationbar from "@/components/Bottombar";
@@ -52,14 +53,7 @@ export default function Home() {
             className="w-fit flex item-center justify-around center mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center gap-y-20 gap-x-14 mt-10 mb-5"
           >
             <RestaurantCard />
-            <RestaurantCard />
-            <RestaurantCard />
-            <RestaurantCard />
-            <RestaurantCard />
-            <RestaurantCard />
-            <RestaurantCard />
-            <RestaurantCard />
-            <RestaurantCard />
+
           </section>
           <div className="flex item-center justify-center gap-4 py-8">
             <Button
