@@ -37,11 +37,14 @@ import { getStore } from '@/services/store.service'
 interface Store {
   store_id: number
   category_id: number
+  location_id: number
   store_name: string
   store_description: string
   store_menu_image: string
   table_booking: number
-  SumRating: number
+  sum_rating: number
+  latitude: number
+  longitude: number
   open_time: Date
   close_time: Date
   createAt: Date
@@ -57,18 +60,18 @@ export default function Restaurantcard() {
   // };
 
   const fetchData = async () => {
-    const storeData = []
+    const storeArray = []
     const data = await getStore()
     console.log(data);
 
     if (data) {
       const stores = data
       for (const storeObj of stores) {
-        storeData.push(storeObj)
+        storeArray.push(storeObj)
       }
     }
-    setStoreData(storeData)
-    console.log(storeData);
+    setStoreData(storeArray)
+    console.log(storeArray);
   }
 
 
