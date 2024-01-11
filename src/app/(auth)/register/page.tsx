@@ -3,7 +3,10 @@ import RegisterForm from "@/components/login/RegisterForm"
 
 const App = () => {
     return (
-        <RegisterForm />
+        <div className="min-h-screen">
+            <RegisterForm />
+        </div>
+
     );
 
 }

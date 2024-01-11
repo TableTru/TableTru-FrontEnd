@@ -4,8 +4,9 @@ import LoginForm from '@/components/login/LoginForm'
 function App() {
     return (
         <>
+        <div className="bg-zinc-50 min-h-full">
             <LoginForm />
-            <BottomNavigationbar />
+        </div>
         </>
     );
 

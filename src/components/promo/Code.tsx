@@ -1,26 +1,47 @@
-import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import CommentIcon from '@mui/icons-material/Comment';
-import IconButton from '@mui/material/IconButton';
+"use client";
+import React, { useState } from "react";
+import { Card, CardHeader, CardBody, CardFooter, Avatar, Button } from "@nextui-org/react";
 
-export default function Component() {
+export default function App() {
+    const [isFollowed, setIsFollowed] = React.useState(false);
+
     return (
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            {[1, 2, 3].map((value) => (
-                <ListItem
-                    key={value}
-                    disableGutters
-                    secondaryAction={
-                        <IconButton aria-label="comment">
-                            <CommentIcon />
-                        </IconButton>
-                    }
-                >
-                    <ListItemText primary={`Line item ${value}`} />
-                </ListItem>
-            ))}
-        </List>
+        <>
+            <div className="flex flex-col items-center justify-center">
+                <Card className="max-w-[340px]">
+                    <CardHeader className="justify-between">
+                        <div className="flex gap-5">
+                            <Avatar isBordered radius="full" size="md" src="/avatars/avatar-1.png" />
+                            <div className="flex flex-col gap-1 items-start justify-center">
+                                <h4 className="text-small font-semibold leading-none text-default-600">Zoey Lang</h4>
+                                <h5 className="text-small tracking-tight text-default-400">@zoeylang</h5>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardBody className="px-3 py-0 text-small text-default-400">
+                        <p>
+                            Frontend developer and UI/UX enthusiast. Join me on this coding adventure!
+                        </p>
+                        <span className="pt-2">
+                            #FrontendWithZoey
+                            <span className="py-2" aria-label="computer" role="img">
+                                💻
+                            </span>
+                        </span>
+                    </CardBody>
+                    <CardFooter className="gap-3">
+                        <Button
+                            className={isFollowed ? "bg-transparent cursor-not-allowed text-foreground border-default-200" : "bg-red-700 text-white"}
+                            radius="full"
+                            size="sm"
+                            variant={isFollowed ? "bordered" : "solid"}
+                            onPress={() => setIsFollowed(!isFollowed)} 
+                        >
+                            {isFollowed ? "เก็บโค้ต" : "เก็บโค้ต"}
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </div>
+        </>
     );
 }
