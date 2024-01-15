@@ -13,12 +13,27 @@ import Link from "@mui/material/Link";
 import { Button, TextField, Container, Paper, Typography } from '@mui/material';
 import { styled } from "@mui/material/styles";
 
+import { getLoginUser } from '@/utills/auth'
+import { useRouter } from "next/router";
+
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     username: '',
-    email: '',
     password: '',
   });
+
+  const Login = async () => {
+    if (formData.username != '' || formData.username != '') {
+      const user = await getLoginUser(formData)
+      if (user) {
+        localStorage.setItem('userData', JSON.stringify(user));
+        console.log("login pass " + user.username);
+        window.location.replace('/')
+      } else {
+        console.log("username or password is incorect");
+      }
+    }
+  }
 
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
@@ -31,6 +46,7 @@ export default function LoginForm() {
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
+    Login()
   };
 
   return (
@@ -49,12 +65,12 @@ export default function LoginForm() {
           <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: 1 }}>
             <TextField
               fullWidth
-              label="Email"
+              label="Username"
               variant="outlined"
               margin="normal"
-              name="email"
-              type="email"
-              value={formData.email}
+              name="username"
+              type="username"
+              value={formData.username}
               onChange={handleChange}
               required
             />
@@ -69,24 +85,24 @@ export default function LoginForm() {
               onChange={handleChange}
               required
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>
           </form>
 
           <Grid container>
-            <Grid item xs>
+            {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
               <Link href="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {"Sign Up"}
               </Link>
             </Grid>
           </Grid>
