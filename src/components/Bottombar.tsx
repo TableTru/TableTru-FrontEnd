@@ -6,16 +6,25 @@ import Paper from '@mui/material/Paper';
 import HomeIcon from '@mui/icons-material/Home';
 import HistoryIcon from '@mui/icons-material/History';
 import PersonIcon from '@mui/icons-material/Person';
-import { NextLinkComposed } from '@/components/Link';
 import Link from 'next/link';
-import Home from '@/app/page';
 
 export default function Bottombar() {
   const [value, setValue] = useState("home");
+  const [profilePath, setProfilePath] = useState("login");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const checkLoginStatus = () => {
+    const userData = localStorage.getItem("userData")
+    if(userData){
+      setProfilePath("profile")
+    }
+  }
+  useEffect(() => {
+    checkLoginStatus()
+  },[])
 
   return (
     <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
@@ -41,7 +50,7 @@ export default function Bottombar() {
         />
         <BottomNavigationAction
           LinkComponent={Link}
-          href={"/profile"}
+          href={`/${profilePath}`}
           value={"profile"}
           label="โปรไฟล์"
           icon={<PersonIcon />} />
