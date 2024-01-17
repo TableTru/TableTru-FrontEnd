@@ -49,6 +49,11 @@ export default function ProfileCard() {
         },
     ];
 
+    const logout = () => {
+        localStorage.removeItem('userData');
+        // window.location.replace('/')
+    }
+
     return (
         <ThemeProvider theme={createTheme()}>
             <Container component="main" maxWidth="xs">
@@ -88,10 +93,15 @@ export default function ProfileCard() {
                         marginTop: 2,
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'left',
                     }}
                 >
-                    <Button variant="outlined">แก้ไขโปรไฟล์</Button>
+                    <Link href="/profile/edit" sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}>
+                        <Button variant="outlined">แก้ไขโปรไฟล์</Button>
+                    </Link>
+                    
                 </Box>
 
                 <Box
@@ -129,9 +139,21 @@ export default function ProfileCard() {
                         </List>
                     ))}
 
-                    <Button variant="outlined" sx={{ marginBottom: 2 }}>ลงทะเบียนร้านค้า</Button>
-                    <Button variant="contained" className={"bg-red-700"} color="error" sx={{ marginBottom: 2 }}>Logout</Button>
-
+                    <Link href="/profile/edit" sx={{
+                        marginBottom: 2,
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }}>
+                        <Button variant="outlined">ลงทะเบียนร้านค้า</Button>
+                    </Link>
+                    <Link href="/" sx={{
+                        marginBottom: 2,
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }}>
+                        <Button variant="contained" className={"bg-red-700"} color="error" sx={{ marginBottom: 2 }} onClick={logout}>Logout</Button>
+                    </Link>
+                    
                 </Box>
 
             </Container>
