@@ -1,5 +1,7 @@
 "use client";
 
+import ProfileCard from "@/components/profile/ProfileCard";
+import EditProfileCard from '@/components/profile/EditProfileCard'
 import React, { useEffect, useState } from "react";
 
 export default function Profile() {
@@ -10,7 +12,7 @@ export default function Profile() {
     return (
       <>
         <div>
-          <h1>หน้า Profile จ้า</h1>
+          <ProfileCard/>
         </div>
       </>
     );

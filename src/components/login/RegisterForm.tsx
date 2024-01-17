@@ -20,8 +20,9 @@ import {createUser} from '@/services/user.service'
 export default function SignUp() {
   const [registerData, setRegisterData] = useState({
     username: '',
-    email: '',
     password: '',
+    email: '',
+    phone_number: '',
   });
   
 
@@ -30,8 +31,9 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
     const newRegisterData = {
       username: data.get('username') as string,
-      email: data.get('email') as string,
       password: data.get('password') as string,
+      email: data.get('email') as string,
+      phone_number: data.get('phone_number') as string,
     };
   
     setRegisterData(newRegisterData);
@@ -112,6 +114,16 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="phone_number"
+                  label="Phone Number"
+                  name="phone_number"
+                  autoComplete="phone_number"
                 />
               </Grid>
             </Grid>
