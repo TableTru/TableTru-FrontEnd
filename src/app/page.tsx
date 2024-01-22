@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import Appbar from "@/components/Appbar";
 import RestaurantCard from "@/components/cards/Restaurantcard";
@@ -12,8 +11,6 @@ import IconBottonSelect from "@/components/botton/MyLocation";
 import BackgroundCard from "@/components/BackgroundImage";
 
 export default function Home() {
-  const router = useRouter();
-
   return (
     <>
       <Appbar />
@@ -32,13 +29,6 @@ export default function Home() {
           <h1 className="flex py-5 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-4xl text-gray-800">
             ที่อยู่
           </h1>
-          {/* <Button
-                      color="primary"
-                      className={"bg-red-700 w-96"}
-                      onPress={() => router.push("/products")}
-                      >
-                    ดูทั้งหมด
-                    </Button> */}
           <LocationScrollCards />
         </div>
 
@@ -55,13 +45,14 @@ export default function Home() {
 
           </section>
           <div className="flex item-center justify-center gap-4 py-8">
-            <Button
-              color="primary"
-              className={"bg-red-700 w-96"}
-              onPress={() => router.push("/products")}
-            >
-              ร้านทั้งหมด
-            </Button>
+            <a href="/products">
+              <Button
+                color="primary"
+                className={"bg-red-700 w-96"}
+              >
+                ร้านทั้งหมด
+              </Button>
+            </a>
           </div>
         </div>
       </div>
