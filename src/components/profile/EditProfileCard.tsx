@@ -52,7 +52,7 @@ export default function EditProfileCard() {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
 
-        <Box
+        {/* <Box
           sx={{
             marginTop: 8,
             display: 'flex',
@@ -67,7 +67,18 @@ export default function EditProfileCard() {
           <Image
             src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium"
           />
-        </Box>
+        </Box> */}
+
+        <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Avatar src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" sx={{ width: 100, height: 100, m: 1, bgcolor: 'secondary.main' }} />
+                </Box>
 
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
