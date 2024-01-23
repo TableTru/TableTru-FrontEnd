@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.MuiInputBase-input.MuiOutlinedInput-input{
+    padding: 14px 16.5px;
+}
+
+.MuiFormControl-root.MuiFormControl-fullWidth.MuiTextField-root.aungpor {
+    padding: 14px 50px;
+}
