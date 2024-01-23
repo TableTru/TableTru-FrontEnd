@@ -18,6 +18,9 @@ import {
     ListItemAvatar,
     ListItemText,
     ListItemButton,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
 
 
 } from "@mui/material";
@@ -26,6 +29,8 @@ import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CreateStoreDetail from '@/components/store/CreateStoreDetail'
 
 
 export default function CreateStore() {
@@ -50,7 +55,7 @@ export default function CreateStore() {
 
                     <Box sx={{ marginTop: 8, display: 'flex', alignItems: 'left', }}>
                         <Typography component="h1" variant="h4">
-                            สร้างร้างค้า
+                            สร้างร้านค้า
                         </Typography>
                     </Box>
 
@@ -77,7 +82,7 @@ export default function CreateStore() {
                                     ชื่อร้าน
                                 </Typography>
                                 <TextField
-                                className="aungpor"
+                                    className="aungpor"
                                     required
                                     fullWidth
                                     id="store_name"
@@ -107,15 +112,24 @@ export default function CreateStore() {
                             </Grid>
 
                             <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="new-password"
-                                />
+                                <Accordion>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1-content"
+                                        id="panel1-header"
+                                    >
+                                        รายละเอียดร้านค้า
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12}>
+                                                <Typography variant="subtitle1">
+                                                    วันที่เปิดร้าน
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </AccordionDetails>
+                                </Accordion>
                             </Grid>
                         </Grid>
 
