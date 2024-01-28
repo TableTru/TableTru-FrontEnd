@@ -13,6 +13,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
 
+
 export default function ListCard() {
   const theme = useTheme();
 
@@ -31,7 +32,7 @@ export default function ListCard() {
             Live From Space
           </Typography>
         <Stack direction="row" spacing={1}>
-          <Chip label="Chip Filled" />
+          <Chip label="ยืนยัน" color="success" />
         </Stack>
         </CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>

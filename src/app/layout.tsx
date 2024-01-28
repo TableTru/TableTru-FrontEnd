@@ -27,7 +27,6 @@ export default function RootLayout({
       <ThemeProvider theme={theme}>
           {children}
       <BottomNavigationbar />
-      <Footer/>
       </ThemeProvider>
       </body>
     </html>
