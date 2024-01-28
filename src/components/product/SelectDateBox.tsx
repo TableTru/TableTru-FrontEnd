@@ -9,7 +9,7 @@ export default function SelectDateBox() {
           รายละเอียด:
         </h2>
         <div className="bg-gray-100 dark:bg-gray-700 rounded-xl ">
-          <div className="p-2 lg:p-5 ">
+          <div className="p-2 lg:p-5">
             <div className="flex flex-col justify-center gap-x-10 gap-y-4">
             <div className="flex">
                 <DatePick />
