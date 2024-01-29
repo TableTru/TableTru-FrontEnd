@@ -29,13 +29,10 @@ import {
 
 
 } from "@mui/material";
-import IconButton from '@mui/material/IconButton';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
+import EditIcon from '@mui/icons-material/Edit';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import DraftsIcon from '@mui/icons-material/Drafts';
-import InboxIcon from '@mui/icons-material/Inbox';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 
 
@@ -51,7 +48,7 @@ export default function StoreHome() {
                     <Box sx={{ marginTop: 8, display: 'flex', alignItems: 'left', }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Card sx={{ display: 'flex', width: '100%' }}>
+                                <Card sx={{ display: 'flex', width: '100%', height: '150px' }}>
                                     <CardMedia
                                         component="img"
                                         sx={{ width: 151 }}
@@ -65,7 +62,7 @@ export default function StoreHome() {
                                                 ร้านอาหารของฉัน
                                             </Typography>
                                         </CardContent>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+                                        {/* <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
                                             <IconButton aria-label="previous">
                                                 {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
                                             </IconButton>
@@ -75,7 +72,7 @@ export default function StoreHome() {
                                             <IconButton aria-label="next">
                                                 {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
                                             </IconButton>
-                                        </Box>
+                                        </Box> */}
                                     </Box>
 
                                 </Card>
@@ -84,21 +81,30 @@ export default function StoreHome() {
                             <Grid item xs={12}>
                                 <List>
                                     <ListItem disablePadding>
-                                        <ListItemButton>
+                                        <ListItemButton component="a" href="/store/tableBooking">
                                             <ListItemIcon>
-                                                <InboxIcon />
+                                                <PeopleAltIcon />
                                             </ListItemIcon>
-                                            <ListItemText primary="แก้ไขรายละเอียด" />
+                                            <ListItemText primary="คิวจองโต๊ะ" />
                                         </ListItemButton>
                                     </ListItem>
-                                    <ListItem disablePadding>
-                                        <ListItemButton>
+                                    {/* <ListItem disablePadding>
+                                        <ListItemButton component="a" href="/">
                                             <ListItemIcon>
                                                 <DraftsIcon />
                                             </ListItemIcon>
-                                            <ListItemText primary="Drafts" />
+                                            <ListItemText primary="คอมเม้นและรีวิว" />
+                                        </ListItemButton>
+                                    </ListItem> */}
+                                    <ListItem disablePadding>
+                                        <ListItemButton component="a" href="/store/edit">
+                                            <ListItemIcon>
+                                                <EditIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="แก้ไขรายละเอียด" secondary="กดเพื่อดูหน้าร้านค้า" />
                                         </ListItemButton>
                                     </ListItem>
+
                                 </List>
                             </Grid>
 
