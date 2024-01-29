@@ -21,6 +21,7 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
+    Autocomplete,
 
 
 } from "@mui/material";
@@ -31,6 +32,7 @@ import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CreateStoreDetail from '@/components/store/CreateStoreDetail'
+import ImageUpload from '@/components/store/ImageUpload'
 
 
 export default function CreateStore() {
@@ -47,6 +49,12 @@ export default function CreateStore() {
 
     };
 
+    const categoryData = [
+        { label: 'The Shawshank Redemption', year: 1994 },
+        { label: 'The Godfather', year: 1972 },
+        { label: 'The Godfather: Part II', year: 1974 },
+    ]
+
     return (
         <>
             <ThemeProvider theme={createTheme()}>
@@ -59,7 +67,7 @@ export default function CreateStore() {
                         </Typography>
                     </Box>
 
-                    <Box
+                    {/* <Box
                         sx={{
                             marginTop: 4,
                             display: 'flex',
@@ -72,7 +80,7 @@ export default function CreateStore() {
                         }}
                     >
                         <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" />
-                    </Box>
+                    </Box> */}
 
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
@@ -101,14 +109,25 @@ export default function CreateStore() {
                             </Grid>
 
                             <Grid item xs={12}>
+                                <Typography variant="subtitle1">
+                                    คำอธิบายร้าน
+                                </Typography>
                                 <TextField
                                     required
                                     fullWidth
                                     id="store_description"
-                                    label="คำอธิบายร้าน"
+                                    // label="คำอธิบายร้าน"
                                     name="store_description"
                                     autoComplete="store_description"
                                 />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <Typography variant="subtitle1">
+                                    เพิ่มรูปภาพร้านค้า
+                                </Typography>
+                                {/* <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" /> */}
+                                <ImageUpload/>
                             </Grid>
 
                             <Grid item xs={12}>
@@ -124,8 +143,25 @@ export default function CreateStore() {
                                         <Grid container spacing={2}>
                                             <Grid item xs={12}>
                                                 <Typography variant="subtitle1">
-                                                    วันที่เปิดร้าน
+                                                    หมวดหมู่
                                                 </Typography>
+                                                <Autocomplete
+                                                    disablePortal
+                                                    id="combo-box-demo"
+                                                    options={categoryData}
+                                                    renderInput={(params) => <TextField {...params} label="หมวดหมู่" />}
+                                                />
+                                            </Grid>
+
+                                            <Grid item xs={12}>
+                                                <Typography variant="subtitle1">
+                                                    จำนวนโต๊ะที่เปิดให้จอง
+                                                </Typography>
+                                                <TextField
+                                                    required
+                                                    fullWidth
+                                                    id="table_num"
+                                                />
                                             </Grid>
                                         </Grid>
                                     </AccordionDetails>
@@ -140,7 +176,7 @@ export default function CreateStore() {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            แก้ไข
+                            สร้างร้านค้า
                         </Button>
 
 
