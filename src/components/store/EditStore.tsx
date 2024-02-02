@@ -35,7 +35,7 @@ import CreateStoreDetail from '@/components/store/CreateStoreDetail'
 import ImageUpload from '@/components/store/ImageUpload'
 
 
-export default function CreateStore() {
+export default function EditStore() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -63,24 +63,9 @@ export default function CreateStore() {
 
                     <Box sx={{ marginTop: 8, display: 'flex', alignItems: 'left', }}>
                         <Typography component="h1" variant="h4">
-                            สร้างร้านค้า
+                            แก้ไขร้านค้า
                         </Typography>
                     </Box>
-
-                    {/* <Box
-                        sx={{
-                            marginTop: 4,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            '& > :first-child': {  // เลือกคอมโพเนนต์ที่เป็นลำดับแรกภายใน Box
-                                width: '100%',  // ทำให้คอมโพเนนต์มีความกว้างเต็ม Box
-                                height: 'auto',  // ทำให้ความสูงของคอมโพเนนต์ปรับตามอัตราส่วน
-                            },
-                        }}
-                    >
-                        <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" />
-                    </Box> */}
 
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
@@ -127,7 +112,7 @@ export default function CreateStore() {
                                     เพิ่มรูปภาพร้านค้า
                                 </Typography>
                                 {/* <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" /> */}
-                                <ImageUpload/>
+                                <ImageUpload />
                             </Grid>
 
                             <Grid item xs={12}>
@@ -184,9 +169,8 @@ export default function CreateStore() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
                         >
-                            สร้างร้านค้า
+                            แก้ไขร้านค้า
                         </Button>
 
 

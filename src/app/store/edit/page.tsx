@@ -1,10 +1,10 @@
-import StoreHome from '@/components/store/StoreHome'
+import EditStore from '@/components/store/EditStore'
 
 function App() {
     return (
         <>
         <div className="bg-zinc-50 min-h-full">
-            <h1>Edit Store</h1>
+            <EditStore/>
         </div>
         </>
     );
