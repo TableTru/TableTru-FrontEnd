@@ -6,6 +6,8 @@ import Paper from '@mui/material/Paper';
 import HomeIcon from '@mui/icons-material/Home';
 import HistoryIcon from '@mui/icons-material/History';
 import PersonIcon from '@mui/icons-material/Person';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import {NextLinkComposed} from '@/components/Link';
 import Link from 'next/link';
 
 export default function Bottombar() {
@@ -50,10 +52,17 @@ export default function Bottombar() {
         />
         <BottomNavigationAction
           LinkComponent={Link}
-          href={`/${profilePath}`}
-          value={"profile"}
-          label="โปรไฟล์"
-          icon={<PersonIcon />} />
+          href={"/store"}
+          value={"store"}
+          label="ร้านค้า"
+          icon={<StorefrontIcon />}
+        />
+        <BottomNavigationAction
+            LinkComponent={Link}
+            href={"/login"}
+            value={"login"}
+            label="โปรไฟล์"
+            icon={<PersonIcon />}/>
       </BottomNavigation >
     </Paper>
   );
