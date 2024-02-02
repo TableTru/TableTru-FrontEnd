@@ -21,6 +21,7 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
+    AccordionActions,
     Autocomplete,
     Collapse,
 
@@ -32,11 +33,6 @@ import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
@@ -74,11 +70,6 @@ const bookingList = [
 ];
 
 export default function TableBooking() {
-    //     const [open, setOpen] = useState(null);
-
-    //   const handleClick = (index: number | null) => {
-    //     setOpen((prevIndex) => (prevIndex === index ? null : index));
-    //   };
     return (
         <>
             <ThemeProvider theme={createTheme()}>
@@ -90,7 +81,7 @@ export default function TableBooking() {
                             รายการจองโต๊ะ
                         </Typography>
 
-                        
+
 
                         <List>
                             {bookingList.map((item, index) => (
@@ -100,58 +91,21 @@ export default function TableBooking() {
                                         aria-controls={`panel${index}-content`}
                                         id={`panel${index}-header`}
                                     >
-                                        <Typography>{item.user}</Typography>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                            <Typography>{item.user}</Typography>
+                                            <Typography variant="subtitle1">ทดสอบ</Typography>
+                                        </Box>
                                     </AccordionSummary>
                                     <AccordionDetails>
                                         <Typography>{item.time}</Typography>
                                     </AccordionDetails>
+                                    <AccordionActions>
+                                        <Button>Cancel</Button>
+                                        <Button>Agree</Button>
+                                    </AccordionActions>
                                 </Accordion>
                             ))}
                         </List>
-                        
-                        {/* {bookingList.map((item, index) => (
-                            <List sx={{ width: '100%', bgcolor: 'background.paper' }} key={index}>
-                                <ListItem>
-                                    <ListItemButton>
-                                        <ListItemText primary={item.user} secondary={item.time} />
-                                    </ListItemButton>
-                                </ListItem>
-
-                                <ListItemButton onClick={() => handleClick(index)}>
-                                    <ListItemIcon>
-                                        <InboxIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Inbox" />
-                                    {open === index ? <ExpandLess /> : <ExpandMore />}
-                                </ListItemButton>
-                                <Collapse in={open === index} timeout="auto" unmountOnExit>
-                                    <List component="div" disablePadding>
-                                        <ListItemButton sx={{ pl: 4 }}>
-                                            <ListItemIcon>
-                                                <StarBorder />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Starred" />
-                                        </ListItemButton>
-                                    </List>
-                                </Collapse>
-                            </List>
-                        ))} */}
-
-                        {/* <FixedSizeList
-                            height={400}
-                            width={360}
-                            itemSize={100}
-                            itemCount={bookingList.length}
-                            overscanCount={5}
-                        >
-                            {({ index, style }) => (
-                                <ListItem style={style}>
-                                    <ListItemButton>
-                                        <ListItemText primary={bookingList[index].user} secondary={bookingList[index].time} />
-                                    </ListItemButton>
-                                </ListItem>
-                            )}
-                        </FixedSizeList> */}
                     </Box>
 
 
