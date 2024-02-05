@@ -17,33 +17,33 @@ interface Location {
 const LocationCard = () => {
     const [locationData, setLocationData] = useState<Location[]>([]);
 
-    // const list = [
-    //     {
-    //         title: "สีลม",
-    //         img:"https://cdn-images.prod.thinkofliving.com/wp-content/uploads/1/2021/11/03150807/Silom_Skyline-1.jpg"
-    //     },
-    //     {
-    //         title: "สาทร",
-    //         img:"https://app01.bhirajburi.co.th/uploads/community_1675147926372_%E0%B8%AA%E0%B8%B2%E0%B8%97%E0%B8%A3%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%99%E0%B8%A8%E0%B8%B9%E0%B8%99%E0%B8%A2%E0%B9%8C%E0%B8%81%E0%B8%A5%E0%B8%B2%E0%B8%87%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%B4%E0%B8%88%20(5).png"
-    //     },
-    //     {
-    //         title: "พร้อมพงษ์",
-    //         img:"https://park.co.th/wp-content/uploads/2020/03/rsz_shutterstock_788969065-768x512.jpg"
-    //     },
-    //     {
-    //         title: "ราชเทวี",
-    //         img:"https://origin.co.th/wp-content/uploads/2019/08/light-rails-459064_1920-696x464.jpg"
-    //     },
-    //     {
-    //         title: "ห้าแยกลาดพร้าว",
-    //         img:"https://static.estopolis.com/article/591e58ce15f02071ef23a882_591e81b315f02071ef23a8c9.jpg"
-    //     },
-    //     {
-    //         title: "อโศก",
-    //         img:"https://cdn-cms.pgimgs.com/areainsider/2019/05/Asoke_09.jpg"
-    //     },
+    const tempData = [
+        {
+            location_name: "สีลม",
+            location_image_name:"https://cdn-images.prod.thinkofliving.com/wp-content/uploads/1/2021/11/03150807/Silom_Skyline-1.jpg"
+        },
+        {
+            location_name: "สาทร",
+            location_image_name:"https://app01.bhirajburi.co.th/uploads/community_1675147926372_%E0%B8%AA%E0%B8%B2%E0%B8%97%E0%B8%A3%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%99%E0%B8%A8%E0%B8%B9%E0%B8%99%E0%B8%A2%E0%B9%8C%E0%B8%81%E0%B8%A5%E0%B8%B2%E0%B8%87%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%B4%E0%B8%88%20(5).png"
+        },
+        {
+            location_name: "พร้อมพงษ์",
+            location_image_name:"https://park.co.th/wp-content/uploads/2020/03/rsz_shutterstock_788969065-768x512.jpg"
+        },
+        {
+            location_name: "ราชเทวี",
+            location_image_name:"https://origin.co.th/wp-content/uploads/2019/08/light-rails-459064_1920-696x464.jpg"
+        },
+        {
+            location_name: "ห้าแยกลาดพร้าว",
+            location_image_name:"https://static.estopolis.com/article/591e58ce15f02071ef23a882_591e81b315f02071ef23a8c9.jpg"
+        },
+        {
+            location_name: "อโศก",
+            location_image_name:"https://cdn-cms.pgimgs.com/areainsider/2019/05/Asoke_09.jpg"
+        },
 
-    // ];
+    ];
 
     const fetchData = async () => {
         const locationArray = []
@@ -67,7 +67,7 @@ const LocationCard = () => {
     const router = useRouter()
     return (
         <>
-            {locationData.map((item, index) => (
+            {tempData.map((item, index) => (
             <div className="inline-block px-3" key={index}>
                 <div
                     className="w-64 h-64 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">

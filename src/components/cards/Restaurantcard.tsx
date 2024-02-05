@@ -51,6 +51,17 @@ interface Store {
   updateAt: Date
 }
 
+const tempData = [
+  {
+    store_id: "1",
+    store_name: "ร้านค้า1"
+  },
+  {
+    store_id: "2",
+    store_name: "ร้านค้า2"
+  }
+]
+
 export default function Restaurantcard() {
   const [storeData, setStoreData] = useState<Store[]>([]);
 
@@ -81,7 +92,7 @@ export default function Restaurantcard() {
 
   return (
     <>
-      {storeData.map((item) => (
+      {tempData.map((item) => (
         <div>
           <Link href={`/products/${item.store_id}`}>
             
