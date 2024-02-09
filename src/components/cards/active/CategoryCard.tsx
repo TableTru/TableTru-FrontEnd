@@ -73,7 +73,7 @@ export default function CategoryCard() {
                     <div
                         className="w-64 h-64 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
 
-                        <Card className="col-span- sm:col-span-4 h-[300px] " isPressable isHoverable onPress={() => router.push('/products')}>
+                        <Card className="col-span- sm:col-span-4 h-[300px] "  isPressable isHoverable onPress={() => router.push('/search')}>
                             <CardHeader className="absolute z-10 bottom-2 min-h-full flex-col !items-center bg-black/30" >
                                 <div className="flex flex-grow gap-2 items-center">
                                     <h2 className="text-white font-medium text-2xl">{item.category_name}</h2>

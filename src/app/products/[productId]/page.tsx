@@ -4,17 +4,21 @@ import DetailBox from "@/components/product/DetailBox";
 import ContactBox from "@/components/product/ContactBox"
 import SelectDateBox from "@/components/product/SelectDateBox";
 import Galleries from "@/components/product/Galleries";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import Map from "@/components/Map";
 
 
-export default function ProductDetail({ params }: { params: { productId: string, productName:string, totalReview:string} }) {
+export default function ProductDetail({ params }: { params: { store_id: string, store_name: string, total_review: string } }) {
     return (
         <>
             <section className="py-10 dark:bg-gray-800">
                 <div className="max-w-6xl px-4 mx-auto">
 
                     <div className="flex flex-wrap mb-24 -mx-4">
-                        <Galleries/>
-
+                        <Galleries />
 
                         <div className="w-full px-4 md:w-1/2">
                             <div className="lg:pl-20">
@@ -22,7 +26,7 @@ export default function ProductDetail({ params }: { params: { productId: string,
                                     <span className="px-2.5 py-0.5 text-xs text-red-600 bg-red-100 dark:bg-gray-700 rounded-xl dark:text-gray-200">New
                                         Arrival</span>
                                     <h2 className="max-w-xl mt-6 mb-6 text-xl font-semibold leading-loose tracking-wide text-gray-700 md:text-2xl dark:text-gray-300">
-                                    {params.productId}
+                                        {params.store_id}
                                     </h2>
                                     <div className="flex flex-wrap items-center mb-6">
                                         <ul className="flex mb-4 mr-2 lg:mb-0">
@@ -72,9 +76,14 @@ export default function ProductDetail({ params }: { params: { productId: string,
                                         </a>
                                     </div>
                                 </div>
-                                <SelectDateBox/>
+                                <Stack direction="row" spacing={1}>
+                                    <Chip icon={<RestaurantIcon />} label="ญิ้ปุ่น" />
+                                    <Chip icon={<LocationOnIcon />} label="สาทร" />
+                                </Stack>
 
-                                <ContactBox/>
+                                <SelectDateBox />
+
+                                <ContactBox />
 
                                 <div className="flex gap-4 mb-6">
                                     <a href="@/app/products/category/[category-slug]/[productId]/page#" className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent dark:border-gray-700 hover:border-red-500 hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl">
@@ -83,8 +92,20 @@ export default function ProductDetail({ params }: { params: { productId: string,
                             </div>
                         </div>
                     </div>
-                    <DetailBox/>
+                    <DetailBox />
+                    <div className="mb-6">
+                        <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">
+                            <div className="p-3 lg:p-5 ">
+                                {/* Map */}
+                                <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
+                                <div className="p-2 rounded-xl lg:p-6 dark:bg-gray-800 bg-gray-50">
+                                    location
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </section>
 
 

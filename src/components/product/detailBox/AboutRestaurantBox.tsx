@@ -24,7 +24,7 @@ function AboutRestaurantBox() {
                 <TableResponsive/>
 
             </Root>
-
+            
         </>);
 }
 

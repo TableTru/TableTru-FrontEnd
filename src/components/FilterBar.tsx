@@ -29,6 +29,9 @@ export default function SwipeableTemporaryDrawer() {
   const [state, setState] = React.useState({
     right: false,
   });
+  const [sort,setSort] = React.useState("");
+  const [category,setCategory] = React.useState("");
+  const [location,setLocation] = React.useState("");
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
@@ -52,32 +55,54 @@ export default function SwipeableTemporaryDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-
       <FormControl sx={ {p:"16px"} }>
-      <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+      <FormLabel id="demo-radio-buttons-group-label">เรียงตาม</FormLabel>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="female"
+        defaultValue="default"
         name="radio-buttons-group"
       >
-        <FormControlLabel value="female" control={<Radio />} label="Female" />
-        <FormControlLabel value="male" control={<Radio />} label="Male" />
-        <FormControlLabel value="other" control={<Radio />} label="Other" />
+        <FormControlLabel value="default" control={<Radio />} label="ค่าเริ่มต้น" />
+        <FormControlLabel value="lowToHigh" control={<Radio />} label="ราคาต่ำไปสูง" />
+        <FormControlLabel value="highest" control={<Radio />} label="ราคาสูงสุด" />
+        <FormControlLabel value="reviewScore" control={<Radio />} label="คะแนนรีวิว" />
+        <FormControlLabel value="nearest" control={<Radio />} label="ใกล้ที่สุดก่อน" />
       </RadioGroup>
     </FormControl>
+    <Divider />
+      <FormControl sx={ {p:"16px"} }>
+        <FormLabel id="demo-radio-buttons-group-label">หมวดหมู่</FormLabel>
+        <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="all-category"
+            name="radio-buttons-group"
+        >
+          <FormControlLabel value="all" control={<Radio />} label="ทั้งหมด" />
+          <FormControlLabel value="thai" control={<Radio />} label="ไทย" />
+          <FormControlLabel value="international" control={<Radio />} label="นานาชาติ" />
+          <FormControlLabel value="japanese" control={<Radio />} label="ญิ่ปุ่น" />
+          <FormControlLabel value="chinese" control={<Radio />} label="จีน" />
+          <FormControlLabel value="italian" control={<Radio />} label="อิตาลี" />
+          <FormControlLabel value="fusions" control={<Radio />} label="ฟิวชั่น" />
+        </RadioGroup>
+      </FormControl>
+      <Divider />
+      <FormControl sx={ {p:"16px"} }>
+        <FormLabel id="demo-radio-buttons-group-label">ที่อยู่</FormLabel>
+        <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="all-location"
+            name="radio-buttons-group"
+        >
+          <FormControlLabel value="silom" control={<Radio />} label="สีลม" />
+          <FormControlLabel value="satorn" control={<Radio />} label="สาทร" />
+          <FormControlLabel value="promppong" control={<Radio />} label="พร้อมพงษ์" />
+          <FormControlLabel value="rachatevi" control={<Radio />} label="ราชเทวี" />
+          <FormControlLabel value="ladprao" control={<Radio />} label="ห้าแยกลาดพร้าว" />
+          <FormControlLabel value="asok" control={<Radio />} label="อโศก" />
+        </RadioGroup>
+      </FormControl>
+
 
 
     </Box>
