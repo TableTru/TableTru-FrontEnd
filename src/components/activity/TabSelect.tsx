@@ -75,12 +75,10 @@ export default function TabSelect() {
           {bookingList.map((item) => (
             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
               <ListItem>
-                <ListItemButton>
                   <ListItemText primary={item.store} secondary={item.time} />
                   <a href="/">
                     <p>กดดูรายละเอียด</p>
                   </a>
-                </ListItemButton>
               </ListItem>
             </List>
           ))}
