@@ -5,9 +5,7 @@ import TabSelect from "@/components/activity/TabSelect";
 function Activity() {
     return (
         <>
-            <Appbar />
-                <TabSelect/>
-            <BottomNavigationbar />
+            <TabSelect />
         </>
 
     );

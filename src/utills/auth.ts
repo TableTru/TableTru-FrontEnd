@@ -11,6 +11,17 @@ export const getLoginUser = async (data: any) => {
   });
 }
 
+// export const checkLoginStatus = () => {
+//   const userData = localStorage.getItem("userData")
+//   const userDataJson = JSON.parse(userData || "[]");
+//   if (userData) {
+//     console.log(userDataJson);
+//   }else{
+//     console.log("not login");
+//     window.location.replace('/')
+//   }
+// }
+
 function catchError(error: any, path: any, func: any): void {
   try {
     return;

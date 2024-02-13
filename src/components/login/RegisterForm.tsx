@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,34 +15,37 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+import {createUser} from '@/services/user.service'
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [registerData, setRegisterData] = useState({
+    username: '',
+    password: '',
+    email: '',
+    phone_number: '',
+  });
+  
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const newRegisterData = {
+      username: data.get('username') as string,
+      password: data.get('password') as string,
+      email: data.get('email') as string,
+      phone_number: data.get('phone_number') as string,
+    };
+  
+    setRegisterData(newRegisterData);
+
+    const newUser = await createUser(newRegisterData)
+    console.log(newUser);
+    window.location.replace('/login')
+
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={createTheme()}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -61,7 +64,7 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
@@ -81,6 +84,27 @@ export default function SignUp() {
                   name="lastName"
                   autoComplete="family-name"
                 />
+              </Grid> */}
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -96,17 +120,10 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                  id="phone_number"
+                  label="Phone Number"
+                  name="phone_number"
+                  autoComplete="phone_number"
                 />
               </Grid>
             </Grid>
@@ -127,7 +144,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
