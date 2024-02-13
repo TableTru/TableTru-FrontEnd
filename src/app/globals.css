@@ -20,3 +20,8 @@
 .MuiList-root.MuiList-padding{
     border-bottom: 1px solid #e0e0e0;
 }
+
+.activity {
+    color: #c53030;
+    padding-left: 10px;
+}
