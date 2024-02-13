@@ -4,11 +4,6 @@ import ListCard from "../cards/ListCards";
     return (
         <div className="py-10">
         <ListCard/>
-        <ListCard/>
-        <ListCard/>
-        <ListCard/>
-        <ListCard/>
-        <ListCard/>
 
         </div>
     );

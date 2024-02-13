@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { Image } from "@nextui-org/react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -59,6 +58,7 @@ export default function LoginForm() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+
         </div>
 
         <div>
@@ -88,6 +88,7 @@ export default function LoginForm() {
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
+
             /> */}
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In
@@ -108,49 +109,6 @@ export default function LoginForm() {
           </Grid>
         </div>
       </Container>
-
-      {/* <Container component="main" maxWidth="xs">
-        <Typography component="h1" variant="h5">
-          Sign Up
-        </Typography>
-        <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: 1 }}>
-          <TextField
-            fullWidth
-            label="Username"
-            variant="outlined"
-            margin="normal"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            fullWidth
-            label="Email"
-            variant="outlined"
-            margin="normal"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            variant="outlined"
-            margin="normal"
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
-            Sign Up
-          </Button>
-        </form>
-      </Container> */}
     </div>
   );
 }

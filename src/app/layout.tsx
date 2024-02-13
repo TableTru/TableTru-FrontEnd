@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Providers } from "./providers";
-
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { red } from "@mui/material/colors";
+import { StyledEngineProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import './globals.css'
 import Footer from '@/components/Footer';
 import BottomNavigationbar from '@/components/Bottombar';
+import theme from '@/theme';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,12 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en" className='bg-zinc-50'>
       <body className={inter.className}>
-      <Providers>
+      <ThemeProvider theme={theme}>
           {children}
-          <BottomNavigationbar />
-          <Footer />
-        </Providers>
+      <BottomNavigationbar />
+      </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
