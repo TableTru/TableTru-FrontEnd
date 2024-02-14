@@ -78,7 +78,7 @@ export default function TabSelect() {
         <Box sx={{ marginBottom: 8 }}>
           <TabPanel value="1">
             {bookingList.map((item) => (
-              <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+              <List className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 <ListItem>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
@@ -99,7 +99,7 @@ export default function TabSelect() {
 
           <TabPanel value="2">
             {bookingList.map((item) => (
-              <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+              <List className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 <ListItem>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />

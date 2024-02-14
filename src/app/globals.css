@@ -17,7 +17,7 @@
     /* ปิด hover */
 }
 
-.MuiList-root.MuiList-padding{
+.MuiList-root.MuiList-padding.bottom-line{
     border-bottom: 1px solid #e0e0e0;
 }
 

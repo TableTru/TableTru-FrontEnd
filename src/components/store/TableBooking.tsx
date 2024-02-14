@@ -142,7 +142,7 @@ export default function TableBooking() {
 
                                 <TabPanel value="2">
                                     {bookingList.map((item) => (
-                                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                                        <List className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
                                             <ListItem>
                                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                                     <ListItemText primary={`${item.user} | ${item.phone}`} secondary={`${item.time} จำนวน ${item.people_num} คน`} />

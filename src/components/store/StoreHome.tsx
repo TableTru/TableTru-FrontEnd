@@ -25,7 +25,8 @@ import {
     Card,
     CardContent,
     CardMedia,
-
+    Chip,
+    Stack,
 
 
 } from "@mui/material";
@@ -45,75 +46,46 @@ export default function StoreHome() {
                 <Container component="main" maxWidth="md">
                     <CssBaseline />
 
-                    <Box sx={{ marginTop: 8, display: 'flex', alignItems: 'left', }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <Card sx={{ display: 'flex', width: '100%', height: '150px' }}>
-                                    <CardMedia
-                                        component="img"
-                                        sx={{ width: 151 }}
-                                        image="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium"
-                                        alt="Live from space album cover"
-                                    />
+                    <Box sx={{ marginTop: 8, marginBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
 
-                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                        <CardContent sx={{ flex: '1 0 auto' }}>
-                                            <Typography component="div" variant="h5">
-                                                ร้านอาหารของฉัน
-                                            </Typography>
-                                        </CardContent>
-                                        {/* <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                                            <IconButton aria-label="previous">
-                                                {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-                                            </IconButton>
-                                            <IconButton aria-label="play/pause">
-                                                <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                                            </IconButton>
-                                            <IconButton aria-label="next">
-                                                {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-                                            </IconButton>
-                                        </Box> */}
-                                    </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
 
-                                </Card>
-                            </Grid>
+                            <Box sx={{ width: '20%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <Avatar src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" sx={{ width: 150, height: 150, m: 1, bgcolor: 'secondary.main' }} />
+                            </Box>
 
-                            <Grid item xs={12}>
-                                <List>
-                                    <ListItem disablePadding>
-                                        <ListItemButton component="a" href="/store/tableBooking">
-                                            <ListItemIcon>
-                                                <PeopleAltIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="คิวจองโต๊ะ" />
-                                        </ListItemButton>
-                                    </ListItem>
-                                    {/* <ListItem disablePadding>
-                                        <ListItemButton component="a" href="/">
-                                            <ListItemIcon>
-                                                <DraftsIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="คอมเม้นและรีวิว" />
-                                        </ListItemButton>
-                                    </ListItem> */}
-                                    <ListItem disablePadding>
-                                        <ListItemButton component="a" href="/store/edit">
-                                            <ListItemIcon>
-                                                <EditIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="แก้ไขรายละเอียด" secondary="กดเพื่อดูหน้าร้านค้า" />
-                                        </ListItemButton>
-                                    </ListItem>
+                            <Box sx={{ margin: 2, width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
+                                <Typography component="h1" variant="h5"> ร้านอาหารของฉัน </Typography>
+                                <Stack direction="row" spacing={1}>
+                                    <Chip label="ยืนยัน" color="success" />
+                                    <Chip label="ยืนยัน" color="success" />
+                                </Stack>
+                            </Box>
 
-                                </List>
-                            </Grid>
-
-                        </Grid>
+                        </Box>
 
 
-                        <nav aria-label="main mailbox folders">
+                        <Box sx={{ marginTop: 2, marginBottom: 2, display: 'flex', flexDirection: 'column' }}>
+                            <List>
+                                <ListItem disablePadding>
+                                    <ListItemButton component="a" href="/store/tableBooking">
+                                        <ListItemIcon>
+                                            <PeopleAltIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="คิวจองโต๊ะ" />
+                                    </ListItemButton>
+                                </ListItem>
+                                <ListItem disablePadding>
+                                    <ListItemButton component="a" href="/store/edit">
+                                        <ListItemIcon>
+                                            <EditIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="แก้ไขรายละเอียด" secondary="กดเพื่อดูหน้าร้านค้า" />
+                                    </ListItemButton>
+                                </ListItem>
 
-                        </nav>
+                            </List>
+                        </Box>
                     </Box>
 
                 </Container>
