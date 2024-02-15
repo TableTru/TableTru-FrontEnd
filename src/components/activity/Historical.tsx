@@ -8,10 +8,6 @@ const Historical = () => {
             <ListCard/>
             <ListCard/>
             <ListCard/>
-            <ListCard/>
-            <ListCard/>
-            <ListCard/>
-            <ListCard/>
         </>
     );
 };
