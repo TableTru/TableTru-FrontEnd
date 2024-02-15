@@ -1,5 +1,5 @@
 "use client";
-import * as React from 'react';
+import React, { useState } from "react";
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -17,9 +17,9 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function ImageUpload() {
-  const [selectedImage, setSelectedImage] = React.useState(null);
+  const [selectedImage, setSelectedImage] = useState("https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium");
 
-  const handleImageChange = (event: { target: { files: any[]; }; }) => {
+  const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedImage(URL.createObjectURL(file));
@@ -32,20 +32,24 @@ export default function ImageUpload() {
         component="label"
         variant="contained"
         startIcon={<CloudUploadIcon />}
+        style={{
+          backgroundImage: `url(${selectedImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          width: '200px',
+          height: '200px',
+          border: 'none',
+          cursor: 'pointer',
+        }}
       >
         Upload file
-        <VisuallyHiddenInput
+        <input
+          className="visually-hidden-input"
           type="file"
+          accept="image/*"
           onChange={handleImageChange}
         />
       </Button>
-
-      {selectedImage && (
-        <div>
-          <p>Preview:</p>
-          <img src={selectedImage} alt="Uploaded Preview" />
-        </div>
-      )}
     </div>
   );
 }
