@@ -1,7 +1,6 @@
 "use client";
-
-import * as React from "react";
-import {Image} from "@nextui-org/react";
+import React, { useState } from "react";
+import { Image, Textarea } from "@nextui-org/react";
 import {
     Tabs,
     Tab,
@@ -9,10 +8,10 @@ import {
     Box,
     Avatar,
     Typography,
-    Grid,
     TextField,
     Button,
     Link,
+    Grid,
     CssBaseline,
     List,
     ListItem,
@@ -48,6 +47,18 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CreateStoreDetail from "@/components/store/CreateStoreDetail";
 import ImageUpload from "@/components/store/ImageUpload";
 
+// export default function CreateStore() {
+//     const [selectedImage, setSelectedImage] = useState('https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium');
+
+//     const handleImageChange = (event: any) => {
+//         const file = event.currentTarget.files[0];
+//         console.log(file);
+//         if (file) {
+//             setSelectedImage(URL.createObjectURL(file));
+//         }
+//     };
+// }
+
 
 export default function EditStore() {
     const rows = [{
@@ -55,6 +66,8 @@ export default function EditStore() {
     }, {
         name: "วันอังคาร", open: "10:00", close: "12:00",
     },];
+
+
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -184,7 +197,7 @@ export default function EditStore() {
                                                 <p>จันทร์</p>
                                             </div>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DemoContainer fullWidth components={["TimePicker"]}>
+                                            <DemoContainer components={["TimePicker"]}>
                                                 <TimePicker label="เวลาเปิด" className={"w-full"}/>
                                             </DemoContainer>
                                         </LocalizationProvider>
@@ -198,7 +211,7 @@ export default function EditStore() {
                                                 <p>อังคาร</p>
                                             </div>
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <DemoContainer fullWidth components={["TimePicker"]}>
+                                                <DemoContainer components={["TimePicker"]}>
                                                     <TimePicker label="เวลาเปิด" className={"w-full"}/>
                                                 </DemoContainer>
                                             </LocalizationProvider>

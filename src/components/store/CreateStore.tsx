@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Image } from "@nextui-org/react";
+import { Image, Textarea } from "@nextui-org/react";
 import {
     Tabs,
     Tab,
@@ -23,8 +23,7 @@ import {
     AccordionDetails,
     Autocomplete,
     Divider,
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
-
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
 
 
 } from "@mui/material";
@@ -38,14 +37,19 @@ import CreateStoreDetail from '@/components/store/CreateStoreDetail'
 import ImageUpload from '@/components/store/ImageUpload'
 import Map from "@/components/Map";
 import { styled } from "@mui/material/styles";
-
-const Root = styled("div")(({ theme }) => ({
-    width: "100%", ...theme.typography.body2, color: theme.palette.text.secondary, "& > :not(style) ~ :not(style)": {
-        marginTop: theme.spacing(2),
-    },
-}));
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 export default function CreateStore() {
+    const [selectedImage, setSelectedImage] = useState('https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium');
+
+    const handleImageChange = (event: any) => {
+        const file = event.currentTarget.files[0];
+        console.log(file);
+        if (file) {
+            setSelectedImage(URL.createObjectURL(file));
+        }
+    };
+    
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -76,6 +80,31 @@ export default function CreateStore() {
             open: "10:00",
             close: '12:00',
         },
+        {
+            name: 'วันพุธ',
+            open: "10:00",
+            close: '12:00',
+        },
+        {
+            name: 'วันพฤหัส',
+            open: "10:00",
+            close: '12:00',
+        },
+        {
+            name: 'วันศุกร์',
+            open: "10:00",
+            close: '12:00',
+        },
+        {
+            name: 'วันเสาร์',
+            open: "10:00",
+            close: '12:00',
+        },
+        {
+            name: 'วันอาทิตย์',
+            open: "10:00",
+            close: '12:00',
+        },
     ]
 
     return (
@@ -90,6 +119,29 @@ export default function CreateStore() {
                             </Typography>
                         </Box>
 
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                            <label htmlFor="upload-input">
+                                <img
+                                    src={selectedImage}
+                                    alt="Upload"
+                                    style={{
+                                        width: '100%',
+                                        height: '400px',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        objectFit: 'cover',
+                                    }}
+                                />
+                            </label>
+                            <input
+                                id="upload-input"
+                                className="visually-hidden-input"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                            />
+                        </Box>
+
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
 
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
@@ -101,6 +153,22 @@ export default function CreateStore() {
                                     required
                                     fullWidth
                                     id="store_name"
+                                />
+                            </Box>
+
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                                <Typography variant="subtitle1">
+                                    คำอธิบายร้าน
+                                </Typography>
+
+                                <TextField
+                                    required
+                                    fullWidth
+                                    multiline
+                                    rows={4} // ตั้งค่าจำนวนบรรทัดที่แสดง
+                                    id="store_description"
+                                    name="store_description"
+                                    autoComplete="store_description"
                                 />
                             </Box>
 
@@ -124,20 +192,6 @@ export default function CreateStore() {
                                 >
                                     <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
                                 </Box>
-                            </Box>
-
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
-                                <Typography variant="subtitle1">
-                                    คำอธิบายร้าน
-                                </Typography>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="store_description"
-                                    // label="คำอธิบายร้าน"
-                                    name="store_description"
-                                    autoComplete="store_description"
-                                />
                             </Box>
 
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
@@ -170,7 +224,16 @@ export default function CreateStore() {
                                             />
                                         </Box>
 
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', }}></Box>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                                            <Typography variant="subtitle1">
+                                                จำนวนโต๊ะที่เปิดให้จอง
+                                            </Typography>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                id="table_num"
+                                            />
+                                        </Box>
 
                                         <Box sx={{ width: '100%', marginTop: 2, marginBottom: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
 
@@ -201,16 +264,7 @@ export default function CreateStore() {
                                             </TableContainer>
                                         </Box>
 
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
-                                            <Typography variant="subtitle1">
-                                                จำนวนโต๊ะที่เปิดให้จอง
-                                            </Typography>
-                                            <TextField
-                                                required
-                                                fullWidth
-                                                id="table_num"
-                                            />
-                                        </Box>
+
                                     </AccordionDetails>
                                 </Accordion>
                             </Box>
@@ -221,7 +275,7 @@ export default function CreateStore() {
                                         fullWidth
                                         variant="contained"
                                         className={"bg-red-700"}
-                                        sx={{ mt: 2}}
+                                        sx={{ mt: 2 }}
                                     >
                                         ยกเลิก
                                     </Button>
@@ -231,15 +285,11 @@ export default function CreateStore() {
                                     type="submit"
                                     fullWidth
                                     variant="contained"
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                 >
                                     สร้างร้านค้า
                                 </Button>
                             </Box>
-
-                            
-
-
 
                         </Box>
                     </Box>
