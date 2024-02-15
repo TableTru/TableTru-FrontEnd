@@ -19,12 +19,13 @@ const VisuallyHiddenInput = styled('input')({
 export default function ImageUpload() {
   const [selectedImage, setSelectedImage] = useState("https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium");
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (event: any) => {
+    const file = event.currentTarget.files[0];
+    console.log(file);
     if (file) {
-      setSelectedImage(URL.createObjectURL(file));
+        setSelectedImage(URL.createObjectURL(file));
     }
-  };
+};
 
   return (
     <div>
