@@ -192,6 +192,8 @@ export default function EditStore() {
                                         </Typography>
 
                                         {/*Monday*/}
+
+
                                         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 gap-4">
                                             <div className={"flex items-start md:items-center"}>
                                                 <p>จันทร์</p>
@@ -207,6 +209,8 @@ export default function EditStore() {
                                             </DemoContainer>
                                         </LocalizationProvider>
 
+
+                                            {/*อังคาร*/}
                                             <div className={"flex items-start md:items-center"}>
                                                 <p>อังคาร</p>
                                             </div>
