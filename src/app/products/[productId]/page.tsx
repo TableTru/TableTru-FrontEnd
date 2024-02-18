@@ -9,9 +9,12 @@ import Stack from "@mui/material/Stack";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Map from "@/components/Map";
+import ConfirmButton from "@/components/botton/ConfirmButton";
+
 
 
 export default function ProductDetail({ params }: { params: { store_id: string, store_name: string, total_review: string } }) {
+
     return (
         <>
             <section className="py-10 dark:bg-gray-800">
@@ -86,8 +89,9 @@ export default function ProductDetail({ params }: { params: { store_id: string, 
                                 <ContactBox />
 
                                 <div className="flex gap-4 mb-6">
-                                    <a href="@/app/products/category/[category-slug]/[productId]/page#" className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent dark:border-gray-700 hover:border-red-500 hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl">
-                                        Buy now</a>
+                                    {/*<button href="@/app/products/category/[category-slug]/[productId]/page#" className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent dark:border-gray-700 hover:border-red-500 hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl" onClick="handleButtonConfirm()">*/}
+                                    {/*    ยืนยันการจอง</button>*/}
+                                    <ConfirmButton/>
                                 </div>
                             </div>
                         </div>

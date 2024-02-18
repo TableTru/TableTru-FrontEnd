@@ -5,6 +5,10 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Rating from '@mui/material/Rating';
@@ -15,6 +19,8 @@ export default function AlignItemsList() {
     const [value, setValue] = useState<number | null>(2);
     const [showMore, setShowMore] = useState(false);
     //put data props here
+
+    const MySwal = withReactContent(Swal)
 
   return (
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
