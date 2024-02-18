@@ -13,6 +13,7 @@ import CardRating from "./detailBox/RatingBox"
 import MenuImage from "./detailBox/MenuImage";
 import AboutRestaurantBox from "./detailBox/AboutRestaurantBox"
 import MainComment from "./detailBox/comments/MainComment";
+import Divider from '@mui/material/Divider';
 
 export default function DetailBox() {
     const [value, setValue] = React.useState("Review");
@@ -63,6 +64,7 @@ export default function DetailBox() {
 
                                         <h3 className="text-5xl pl-4 py-2 text-center mg:pl-4">4.8</h3>
                                     </div>
+                                    <Divider>การตอบกลับ</Divider>
                                     <div>
                                         <MainComment/>
                                         <CardRating/>

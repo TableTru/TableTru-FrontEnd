@@ -1,9 +1,31 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
 
 
 function MainComment() {
+
+    const [value, setValue] = React.useState<number | null>(0);
+
     return (
         <>
             <form>
+                <div className={"my-4 flex flex-warp "}>
+                    <Avatar alt="Leonic" src="/static/images/avatar/1.jpg"/>
+                    <div className={"mx-4 flex-cols"}>
+                <Typography component="h3">ให้คะแนนรีวิว</Typography>
+
+                <Rating
+                    name="simple-controlled"
+                    value={value}
+                    onChange={(event, newValue) => {
+                        setValue(newValue);
+                    }}
+                />
+                </div>
+                </div>
                 <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                     <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                         <label className="sr-only">Your comment</label>
