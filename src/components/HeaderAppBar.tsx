@@ -62,7 +62,7 @@ export default function HeaderAppBar() {
   }
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, position: 'fixed', top: 0, left: 0, right: 0, zIndex: 999 }}>
       <AppBar position="static" sx={{ bgcolor: '#c53030' }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
