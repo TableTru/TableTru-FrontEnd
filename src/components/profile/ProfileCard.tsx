@@ -29,6 +29,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import AppBar from '@/components/Appbar'
 
 export default function ProfileCard() {
     const [userData, setUserData] = useState();
@@ -59,6 +60,7 @@ export default function ProfileCard() {
 
     return (
         <ThemeProvider theme={createTheme()}>
+            <AppBar color="primary"  className={"bg-red-700"}/>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
 
