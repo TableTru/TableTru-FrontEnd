@@ -6,7 +6,7 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import './globals.css'
 import Footer from '@/components/Footer';
-import BottomNavigationbar from '@/components/Bottombar';
+import Bottombar from '@/components/Bottombar';
 import theme from '@/theme';
 
 const inter = Inter({ subsets: ['latin'] })
@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
       <ThemeProvider theme={theme}>
           {children}
-      <BottomNavigationbar />
+      <Bottombar />
       </ThemeProvider>
       </body>
     </html>

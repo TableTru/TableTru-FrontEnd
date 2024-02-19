@@ -2,8 +2,7 @@ import Appbar from "@/components/Appbar";
 import SearchBar from "@/components/SearchBar";
 import FilterBar from "@/components/FilterBar";
 import RestaurantCard from "@/components/cards/Restaurantcard";
-import {SearchIcon} from "@/components/SearchIcon";
-import {Input} from "@nextui-org/react";
+import ToggleTest from '@/components/AppBarToggle'
 
 export default function SearchPage() {
     return (<>
@@ -12,6 +11,7 @@ export default function SearchPage() {
                 <form className="flex items-center justify-center ">
                     <SearchBar/>
                     <FilterBar/>
+                    {/* <ToggleTest/> */}
                 </form>
             </div>
 
