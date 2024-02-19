@@ -15,7 +15,20 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
-const pages = ['หน้าแรก', 'คำสั่งซื้อ', 'ร้านของฉัน'];
+const pages = [
+  {
+    name: 'หน้าแรก',
+    path: '/'
+  },
+  {
+    name: 'คำสั่งซื้อ',
+    path: '/activity'
+  },
+  {
+    name: 'ร้านของฉัน',
+    path: '/store'
+  },
+];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 
@@ -38,16 +51,26 @@ export default function HeaderAppBar() {
     setAnchorElUser(null);
   };
 
+  const pageClick = (path: string) => {
+    window.location.replace(path)
+    setAnchorElNav(null);
+  }
+
+  const profileClick = (path: string) => {
+    window.location.replace(path)
+    setAnchorElUser(null);
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ bgcolor: '#c53030' }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
               variant="h6"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href="/"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -89,18 +112,19 @@ export default function HeaderAppBar() {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                  <MenuItem key={page.name} onClick={() => pageClick(page.path)}>
+                    <Typography textAlign="center">{page.name}</Typography>
                   </MenuItem>
                 ))}
+
               </Menu>
             </Box>
-            
+
             <Typography
               variant="h5"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href="/"
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -114,12 +138,12 @@ export default function HeaderAppBar() {
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
 
-                <Box key={page} sx={{ marginLeft: 2, marginRight: 2, display: 'flex', flexDirection: 'column' }}>
+                <Box key={page.name} sx={{ marginLeft: 2, marginRight: 2, display: 'flex', flexDirection: 'column' }}>
                   <Button
-                    onClick={handleCloseNavMenu}
+                    onClick={() => pageClick(page.path)}
                     sx={{ my: 2, color: 'white', display: 'block' }}
                   >
-                    {page}
+                    {page.name}
                   </Button>
                 </Box>
 
@@ -127,33 +151,11 @@ export default function HeaderAppBar() {
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Tooltip title="profile">
+                <IconButton onClick={() => profileClick("/profile")} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip>
-              {/* <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu> */}
             </Box>
           </Toolbar>
         </Container>

@@ -28,7 +28,7 @@ export default function RootLayout({
         <HeaderAppBar/>
       <ThemeProvider theme={theme}>
           {children}
-      <Bottombar />
+      {/* <Bottombar /> */}
       </ThemeProvider>
       </body>
     </html>
