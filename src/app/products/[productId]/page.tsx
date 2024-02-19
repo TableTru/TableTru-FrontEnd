@@ -86,28 +86,31 @@ export default function ProductDetail({ params }: { params: { store_id: string, 
 
                                 <SelectDateBox />
 
+                                <div className="mb-6">
+                                    <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">
+                                        <div className="p-3 lg:p-5 ">
+                                            {/* Map */}
+                                            <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
+                                            <div className="p-2 rounded-xl lg:p-6 dark:bg-gray-800 bg-gray-50">
+                                                123/xyz Location
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <ContactBox />
 
-                                <div className="flex gap-4 mb-6">
+                                <div className="flex flex-cols gap-4 mb-6">
                                     {/*<button href="@/app/products/category/[category-slug]/[productId]/page#" className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent dark:border-gray-700 hover:border-red-500 hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl" onClick="handleButtonConfirm()">*/}
                                     {/*    ยืนยันการจอง</button>*/}
+
                                     <ConfirmButton/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <DetailBox />
-                    <div className="mb-6">
-                        <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">
-                            <div className="p-3 lg:p-5 ">
-                                {/* Map */}
-                                <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
-                                <div className="p-2 rounded-xl lg:p-6 dark:bg-gray-800 bg-gray-50">
-                                    location
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
 
             </section>
