@@ -29,7 +29,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import AppBar from '@/components/Appbar'
+import AppBar from '@/components/HeaderAppBar'
 
 export default function ProfileCard() {
     const [userData, setUserData] = useState();

@@ -1,5 +1,5 @@
 import BottomNavigationbar from "@/components/Bottombar";
-import Appbar from "@/components/Appbar";
+import Appbar from "@/components/HeaderAppBar";
 import TabSelect from "@/components/activity/TabSelect";
 
 function Activity() {

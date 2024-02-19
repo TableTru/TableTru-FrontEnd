@@ -8,6 +8,7 @@ import './globals.css'
 import Footer from '@/components/Footer';
 import Bottombar from '@/components/Bottombar';
 import theme from '@/theme';
+import HeaderAppBar from '@/components/HeaderAppBar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className='bg-zinc-50'>
       <body className={inter.className}>
+        <HeaderAppBar/>
       <ThemeProvider theme={theme}>
           {children}
       <Bottombar />
