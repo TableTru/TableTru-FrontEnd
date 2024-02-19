@@ -115,7 +115,7 @@ export default function CreateStore() {
                     <Box sx={{ mt: 8, mb: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
                         <Box sx={{ display: "flex", alignItems: "left" }}>
                             <Typography component="h1" variant="h4">
-                                แก้ไขร้านค้า
+                                สร้างร้านค้า
                             </Typography>
                         </Box>
 
