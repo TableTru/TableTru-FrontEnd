@@ -34,7 +34,7 @@ const userTemp: User =
   user_id: 1,
   username: "Aungpor",
   password: "por1234",
-  user_status: "user",
+  user_status: "merchant",
   profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
   email: "aungpor.napat@gmail.com",
   phone_num: "0813111234",
