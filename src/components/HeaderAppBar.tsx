@@ -142,7 +142,7 @@ export default function HeaderAppBar() {
                 }}
               >
                 {pages.filter((page) => page.name !== "ร้านของฉัน" || isLogin).map((page) => (
-                  <Link key={page.name} href={`/${page.path}`}>
+                  <Link key={page.name} href={`${page.path}`}>
                     <MenuItem >
                       <Typography textAlign="center">{page.name}</Typography>
                     </MenuItem>
@@ -175,12 +175,11 @@ export default function HeaderAppBar() {
                 <>
                   {pages.map((page) => (
                     <Box key={page.name} sx={{ marginLeft: 2, marginRight: 2, display: 'flex', flexDirection: 'column' }}>
-                      <Button
-                        onClick={() => pageClick(page.path)}
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                      >
-                        {page.name}
-                      </Button>
+                      <Link href={`${page.path}`}>
+                        <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                          {page.name}
+                        </Button>
+                      </Link>
                     </Box>
                   ))}
                 </>
@@ -188,12 +187,11 @@ export default function HeaderAppBar() {
                 <>
                   {pages.filter((page) => page.name !== "ร้านของฉัน").map((page) => (
                     <Box key={page.name} sx={{ marginLeft: 2, marginRight: 2, display: 'flex', flexDirection: 'column' }}>
-                      <Button
-                        onClick={() => pageClick(page.path)}
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                      >
-                        {page.name}
-                      </Button>
+                      <Link href={`${page.path}`}>
+                        <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                          {page.name}
+                        </Button>
+                      </Link>
                     </Box>
                   ))}
                 </>
@@ -218,7 +216,7 @@ export default function HeaderAppBar() {
           </Toolbar>
         </Container>
       </AppBar>
-    </Box>
+    </Box >
 
   );
 }
