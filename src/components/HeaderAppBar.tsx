@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -35,6 +35,18 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 export default function HeaderAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [isLogin, setIsLogin] = useState(false);
+
+  const checkLoginStatus = () => {
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+    if (userData) {
+      console.log(userDataJson);
+      setIsLogin(true)
+    } else {
+      console.log("not login");
+    }
+  }
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -60,6 +72,10 @@ export default function HeaderAppBar() {
     window.location.replace(path)
     setAnchorElUser(null);
   }
+
+  useEffect((() => {
+    checkLoginStatus()
+  }), [])
 
   return (
     <Box sx={{ flexGrow: 1, position: 'fixed', top: 0, left: 0, right: 0, zIndex: 999 }}>
@@ -136,8 +152,7 @@ export default function HeaderAppBar() {
               TableTru
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
-
+              {pages.filter((page) => page.name !== "ร้านของฉัน" || isLogin).map((page) => (
                 <Box key={page.name} sx={{ marginLeft: 2, marginRight: 2, display: 'flex', flexDirection: 'column' }}>
                   <Button
                     onClick={() => pageClick(page.path)}
@@ -146,8 +161,8 @@ export default function HeaderAppBar() {
                     {page.name}
                   </Button>
                 </Box>
-
               ))}
+
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>

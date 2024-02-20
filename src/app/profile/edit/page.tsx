@@ -5,15 +5,31 @@ import EditProfileCard from '@/components/profile/EditProfileCard'
 import React, { useEffect, useState } from "react";
 
 export default function EditProfile() {
-    
-    useEffect((() => {
-    }),[])
+  const [isLogin, setIsLogin] = useState(false);
 
-    return (
-      <>
-        <div>
-          <EditProfileCard/>
-        </div>
-      </>
-    );
+  const checkLoginStatus = () => {
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+    if (userData) {
+      console.log(userDataJson);
+      setIsLogin(true)
+    } else {
+      console.log("not login");
+      window.location.replace('/login')
+    }
   }
+
+  useEffect((() => {
+    checkLoginStatus()
+  }), [])
+
+  return (
+    <>
+      {isLogin ? (
+        <EditProfileCard />
+      ) : (
+        <p>Please Login</p>
+      )}
+    </>
+  );
+}
