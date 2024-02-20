@@ -2,6 +2,7 @@
 
 import ProfileCard from "@/components/profile/ProfileCard";
 import EditProfileCard from '@/components/profile/EditProfileCard'
+import FormTest from '@/components/profile/FormTest'
 import React, { useEffect, useState } from "react";
 
 export default function EditProfile() {
@@ -27,6 +28,7 @@ export default function EditProfile() {
     <>
       {isLogin ? (
         <EditProfileCard />
+        // <FormTest/>
       ) : (
         <p>Please Login</p>
       )}
