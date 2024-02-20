@@ -13,14 +13,8 @@ function App() {
         if (userData) {
             console.log(userDataJson);
             setIsLogin(true)
-            if (userDataJson.user_status === "merchant") {
-                setUserData(userDataJson)
-                console.log(userDataJson.user_status);
-            }
-            else {
-                console.log("not merchant");
-                window.location.replace('/')
-            }
+            setUserData(userDataJson)
+            console.log(userDataJson.user_status);
 
 
         } else {
