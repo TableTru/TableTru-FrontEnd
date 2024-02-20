@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import Link from "next/link";
 
 const pages = [
   {
@@ -31,18 +32,31 @@ const pages = [
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
+interface LocalStorageUser {
+  user_id: number;
+  username: string;
+  password: string;
+  profile_image: string;
+  user_status: string;
+  email: string;
+  phone_num: string;
+  latitude: number;
+  longitude: number;
+}
 
 export default function HeaderAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [isLogin, setIsLogin] = useState(false);
+  const [userData, setUserData] = useState()
 
   const checkLoginStatus = () => {
     const userData = localStorage.getItem("userData")
-    const userDataJson = JSON.parse(userData || "[]");
+    const userDataJson: LocalStorageUser = JSON.parse(userData || "[]");
     if (userData) {
       console.log(userDataJson);
       setIsLogin(true)
+      setUserData(userDataJson)
     } else {
       console.log("not login");
     }
@@ -127,10 +141,14 @@ export default function HeaderAppBar() {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page.name} onClick={() => pageClick(page.path)}>
-                    <Typography textAlign="center">{page.name}</Typography>
-                  </MenuItem>
+                {pages.filter((page) => page.name !== "ร้านของฉัน" || isLogin).map((page) => (
+                  <Link key={page.name} href={`/${page.path}`}>
+                    <MenuItem >
+                      <Typography textAlign="center">{page.name}</Typography>
+                    </MenuItem>
+                  </Link>
+
+
                 ))}
 
               </Menu>
@@ -152,23 +170,48 @@ export default function HeaderAppBar() {
               TableTru
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.filter((page) => page.name !== "ร้านของฉัน" || isLogin).map((page) => (
-                <Box key={page.name} sx={{ marginLeft: 2, marginRight: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Button
-                    onClick={() => pageClick(page.path)}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                  >
-                    {page.name}
-                  </Button>
-                </Box>
-              ))}
+              {isLogin && userData.user_status === "merchant" ? (
+                // ถ้าเป็น true จะแสดงส่วนนี้
+                <>
+                  {pages.map((page) => (
+                    <Box key={page.name} sx={{ marginLeft: 2, marginRight: 2, display: 'flex', flexDirection: 'column' }}>
+                      <Button
+                        onClick={() => pageClick(page.path)}
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                      >
+                        {page.name}
+                      </Button>
+                    </Box>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {pages.filter((page) => page.name !== "ร้านของฉัน").map((page) => (
+                    <Box key={page.name} sx={{ marginLeft: 2, marginRight: 2, display: 'flex', flexDirection: 'column' }}>
+                      <Button
+                        onClick={() => pageClick(page.path)}
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                      >
+                        {page.name}
+                      </Button>
+                    </Box>
+                  ))}
+                </>
+              )}
+
 
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
+
               <Tooltip title="profile">
                 <IconButton onClick={() => profileClick("/profile")} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  {isLogin ? (
+                    <Avatar alt="Remy Sharp" src={`${userData.profile_image}`} />
+                  ) : (
+                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  )}
+
                 </IconButton>
               </Tooltip>
             </Box>

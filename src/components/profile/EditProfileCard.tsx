@@ -98,7 +98,7 @@ export default function EditProfileCard() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(userData);
-    window.location.replace('/login')
+    window.location.replace('/profile')
   };
 
   useEffect(() => {
@@ -183,15 +183,8 @@ export default function EditProfileCard() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            Edit
           </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>
