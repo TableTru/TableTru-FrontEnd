@@ -117,7 +117,6 @@ export default function ProfileCard() {
 
     const logout = () => {
         localStorage.removeItem('userData');
-        window.location.replace('/')
     }
 
     const storeCreateClick = () => {
@@ -133,7 +132,7 @@ export default function ProfileCard() {
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
 
-                <Box sx={{ marginTop: 8, marginBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                <Box sx={{ marginTop: 10, marginBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
                     <Box
                         sx={{
                             display: 'flex',
@@ -221,7 +220,7 @@ export default function ProfileCard() {
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                         <ListItemText primary={`${item.review_comment}`} secondary={`${item.store_name}`} />
                                         <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
-                                            <a href="">
+                                            <a href={`/products/${item.store_id}`}>
                                                 <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
                                             </a>
                                         </Box>
@@ -231,19 +230,30 @@ export default function ProfileCard() {
                             </List>
                         ))}
 
-                        <Link href="/store/create" sx={{
-                            marginBottom: 2,
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
-                            <Button variant="outlined">ลงทะเบียนร้านค้า</Button>
-                        </Link>
+                        {userTemp.user_status === "user" ? (
+                            <Link href="/store/create" sx={{
+                                marginBottom: 2,
+                                display: 'flex',
+                                flexDirection: 'column'
+                            }}>
+                                <Button variant="outlined">ลงทะเบียนร้านค้า</Button>
+                            </Link>
+                        ) : (
+                            <Link href="/store" sx={{
+                                marginBottom: 2,
+                                display: 'flex',
+                                flexDirection: 'column'
+                            }}>
+                                <Button variant="outlined">ร้านค้าของฉัน</Button>
+                            </Link>
+                        )}
+
                         <Link href="/" sx={{
                             marginBottom: 2,
                             display: 'flex',
                             flexDirection: 'column'
                         }}>
-                            <Button variant="contained" className={"bg-red-700"} color="error" sx={{ marginBottom: 2 }} >Logout</Button>
+                            <Button variant="contained" className={"bg-red-700"} color="error" sx={{ marginBottom: 2 }} onClick={logout} >Logout</Button>
                         </Link>
 
                     </Box>
