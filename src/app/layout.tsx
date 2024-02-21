@@ -6,8 +6,9 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import './globals.css'
 import Footer from '@/components/Footer';
-import BottomNavigationbar from '@/components/Bottombar';
+import Bottombar from '@/components/Bottombar';
 import theme from '@/theme';
+import HeaderAppBar from '@/components/HeaderAppBar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,9 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en" className='bg-zinc-50'>
       <body className={inter.className}>
+        <HeaderAppBar/>
       <ThemeProvider theme={theme}>
           {children}
-      <BottomNavigationbar />
+      {/* <Bottombar /> */}
       </ThemeProvider>
       </body>
     </html>

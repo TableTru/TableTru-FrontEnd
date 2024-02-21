@@ -36,5 +36,8 @@
     left: 0;
     white-space: nowrap;
     width: 1px;
-  }
+}
   
+.MuiSvgIcon-root.appBar{
+    color: white;
+}
