@@ -82,25 +82,18 @@ const storeTemp: Store =
     ]
 }
 
-const storeImageTemp: StoreImage[] = [
-    {
-        store_image_id: 1,
-        store_id: 1,
-        store_image_name: "",
-        store_image_type: "ภาพปกร้าน"
-    },
-    {
-        store_image_id: 2,
-        store_id: 1,
-        store_image_name: "",
-        store_image_type: "ภาพเมนู"
-    },
-]
+const storeImageTemp: StoreImage = {
+    store_image_id: 1,
+    store_id: 1,
+    store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+    store_image_type: "ภาพปกร้าน"
+}
 
 export default function StoreHome() {
     const theme = useTheme();
     const [storeData, setStoreData] = useState<Store>();
     const [storeImageData, setStoreImageData] = useState<StoreImage[]>()
+    const [coverImage, setCoverImage] = useState<StoreImage>()
 
     const fetchData = async () => {
         // const data = await getStoreById();
@@ -112,7 +105,7 @@ export default function StoreHome() {
         // }
 
         // const imageArray = [];
-        // const storeImages = await getStoreImageById();
+        // const storeImages = await getStoreImageByType(data.store_id, "ภาพเมนู" );
         // console.log(storeImages);
 
         // if (storeImages) {
@@ -124,7 +117,8 @@ export default function StoreHome() {
         // }
 
         setStoreData(storeTemp);
-        setStoreImageData(storeImageTemp);
+        // setStoreImageData(storeImageTemp);
+        setCoverImage(storeImageTemp)
     };
 
     useEffect(() => {
@@ -142,7 +136,7 @@ export default function StoreHome() {
                         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
 
                             <Box sx={{ width: '20%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <Avatar src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" sx={{ width: 150, height: 150, m: 1, bgcolor: 'secondary.main' }} />
+                                <Avatar src={coverImage?.store_image_name} sx={{ width: 150, height: 150, m: 1, bgcolor: 'secondary.main' }} />
                             </Box>
 
                             <Box sx={{ margin: 2, width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>

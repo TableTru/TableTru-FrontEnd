@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { Image, Textarea } from "@nextui-org/react";
 import {
     Tabs,
@@ -47,65 +48,170 @@ import ImageUpload from "@/components/store/ImageUpload";
 import Map from "@/components/Map";
 
 
+interface Store {
+    store_id: number;
+    category_id: number;
+    location_id: number;
+    store_name: string;
+    store_description: string;
+    table_booking: number;
+    sum_rating: number;
+    Latitude: string;
+    longitude: string;
+    OpenTimes: object[];
+}
+
+interface StoreImage {
+    store_image_id: number;
+    store_id: number;
+    store_image_name: string;
+    store_image_type: string;
+}
+
+const storeTemp: Store =
+{
+    store_id: 1,
+    category_id: 1,
+    location_id: 1,
+    store_name: "ร้านค้าของฉัน",
+    store_description: 'hahahahahahahahahaha',
+    table_booking: 4,
+    sum_rating: 3.25,
+    Latitude: '',
+    longitude: '',
+    OpenTimes: [
+        {
+            day: 'วันจันทร์',
+            open_time: '',
+            close_time: ''
+        },
+        {
+            day: 'วันอังคาร',
+            open_time: '',
+            close_time: ''
+        }
+    ]
+}
+
+const storeImageTemp: StoreImage[] = [
+    {
+        store_image_id: 1,
+        store_id: 1,
+        store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+        store_image_type: "ภาพปกร้าน"
+    },
+    {
+        store_image_id: 1,
+        store_id: 1,
+        store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+        store_image_type: "ภาพปกร้าน"
+    },
+]
+
+const categoryData = [
+    { label: "The Shawshank Redemption", year: 1994 },
+    {
+        label: "The Godfather",
+        year: 1972,
+    },
+    { label: "The Godfather: Part II", year: 1974 },
+];
+
 export default function EditStore() {
+    const [storeData, setStoreData] = useState<Store>();
+    const [storeImageData, setStoreImageData] = useState<StoreImage[]>()
+    const [coverImage, setCoverImage] = useState<StoreImage>()
+    const [formData, setFormData] = useState({
+        store_name: storeTemp.store_name,
+        store_description: storeTemp.store_description,
+        category_id: storeTemp.category_id,
+        table_booking: storeTemp.table_booking,
+        OpenTimes: storeTemp.OpenTimes,
+    })
 
     const rows = [
         {
-            name: 'วันจันทร์',
-            open: '10:00',
-            close: '12:00',
+            day: 'วันจันทร์',
+            open_time: '10:00',
+            close_time: '12:00',
         },
         {
-            name: 'วันอังคาร',
-            open: "10:00",
-            close: '12:00',
+            day: 'วันอังคาร',
+            open_time: "10:00",
+            close_time: '12:00',
         },
         {
-            name: 'วันพุธ',
-            open: "10:00",
-            close: '12:00',
+            day: 'วันพุธ',
+            open_time: "10:00",
+            close_time: '12:00',
         },
         {
-            name: 'วันพฤหัส',
-            open: "10:00",
-            close: '12:00',
+            day: 'วันพฤหัส',
+            open_time: "10:00",
+            close_time: '12:00',
         },
         {
-            name: 'วันศุกร์',
-            open: "10:00",
-            close: '12:00',
+            day: 'วันศุกร์',
+            open_time: "10:00",
+            close_time: '12:00',
         },
         {
-            name: 'วันเสาร์',
-            open: "10:00",
-            close: '12:00',
+            day: 'วันเสาร์',
+            open_time: "10:00",
+            close_time: '12:00',
         },
         {
-            name: 'วันอาทิตย์',
-            open: "10:00",
-            close: '12:00',
+            day: 'วันอาทิตย์',
+            open_time: "10:00",
+            close_time: '12:00',
         },
     ]
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        const newRegisterData = {
-            username: data.get("username") as string,
-            password: data.get("password") as string,
-            email: data.get("email") as string,
-            phone_number: data.get("phone_number") as string,
-        };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
 
-    const categoryData = [
-        { label: "The Shawshank Redemption", year: 1994 },
-        {
-            label: "The Godfather",
-            year: 1972,
-        },
-        { label: "The Godfather: Part II", year: 1974 },
-    ];
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData);
+        // window.location.replace('/profile')
+    };
+
+
+
+    const fetchData = async () => {
+        // const data = await getStoreById();
+        // console.log(data);
+
+        // if (data) {
+        //     setStoreData(data);
+        //     console.log(data);
+        // }
+
+        // const imageArray = [];
+        // const storeImages = await getStoreImageByType(data.store_id, "ภาพเมนู" );
+        // console.log(storeImages);
+
+        // if (storeImages) {
+        //     for (const storeImageObject of storeImages) {
+        //         imageArray.push(storeImageObject);
+        //     }
+        //     setStoreImageData(imageArray);
+        //     console.log(imageArray);
+        // }
+
+        setStoreData(storeTemp);
+        // setStoreImageData(storeImageTemp);
+        setCoverImage(storeImageTemp)
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -134,6 +240,11 @@ export default function EditStore() {
                                         required
                                         fullWidth
                                         id="store_name"
+                                        name="store_name"
+                                        label="store_name"
+                                        autoComplete="store_name"
+                                        value={formData.store_name}
+                                        onChange={handleChange}
                                     />
                                 </Grid>
 
@@ -144,10 +255,12 @@ export default function EditStore() {
                                         fullWidth
                                         multiline
                                         rows={4} // ตั้งค่าจำนวนบรรทัดที่แสดง
-                                        id="store_description"
-                                        // label="คำอธิบายร้าน"
-                                        name="store_description"
-                                        autoComplete="store_description"
+                                        id="store_name"
+                                        name="store_name"
+                                        label="store_name"
+                                        autoComplete="store_name"
+                                        value={formData.store_description}
+                                        onChange={handleChange}
                                     />
                                 </Grid>
 
@@ -215,23 +328,23 @@ export default function EditStore() {
 
                                                     {rows.map((item, index) => (
                                                         <Box key={index} className="grid grid-cols-1 gap-4 md:grid-cols-3 gap-4">
-                                                                <p>{item.name}</p>
-                                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                    <DemoContainer components={["TimePicker"]}>
-                                                                        <TimePicker
-                                                                            label="เวลาเปิด"
-                                                                            className={"w-full"}
-                                                                        />
-                                                                    </DemoContainer>
-                                                                </LocalizationProvider>
-                                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                    <DemoContainer components={["TimePicker"]}>
-                                                                        <TimePicker
-                                                                            label="เวลาปิด"
-                                                                            className={"w-full"}
-                                                                        />
-                                                                    </DemoContainer>
-                                                                </LocalizationProvider>
+                                                            <p>{item.day}</p>
+                                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                <DemoContainer components={["TimePicker"]}>
+                                                                    <TimePicker
+                                                                        label="เวลาเปิด"
+                                                                        className={"w-full"}
+                                                                    />
+                                                                </DemoContainer>
+                                                            </LocalizationProvider>
+                                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                <DemoContainer components={["TimePicker"]}>
+                                                                    <TimePicker
+                                                                        label="เวลาปิด"
+                                                                        className={"w-full"}
+                                                                    />
+                                                                </DemoContainer>
+                                                            </LocalizationProvider>
                                                         </Box>
 
                                                     ))}
