@@ -1,7 +1,6 @@
 'use client';
 
 import React from "react";
-import Appbar from "@/components/Appbar"
 import { FormControl,FormHelperText,Input,InputLabel,TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -32,7 +31,6 @@ const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
   return(
     <>
-    <Appbar />
       <Container component="main" maxWidth="xs">
         <Box
           sx={{

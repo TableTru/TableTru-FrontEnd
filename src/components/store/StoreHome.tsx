@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "@nextui-org/react";
 import {
     Tabs,
@@ -37,8 +37,63 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 
 
+interface Store {
+    store_id: number;
+    category_id: number;
+    location_id: number;
+    store_name: string;
+    store_description: string;
+    table_booking: number;
+    sum_rating: number;
+    Latitude: string;
+    longitude: string;
+    OpenTimes: object[];
+}
+
+const storeTemp: Store =
+{
+    store_id: 1,
+    category_id: 1,
+    location_id: 1,
+    store_name: "ร้านค้าของฉัน",
+    store_description: 'hahahahahahahahahaha',
+    table_booking: 4,
+    sum_rating: 3.25,
+    Latitude: '',
+    longitude: '',
+    OpenTimes: [
+        {
+            day: 'วันจันทร์',
+            open_time: '',
+            close_time: ''
+        },
+        {
+            day: 'วันอังคาร',
+            open_time: '',
+            close_time: ''
+        }
+    ]
+}
+
 export default function StoreHome() {
     const theme = useTheme();
+    const [storeData, setStoreData] = useState<Store>();
+
+    const fetchData = async () => {
+        // const data = await getStore();
+        // console.log(data);
+
+        // if (data) {
+        //     setStoreData(data);
+        //     console.log(data);
+        // }
+
+        setStoreData(storeTemp);
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -55,7 +110,7 @@ export default function StoreHome() {
                             </Box>
 
                             <Box sx={{ margin: 2, width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
-                                <Typography component="h1" variant="h5"> ร้านอาหารของฉัน </Typography>
+                                <Typography component="h1" variant="h5"> {storeData?.store_name} </Typography>
                                 <Stack direction="row" spacing={1}>
                                     <Chip label="ยืนยัน" color="success" />
                                     <Chip label="ยืนยัน" color="success" />

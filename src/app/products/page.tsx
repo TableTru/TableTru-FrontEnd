@@ -1,5 +1,5 @@
 import RestaurantCard from "@/components/cards/Restaurantcard";
-import Appbar from "@/components/Appbar";
+import Appbar from "@/components/HeaderAppBar";
 import SearchFilterBar from "@/components/SearchHeader";
 import SearchBar from "@/components/SearchBar";
 import FilterBar from "@/components/FilterBar";
@@ -7,7 +7,6 @@ import FilterBar from "@/components/FilterBar";
 export default function FoodDetail() {
 
     return (<>
-        <Appbar/>
         <div className="py-20 px-2">
             <h3 className={"text-3xl text-center"}>ร้านอาหารทั้งหมด</h3>
         </div>
