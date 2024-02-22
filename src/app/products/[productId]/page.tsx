@@ -10,10 +10,38 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Map from "@/components/Map";
 import ConfirmButton from "@/components/botton/ConfirmButton";
+import {useEffect, useState} from "react";
+import { getStore } from "@/services/store.service";
+
+import { products } from "@/data/product";
+
+//
+// const [storeData, setStoreData] = useState<>([]);
+//
+// const fetchData = async () => {
+//     const storeArray = [];
+//     const data = await getStore();
+//     console.log(data);
+//
+//     if (data) {
+//         const stores = data;
+//         for (const storeObj of stores) {
+//             storeArray.push(storeObj);
+//         }
+//     }
+//     setStoreData(storeArray);
+//     console.log(storeArray);
+// };
+//
+// useEffect(() => {
+//     fetchData();
+// }, []);
 
 
 
-export default function ProductDetail({ params }: { params: { store_id: string, store_name: string, total_review: string } }) {
+
+export default function ProductDetail({ params }) {
+
 
     return (
         <>
@@ -29,7 +57,7 @@ export default function ProductDetail({ params }: { params: { store_id: string, 
                                     <span className="px-2.5 py-0.5 text-xs text-red-600 bg-red-100 dark:bg-gray-700 rounded-xl dark:text-gray-200">New
                                         Arrival</span>
                                     <h2 className="max-w-xl mt-6 mb-6 text-xl font-semibold leading-loose tracking-wide text-gray-700 md:text-2xl dark:text-gray-300">
-                                        {params.store_id}
+                                        {params.store_name}
                                     </h2>
                                     <div className="flex flex-wrap items-center mb-6">
                                         <ul className="flex mb-4 mr-2 lg:mb-0">
@@ -75,7 +103,7 @@ export default function ProductDetail({ params }: { params: { store_id: string, 
                                             </li>
                                         </ul>
                                         <a className="mb-4 text-xs underline hover:text-red-600 dark:text-gray-400 dark:hover:text-gray-300 lg:mb-0" href="@/app/products/category/[category-slug]/[productId]/page#">
-                                            20 reviews
+                                            {params.total_review}
                                         </a>
                                     </div>
                                 </div>
