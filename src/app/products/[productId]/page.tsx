@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
 import DetailBox from "@/components/product/DetailBox";
@@ -11,9 +14,33 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Map from "@/components/Map";
 import ConfirmButton from "@/components/botton/ConfirmButton";
 
+interface Store {
+}
 
+const storeTemp = {
+
+}
 
 export default function ProductDetail({ params }: { params: { store_id: string, store_name: string, total_review: string } }) {
+
+    const [stoeData, setStoreData] = useState<Store>();
+
+    const fetchData = async () => {
+        // const data = await getStoreById(params.store_id);
+        // console.log(data);
+
+        // if (data) {
+        //     setStoreData(data);
+        //     console.log(data);
+        // }
+
+        setStoreData(storeTemp);
+
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <>
