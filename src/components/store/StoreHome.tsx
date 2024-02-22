@@ -50,6 +50,13 @@ interface Store {
     OpenTimes: object[];
 }
 
+interface StoreImage {
+    store_image_id: number;
+    store_id: number;
+    store_image_name: string;
+    store_image_type: string;
+}
+
 const storeTemp: Store =
 {
     store_id: 1,
@@ -75,12 +82,28 @@ const storeTemp: Store =
     ]
 }
 
+const storeImageTemp: StoreImage[] = [
+    {
+        store_image_id: 1,
+        store_id: 1,
+        store_image_name: "",
+        store_image_type: "ภาพปกร้าน"
+    },
+    {
+        store_image_id: 2,
+        store_id: 1,
+        store_image_name: "",
+        store_image_type: "ภาพเมนู"
+    },
+]
+
 export default function StoreHome() {
     const theme = useTheme();
     const [storeData, setStoreData] = useState<Store>();
+    const [storeImageData, setStoreImageData] = useState<StoreImage[]>()
 
     const fetchData = async () => {
-        // const data = await getStore();
+        // const data = await getStoreById();
         // console.log(data);
 
         // if (data) {
@@ -88,7 +111,20 @@ export default function StoreHome() {
         //     console.log(data);
         // }
 
+        // const imageArray = [];
+        // const storeImages = await getStoreImageById();
+        // console.log(storeImages);
+
+        // if (storeImages) {
+        //     for (const storeImageObject of storeImages) {
+        //         imageArray.push(storeImageObject);
+        //     }
+        //     setStoreImageData(imageArray);
+        //     console.log(imageArray);
+        // }
+
         setStoreData(storeTemp);
+        setStoreImageData(storeImageTemp);
     };
 
     useEffect(() => {
