@@ -13,35 +13,33 @@ import ConfirmButton from "@/components/botton/ConfirmButton";
 import {useEffect, useState} from "react";
 import { getStore } from "@/services/store.service";
 
-import { products } from "@/data/product";
+interface Store {
+}
 
-//
-// const [storeData, setStoreData] = useState<>([]);
-//
-// const fetchData = async () => {
-//     const storeArray = [];
-//     const data = await getStore();
-//     console.log(data);
-//
-//     if (data) {
-//         const stores = data;
-//         for (const storeObj of stores) {
-//             storeArray.push(storeObj);
-//         }
-//     }
-//     setStoreData(storeArray);
-//     console.log(storeArray);
-// };
-//
-// useEffect(() => {
-//     fetchData();
-// }, []);
+const storeTemp = {
 
+}
 
+export default function ProductDetail({ params }: { params: { store_id: string, store_name: string, total_review: string } }) {
 
+    const [stoeData, setStoreData] = useState<Store>();
 
-export default function ProductDetail({ params }) {
+    const fetchData = async () => {
+        // const data = await getStoreById(params.store_id);
+        // console.log(data);
 
+        // if (data) {
+        //     setStoreData(data);
+        //     console.log(data);
+        // }
+
+        setStoreData(storeTemp);
+
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <>
