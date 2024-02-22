@@ -2,11 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-.MuiInputBase-input.MuiOutlinedInput-input{
+.MuiInputBase-input.MuiOutlinedInput-input {
     padding: 14px 16.5px;
 }
 
-.MuiFormControl-root.MuiFormControl-fullWidth.MuiTextField-root.aungpor {
-    padding: 14px 50px;
+.MuiButton-containedPrimary {
+    background-color: #c53030;
+  }
+
+.MuiButton-containedPrimary:hover {
+    background-color: transparent;
+    /* ปิด hover */
+    color: #3c52b2;
+    /* ปิด hover */
 }
 
+.MuiList-root.MuiList-padding.bottom-line{
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.activity {
+    color: #c53030;
+    padding-left: 10px;
+}
+
+.visually-hidden-input {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    white-space: nowrap;
+    width: 1px;
+}
+  
+.MuiSvgIcon-root.appBar{
+    color: white;
+}

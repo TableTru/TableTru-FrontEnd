@@ -1,150 +1,192 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import { Image } from "@nextui-org/react";
+import {
+  Tabs,
+  Tab,
+  Container,
+  Box, Avatar,
+  Typography,
+  Grid,
+  TextField,
+  Button,
+  Link,
+  CssBaseline,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  ListItemButton,
+
+
+} from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import ImageIcon from '@mui/icons-material/Image';
+import WorkIcon from '@mui/icons-material/Work';
+import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import {createUser} from '@/services/user.service'
+interface User {
+  user_id: number;
+  username: string;
+  password: string;
+  profile_image: string;
+  user_status: string;
+  email: string;
+  phone_num: string;
+  latitude: number;
+  longitude: number;
+}
+
+const userTemp =
+{
+  user_id: 1,
+  username: "Aungpor",
+  password: "por1234",
+  user_status: "user",
+  profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+  email: "aungpor.napat@gmail.com",
+  phone_num: "0813111234",
+  latitude: 0,
+  longitude: 0,
+
+}
 
 export default function SignUp() {
-  const [registerData, setRegisterData] = useState({
-    username: '',
-    password: '',
-    email: '',
-    phone_number: '',
+  const [userData, setUserData] = useState({
+    username: "",
+    password: "",
+    email: "",
+    phone_num: "",
+    profile_image: ""
   });
-  
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const newRegisterData = {
-      username: data.get('username') as string,
-      password: data.get('password') as string,
-      email: data.get('email') as string,
-      phone_number: data.get('phone_number') as string,
-    };
-  
-    setRegisterData(newRegisterData);
+  const fetchData = async () => {
+    // const data = await getUser();
+    // console.log(data);
 
-    const newUser = await createUser(newRegisterData)
-    console.log(newUser);
-    window.location.replace('/login')
+    // if (data) {
+    //     setUserData(data);
+    //     console.log(data);
+    // }
+
+    // const reviewArray = [];
+    // const userReviews = await getUserReview();
+    // console.log(userReviews);
+
+    // if (userReviews) {
+    //     for (const reviewObject of userReviews) {
+    //         reviewArray.push(reviewObject);
+    //     }
+    //     setReviewData(reviewArray);
+    //     console.log(reviewArray);
+    // }
+
+    setUserData(userTemp);
 
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(userData);
+    window.location.replace('/')
+  };
+
+  useEffect(() => {
+    // fetchData();
+  }, []);
+
   return (
-    <ThemeProvider theme={createTheme()}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              {/* <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid> */}
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  autoComplete="username"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="phone_number"
-                  label="Phone Number"
-                  name="phone_number"
-                  autoComplete="phone_number"
-                />
-              </Grid>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+
+
+        <Typography sx={{mt: 11}} component="h1" variant="h5">
+        SignUp
+        </Typography>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+
+              <Box
+                sx={{ mb: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+                <Avatar src={`${userData.profile_image}`} sx={{ width: 200, height: 200, mt: 2, mb: 2, bgcolor: 'secondary.main' }} />
+              </Box>
+
+              <TextField
+                required
+                fullWidth
+                id="username"
+                name="username"
+                label="Username"
+                autoComplete="username"
+                value={userData.username}
+                onChange={handleChange}
+              />
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="password"
+                name="password"
+                label="password"
+                autoComplete="password"
+                value={userData.password}
+                onChange={handleChange}
+              />
             </Grid>
-          </Box>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                name="email"
+                label="email"
+                autoComplete="email"
+                value={userData.email}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="phone_num"
+                name="phone_num"
+                label="phone_num"
+                autoComplete="phone_num"
+                value={userData.phone_num}
+                onChange={handleChange}
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Edit
+          </Button>
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Box>
+    </Container>
   );
-}
+};

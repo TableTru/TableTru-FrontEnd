@@ -15,6 +15,36 @@ import { styled } from "@mui/material/styles";
 import { getLoginUser } from '@/utills/auth'
 import { useRouter } from "next/router";
 
+interface User {
+  user_id: number;
+  username: string;
+  password: string;
+  profile_image: string;
+  user_status: string;
+  email: string;
+  phone_num: string;
+  latitude: number;
+  longitude: number;
+  createAt: Date;
+  updateAt: Date;
+}
+
+const userTemp: User =
+{
+  user_id: 1,
+  username: "Aungpor",
+  password: "por1234",
+  user_status: "merchant",
+  profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+  email: "aungpor.napat@gmail.com",
+  phone_num: "0813111234",
+  latitude: 0,
+  longitude: 0,
+  createAt: new Date(),
+  updateAt: new Date(),
+
+}
+
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     username: '',
@@ -47,6 +77,12 @@ export default function LoginForm() {
     console.log('Form submitted:', formData);
     Login()
   };
+
+  const tempLogin = async () => {
+    localStorage.setItem('userData', JSON.stringify(userTemp));
+    console.log("login pass " + userTemp.username);
+    window.location.replace('/')
+  }
 
   return (
     <div className="">
@@ -106,7 +142,9 @@ export default function LoginForm() {
                 {"Sign Up"}
               </Link>
             </Grid>
+            
           </Grid>
+          <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={tempLogin}>Temp Login</Button>
         </div>
       </Container>
     </div>

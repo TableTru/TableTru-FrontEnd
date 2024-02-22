@@ -1,17 +1,17 @@
 "use client";
-
 import React, { useState } from "react";
-import { Image } from "@nextui-org/react";
+import { Image, Textarea } from "@nextui-org/react";
 import {
     Tabs,
     Tab,
     Container,
-    Box, Avatar,
+    Box,
+    Avatar,
     Typography,
-    Grid,
     TextField,
     Button,
     Link,
+    Grid,
     CssBaseline,
     List,
     ListItem,
@@ -22,38 +22,90 @@ import {
     AccordionSummary,
     AccordionDetails,
     Autocomplete,
-
-
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
 } from "@mui/material";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CreateStoreDetail from '@/components/store/CreateStoreDetail'
-import ImageUpload from '@/components/store/ImageUpload'
+
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import ImageIcon from "@mui/icons-material/Image";
+import WorkIcon from "@mui/icons-material/Work";
+import BeachAccessIcon from "@mui/icons-material/BeachAccess";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CreateStoreDetail from "@/components/store/CreateStoreDetail";
+import ImageUpload from "@/components/store/ImageUpload";
+import Map from "@/components/Map";
 
 
 export default function EditStore() {
+
+    const rows = [
+        {
+            name: 'วันจันทร์',
+            open: '10:00',
+            close: '12:00',
+        },
+        {
+            name: 'วันอังคาร',
+            open: "10:00",
+            close: '12:00',
+        },
+        {
+            name: 'วันพุธ',
+            open: "10:00",
+            close: '12:00',
+        },
+        {
+            name: 'วันพฤหัส',
+            open: "10:00",
+            close: '12:00',
+        },
+        {
+            name: 'วันศุกร์',
+            open: "10:00",
+            close: '12:00',
+        },
+        {
+            name: 'วันเสาร์',
+            open: "10:00",
+            close: '12:00',
+        },
+        {
+            name: 'วันอาทิตย์',
+            open: "10:00",
+            close: '12:00',
+        },
+    ]
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const newRegisterData = {
-            username: data.get('username') as string,
-            password: data.get('password') as string,
-            email: data.get('email') as string,
-            phone_number: data.get('phone_number') as string,
+            username: data.get("username") as string,
+            password: data.get("password") as string,
+            email: data.get("email") as string,
+            phone_number: data.get("phone_number") as string,
         };
-
     };
 
     const categoryData = [
-        { label: 'The Shawshank Redemption', year: 1994 },
-        { label: 'The Godfather', year: 1972 },
-        { label: 'The Godfather: Part II', year: 1974 },
-    ]
+        { label: "The Shawshank Redemption", year: 1994 },
+        {
+            label: "The Godfather",
+            year: 1972,
+        },
+        { label: "The Godfather: Part II", year: 1974 },
+    ];
 
     return (
         <>
@@ -61,122 +113,146 @@ export default function EditStore() {
                 <Container component="main" maxWidth="md">
                     <CssBaseline />
 
-                    <Box sx={{ marginTop: 8, display: 'flex', alignItems: 'left', }}>
-                        <Typography component="h1" variant="h4">
-                            แก้ไขร้านค้า
-                        </Typography>
-                    </Box>
+                    <Box sx={{ mt: 8, mb: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                        <Box sx={{ display: "flex", alignItems: "left" }}>
+                            <Typography component="h1" variant="h4">
+                                แก้ไขร้านค้า
+                            </Typography>
+                        </Box>
 
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-
-                            <Grid item xs={12}>
-                                <Typography variant="subtitle1">
-                                    ชื่อร้าน
-                                </Typography>
-                                <TextField
-                                    className="aungpor"
-                                    required
-                                    fullWidth
-                                    id="store_name"
-                                />
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <Typography variant="subtitle1">
-                                    ค้นหาพิกัดของร้าน
-                                </Typography>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="store_Location"
-                                />
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <Typography variant="subtitle1">
-                                    คำอธิบายร้าน
-                                </Typography>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="store_description"
-                                    // label="คำอธิบายร้าน"
-                                    name="store_description"
-                                    autoComplete="store_description"
-                                />
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <Typography variant="subtitle1">
-                                    เพิ่มรูปภาพร้านค้า
-                                </Typography>
-                                {/* <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" /> */}
-                                <ImageUpload />
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <Accordion>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel1-content"
-                                        id="panel1-header"
-                                    >
-                                        รายละเอียดร้านค้า
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12}>
-                                                <Typography variant="subtitle1">
-                                                    หมวดหมู่
-                                                </Typography>
-                                                <Autocomplete
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={categoryData}
-                                                    renderInput={(params) => <TextField {...params} label="หมวดหมู่" />}
-                                                />
-                                            </Grid>
-
-                                            <Grid item xs={12}>
-                                                <Typography variant="subtitle1">
-                                                    จำนวนโต๊ะที่เปิดให้จอง
-                                                </Typography>
-                                                <TextField
-                                                    required
-                                                    fullWidth
-                                                    id="table_num"
-                                                />
-                                            </Grid>
-                                        </Grid>
-                                    </AccordionDetails>
-                                </Accordion>
-                            </Grid>
-                        </Grid>
-
-                        <a href="/store">
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                className={"bg-red-700"}
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                ยกเลิก
-                            </Button>
-                        </a>
-
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
+                        <Box
+                            component="form"
+                            noValidate
+                            onSubmit={handleSubmit}
+                            sx={{ my: 3 }}
                         >
-                            แก้ไขร้านค้า
-                        </Button>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle1">ชื่อร้าน</Typography>
+                                    <TextField
+                                        className="aungpor"
+                                        required
+                                        fullWidth
+                                        id="store_name"
+                                    />
+                                </Grid>
 
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle1">คำอธิบายร้าน</Typography>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        multiline
+                                        rows={4} // ตั้งค่าจำนวนบรรทัดที่แสดง
+                                        id="store_description"
+                                        // label="คำอธิบายร้าน"
+                                        name="store_description"
+                                        autoComplete="store_description"
+                                    />
+                                </Grid>
 
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle1">ค้นหาพิกัดของร้าน</Typography>
+                                    <TextField required fullWidth id="store_Location" />
+                                </Grid>
 
+                                <Grid item xs={12}>
+                                    <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle1">อัปโหลดเมนู</Typography>
+                                    {/* <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" /> */}
+                                    <ImageUpload />
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <Accordion>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1-content"
+                                            id="panel1-header"
+                                        >
+                                            รายละเอียดร้านค้า
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">หมวดหมู่</Typography>
+                                                    <Autocomplete
+                                                        disablePortal
+                                                        id="combo-box-demo"
+                                                        options={categoryData}
+                                                        renderInput={(params) => (
+                                                            <TextField {...params} label="หมวดหมู่" />
+                                                        )}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">
+                                                        แก้ไขรูปภาพ
+                                                    </Typography>
+                                                    {/* <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" /> */}
+                                                    <ImageUpload />
+                                                </Grid>
+
+                                                <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">
+                                                        จำนวนโต๊ะที่เปิดให้จอง
+                                                    </Typography>
+                                                    <TextField required fullWidth id="table_num" />
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item xs={12} sx={{ marginTop: 3 }}>
+                                                <Typography variant="subtitle1">
+                                                    วันที่เปิด-ปิด
+                                                </Typography>
+
+                                                {/*Monday*/}
+
+                                                <div >
+
+                                                    {rows.map((item, index) => (
+                                                        <Box key={index} className="grid grid-cols-1 gap-4 md:grid-cols-3 gap-4">
+                                                                <p>{item.name}</p>
+                                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                    <DemoContainer components={["TimePicker"]}>
+                                                                        <TimePicker
+                                                                            label="เวลาเปิด"
+                                                                            className={"w-full"}
+                                                                        />
+                                                                    </DemoContainer>
+                                                                </LocalizationProvider>
+                                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                    <DemoContainer components={["TimePicker"]}>
+                                                                        <TimePicker
+                                                                            label="เวลาปิด"
+                                                                            className={"w-full"}
+                                                                        />
+                                                                    </DemoContainer>
+                                                                </LocalizationProvider>
+                                                        </Box>
+
+                                                    ))}
+                                                </div>
+                                            </Grid>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                </Grid>
+                            </Grid>
+                            <Link href="/store">
+                                <Button
+                                    sx={{ marginTop: 3 }}
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                >
+                                    แก้ไขร้านค้า
+                                </Button>
+                            </Link>
+                        </Box>
                     </Box>
-
                 </Container>
             </ThemeProvider>
         </>

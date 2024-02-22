@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Appbar from "@/components/Appbar";
+import Appbar from "@/components/HeaderAppBar";
 import RestaurantCard from "@/components/cards/Restaurantcard";
 import CardHomePage from "@/components/CardSelected";
 import CategoriesScrollCards from "@/components/cards/active/HorizontalScrollCards";
@@ -13,7 +13,6 @@ import BackgroundCard from "@/components/BackgroundImage";
 export default function Home() {
   return (
     <>
-      <Appbar />
       <BackgroundCard />
       <div className="min-h-screen mt-8 space-x-4">
         <div className={"flex item-center justify-center space-x-4"}>
