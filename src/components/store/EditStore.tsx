@@ -89,14 +89,39 @@ const storeTemp: Store =
     OpenTimes: [
         {
             day: 'วันจันทร์',
-            open_time: new Date(),
-            close_time: new Date()
+            open_time: '2024-02-23 15:44:29',
+            close_time: '2022-04-17T15:30',
         },
         {
             day: 'วันอังคาร',
-            open_time: new Date(),
-            close_time: new Date()
-        }
+            open_time: '2022-04-17T15:30',
+            close_time: '2022-04-17T15:30',
+        },
+        {
+            day: 'วันพุธ',
+            open_time: '2022-04-17T15:30',
+            close_time: '2022-04-17T15:30',
+        },
+        {
+            day: 'วันพฤหัส',
+            open_time: '2022-04-17T15:30',
+            close_time: '2022-04-17T15:30',
+        },
+        {
+            day: 'วันศุกร์',
+            open_time: '2022-04-17T15:30',
+            close_time: '2022-04-17T15:30',
+        },
+        {
+            day: 'วันเสาร์',
+            open_time: '2022-04-17T15:30',
+            close_time: '2022-04-17T15:30',
+        },
+        {
+            day: 'วันอาทิตย์',
+            open_time: '2022-04-17T15:30',
+            close_time: '2022-04-17T15:30',
+        },
     ]
 }
 
@@ -142,44 +167,6 @@ export default function EditStore() {
         OpenTimes: storeTemp.OpenTimes,
     })
 
-    const rows = [
-        {
-            day: 'วันจันทร์',
-            open_time: '10:00',
-            close_time: '12:00',
-        },
-        {
-            day: 'วันอังคาร',
-            open_time: "10:00",
-            close_time: '12:00',
-        },
-        {
-            day: 'วันพุธ',
-            open_time: "10:00",
-            close_time: '12:00',
-        },
-        {
-            day: 'วันพฤหัส',
-            open_time: "10:00",
-            close_time: '12:00',
-        },
-        {
-            day: 'วันศุกร์',
-            open_time: "10:00",
-            close_time: '12:00',
-        },
-        {
-            day: 'วันเสาร์',
-            open_time: "10:00",
-            close_time: '12:00',
-        },
-        {
-            day: 'วันอาทิตย์',
-            open_time: "10:00",
-            close_time: '12:00',
-        },
-    ]
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -191,18 +178,20 @@ export default function EditStore() {
         console.log(formData.OpenTimes);
     };
 
-    const handleTimeChange = (newValue, index) => {
-        console.log(newValue);
-        console.log(index);
-        // setFormData((prevData) => {
-        //     const updatedOpenTimes = [...prevData.OpenTimes];
-        //     console.log(prevData.OpenTimes);
-        //     updatedOpenTimes[index].open_time = newValue;
-        //     console.log(updatedOpenTimes);
-            
-        //     return { ...prevData, OpenTimes: updatedOpenTimes };
-        // });
+    const handleOpenTimeChange = (index, newValue) => {
+        const newOpenTimes = [...storeTemp.OpenTimes];
+        newOpenTimes[index].open_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        setFormData({ ...storeTemp, OpenTimes: newOpenTimes });
+        console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
     };
+
+    const handleCloseTimeChange = (index, newValue) => {
+        const newCloseTimes = [...storeTemp.OpenTimes];
+        newCloseTimes[index].close_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        setFormData({ ...storeTemp, OpenTimes: newCloseTimes });
+        console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
+    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -388,8 +377,8 @@ export default function EditStore() {
                                                                     <TimePicker
                                                                         label="เวลาเปิด"
                                                                         className={"w-full"}
-                                                                        value={item.open_time}
-                                                                        onChange={(newValue) => setValue(newValue)}
+                                                                        value={dayjs(item.open_time)}
+                                                                        onChange={(newValue) => handleOpenTimeChange(index, newValue)}
                                                                     />
                                                                 </DemoContainer>
                                                             </LocalizationProvider>
@@ -398,6 +387,8 @@ export default function EditStore() {
                                                                     <TimePicker
                                                                         label="เวลาปิด"
                                                                         className={"w-full"}
+                                                                        value={dayjs(item.close_time)}
+                                                                        onChange={(newValue) => handleCloseTimeChange(index, newValue)}
                                                                     />
                                                                 </DemoContainer>
                                                             </LocalizationProvider>
