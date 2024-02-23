@@ -178,14 +178,14 @@ export default function EditStore() {
         console.log(formData.OpenTimes);
     };
 
-    const handleOpenTimeChange = (index, newValue) => {
+    const handleOpenTimeChange = (index: number, newValue: any) => {
         const newOpenTimes = [...storeTemp.OpenTimes];
         newOpenTimes[index].open_time = newValue.format('YYYY-MM-DD HH:mm:ss');
         setFormData({ ...storeTemp, OpenTimes: newOpenTimes });
         console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
     };
 
-    const handleCloseTimeChange = (index, newValue) => {
+    const handleCloseTimeChange = (index: number, newValue: any) => {
         const newCloseTimes = [...storeTemp.OpenTimes];
         newCloseTimes[index].close_time = newValue.format('YYYY-MM-DD HH:mm:ss');
         setFormData({ ...storeTemp, OpenTimes: newCloseTimes });
