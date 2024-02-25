@@ -116,7 +116,7 @@ export default function Restaurantcard() {
   return (
     <>
       {tempData.map((item) => (
-        <Link href={`/products/${item.store_id}`}>
+        <Link href={`/products/${item.store_id}`}  key={item.store_id}>
           <Card sx={{ maxWidth: 345 }}>
             <CardActionArea>
               <CardMedia
