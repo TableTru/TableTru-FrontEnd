@@ -179,16 +179,16 @@ export default function EditStore() {
     };
 
     const handleOpenTimeChange = (index: number, newValue: any) => {
-        const newOpenTimes = [...storeTemp.OpenTimes];
+        const newOpenTimes = [...formData.OpenTimes];
         newOpenTimes[index].open_time = newValue.format('YYYY-MM-DD HH:mm:ss');
-        setFormData({ ...storeTemp, OpenTimes: newOpenTimes });
+        setFormData({ ...formData, OpenTimes: newOpenTimes });
         console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
     };
 
     const handleCloseTimeChange = (index: number, newValue: any) => {
-        const newCloseTimes = [...storeTemp.OpenTimes];
+        const newCloseTimes = [...formData.OpenTimes];
         newCloseTimes[index].close_time = newValue.format('YYYY-MM-DD HH:mm:ss');
-        setFormData({ ...storeTemp, OpenTimes: newCloseTimes });
+        setFormData({ ...formData, OpenTimes: newCloseTimes });
         console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
     };
 

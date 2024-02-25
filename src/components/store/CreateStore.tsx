@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { Image, Textarea } from "@nextui-org/react";
 import {
     Tabs,
@@ -29,6 +30,12 @@ import {
     TableHead,
     TableRow,
     Paper,
+    InputLabel,
+    MenuItem,
+    Select,
+    FormControl,
+
+
 } from "@mui/material";
 
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -45,66 +52,116 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CreateStoreDetail from "@/components/store/CreateStoreDetail";
 import ImageUpload from "@/components/store/ImageUpload";
 import Map from "@/components/Map";
+import dayjs, { Dayjs } from 'dayjs';
 
-export default function CreateStore() {
-  
-    const rows = [
-        {
-            name: 'วันจันทร์',
-            open: '10:00',
-            close: '12:00',
-        },
-        {
-            name: 'วันอังคาร',
-            open: "10:00",
-            close: '12:00',
-        },
-        {
-            name: 'วันพุธ',
-            open: "10:00",
-            close: '12:00',
-        },
-        {
-            name: 'วันพฤหัส',
-            open: "10:00",
-            close: '12:00',
-        },
-        {
-            name: 'วันศุกร์',
-            open: "10:00",
-            close: '12:00',
-        },
-        {
-            name: 'วันเสาร์',
-            open: "10:00",
-            close: '12:00',
-        },
-        {
-            name: 'วันอาทิตย์',
-            open: "10:00",
-            close: '12:00',
-        },
-    ]
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        const newRegisterData = {
-            username: data.get("username") as string,
-            password: data.get("password") as string,
-            email: data.get("email") as string,
-            phone_number: data.get("phone_number") as string,
-        };
+const OpenTimes = [
+    {
+        day: 'วันจันทร์',
+        open_time: '',
+        close_time: '',
+    },
+    {
+        day: 'วันอังคาร',
+        open_time: '',
+        close_time: '',
+    },
+    {
+        day: 'วันพุธ',
+        open_time: '',
+        close_time: '',
+    },
+    {
+        day: 'วันพฤหัส',
+        open_time: '',
+        close_time: '',
+    },
+    {
+        day: 'วันศุกร์',
+        open_time: '',
+        close_time: '',
+    },
+    {
+        day: 'วันเสาร์',
+        open_time: '',
+        close_time: '',
+    },
+    {
+        day: 'วันอาทิตย์',
+        open_time: '',
+        close_time: '',
+    }
+]
+
+const storeImageTemp: StoreImage[] = [
+    {
+        store_image_id: 1,
+        store_id: 1,
+        store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+        store_image_type: "ภาพปกร้าน"
+    },
+    {
+        store_image_id: 1,
+        store_id: 1,
+        store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+        store_image_type: "ภาพปกร้าน"
+    },
+]
+export default function EditStore() {
+    const [formData, setFormData] = useState<object>({
+        category_id: '',
+        location_id: '',
+        store_name: '',
+        table_booking: '',
+        sum_rating: '',
+        store_description: '',
+        Latitude: '',
+        longitude: '',
+        OpenTimes: OpenTimes,
+    })
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+        console.log(name);
+        console.log(value);
+        console.log(formData.OpenTimes);
     };
 
-    const categoryData = [
-        { label: "The Shawshank Redemption", year: 1994 },
-        {
-            label: "The Godfather",
-            year: 1972,
-        },
-        { label: "The Godfather: Part II", year: 1974 },
-    ];
+    const handleOpenTimeChange = (index: number, newValue: any) => {
+        const newOpenTimes = [...formData.OpenTimes];
+        console.log(newOpenTimes);
+        
+        newOpenTimes[index].open_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        setFormData({ ...formData, OpenTimes: newOpenTimes });
+        console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
+    };
+
+    const handleCloseTimeChange = (index: number, newValue: any) => {
+        const newCloseTimes = [...formData.OpenTimes];
+        newCloseTimes[index].close_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        setFormData({ ...formData, OpenTimes: newCloseTimes });
+        console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
+    };
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData);
+        // window.location.replace('/profile')
+    };
+
+
+
+    const fetchData = async () => {
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -133,6 +190,11 @@ export default function CreateStore() {
                                         required
                                         fullWidth
                                         id="store_name"
+                                        name="store_name"
+                                        label="store_name"
+                                        autoComplete="store_name"
+                                        value={formData.store_name}
+                                        onChange={handleChange}
                                     />
                                 </Grid>
 
@@ -144,9 +206,11 @@ export default function CreateStore() {
                                         multiline
                                         rows={4} // ตั้งค่าจำนวนบรรทัดที่แสดง
                                         id="store_description"
-                                        // label="คำอธิบายร้าน"
                                         name="store_description"
+                                        label="store_description"
                                         autoComplete="store_description"
+                                        value={formData.store_description}
+                                        onChange={handleChange}
                                     />
                                 </Grid>
 
@@ -178,14 +242,31 @@ export default function CreateStore() {
                                             <Grid container spacing={2}>
                                                 <Grid item xs={12}>
                                                     <Typography variant="subtitle1">หมวดหมู่</Typography>
-                                                    <Autocomplete
+                                                    {/* <Autocomplete
                                                         disablePortal
                                                         id="combo-box-demo"
                                                         options={categoryData}
                                                         renderInput={(params) => (
                                                             <TextField {...params} label="หมวดหมู่" />
                                                         )}
-                                                    />
+                                                    /> */}
+
+                                                    <FormControl fullWidth>
+                                                        {/* <InputLabel id="demo-simple-select-label">หมวดหมู่</InputLabel> */}
+                                                        <Select
+                                                            labelId="demo-simple-select-label"
+                                                            id="category_id"
+                                                            name="category_id   "
+                                                            value={formData.category_id}
+                                                            label="เลิอกโค้ตส่วนลด"
+                                                            onChange={handleChange}
+                                                        >
+                                                            <MenuItem value={1}>หมวดหมู่1</MenuItem>
+                                                            <MenuItem value={2}>หมวดหมู่2</MenuItem>
+                                                            <MenuItem value={3}>หมวดหมู่3</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+
                                                 </Grid>
 
                                                 <Grid item xs={12}>
@@ -200,7 +281,15 @@ export default function CreateStore() {
                                                     <Typography variant="subtitle1">
                                                         จำนวนโต๊ะที่เปิดให้จอง
                                                     </Typography>
-                                                    <TextField required fullWidth id="table_num" />
+                                                    <TextField required
+                                                        fullWidth
+                                                        id="table_booking"
+                                                        name="table_booking"
+                                                        label="table_booking"
+                                                        autoComplete="table_booking"
+                                                        value={formData.table_booking}
+                                                        onChange={handleChange}
+                                                    />
                                                 </Grid>
                                             </Grid>
                                             <Grid item xs={12} sx={{ marginTop: 3 }}>
@@ -212,25 +301,29 @@ export default function CreateStore() {
 
                                                 <div >
 
-                                                    {rows.map((item, index) => (
+                                                    {OpenTimes.map((item, index) => (
                                                         <Box key={index} className="grid grid-cols-1 gap-4 md:grid-cols-3 gap-4">
-                                                                <p>{item.name}</p>
-                                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                    <DemoContainer components={["TimePicker"]}>
-                                                                        <TimePicker
-                                                                            label="เวลาเปิด"
-                                                                            className={"w-full"}
-                                                                        />
-                                                                    </DemoContainer>
-                                                                </LocalizationProvider>
-                                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                    <DemoContainer components={["TimePicker"]}>
-                                                                        <TimePicker
-                                                                            label="เวลาปิด"
-                                                                            className={"w-full"}
-                                                                        />
-                                                                    </DemoContainer>
-                                                                </LocalizationProvider>
+                                                            <p>{item.day}</p>
+                                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                <DemoContainer components={["TimePicker"]}>
+                                                                    <TimePicker
+                                                                        label="เวลาเปิด"
+                                                                        className={"w-full"}
+                                                                        value={dayjs(item.open_time)}
+                                                                        onChange={(newValue) => handleOpenTimeChange(index, newValue)}
+                                                                    />
+                                                                </DemoContainer>
+                                                            </LocalizationProvider>
+                                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                <DemoContainer components={["TimePicker"]}>
+                                                                    <TimePicker
+                                                                        label="เวลาปิด"
+                                                                        className={"w-full"}
+                                                                        value={dayjs(item.close_time)}
+                                                                        onChange={(newValue) => handleCloseTimeChange(index, newValue)}
+                                                                    />
+                                                                </DemoContainer>
+                                                            </LocalizationProvider>
                                                         </Box>
 
                                                     ))}
