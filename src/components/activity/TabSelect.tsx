@@ -30,7 +30,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-<<<<<<< HEAD
 import Ongoing from "@/components/activity/Ongoing";
 import Historical from "@/components/activity/Historical";
 import Modal from '@mui/material/Modal';
@@ -41,9 +40,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 
-=======
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
->>>>>>> develop
 
 const bookingList = [
   {
@@ -103,7 +100,7 @@ export default function TabSelect() {
 
 
   return (
-    <Box sx={{ width: '100%', typography: 'body1' }}>
+    <Box sx={{ mt:8, width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} textColor="primary" indicatorColor="primary" centered aria-label="lab API tabs example">
@@ -113,7 +110,6 @@ export default function TabSelect() {
 
         </Box>
 
-<<<<<<< HEAD
         <TabPanel value="1">
           {bookingList.map((item) => (
             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
@@ -173,53 +169,6 @@ export default function TabSelect() {
             </List>
           ))}
         </TabPanel>
-=======
-        <Box sx={{ marginBottom: 8 }}>
-          <TabPanel value="1">
-            {bookingList.map((item) => (
-              <List className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                <ListItem>
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
-                    <Stack direction="row" spacing={1}>
-                      <Chip label="ยืนยัน" color="success" />
-                    </Stack>
-                    <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
-                      <a href="/">
-                        <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
-                      </a>
-                    </Box>
-                  </Box>
-
-                </ListItem>
-              </List>
-            ))}
-          </TabPanel>
-
-          <TabPanel value="2">
-            {bookingList.map((item) => (
-              <List className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                <ListItem>
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
-                    <Stack direction="row" spacing={1}>
-                      <Chip label="ยืนยัน" color="success" />
-                    </Stack>
-                    <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
-                      <a href="/">
-                        <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
-                      </a>
-                    </Box>
-                  </Box>
-
-                </ListItem>
-              </List>
-            ))}
-          </TabPanel>
-        </Box>
-
-
->>>>>>> develop
 
       </TabContext>
     </Box>
