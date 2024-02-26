@@ -159,10 +159,23 @@ export default function TableBooking() {
         }
         const updatedStoreBookingTemp = storeBookingData.filter(booking => booking.table_booking_id !== tablebookingId);
         setStoreBookingData(updatedStoreBookingTemp);
-        
+
         // const updateBookingRes = tableBookingUpdateById(updateData)
         // console.log(updateBookingRes);
     }
+
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'ยกเลิก':
+                return 'error'; // สีแดง
+            case 'อยู่ระหว่างดำเนินการ':
+                return 'warning'; // สีเหลือง
+            case 'เสร็จสิ้น':
+                return 'success'; // สีเขียว
+            default:
+                return 'default'; // สีเทา
+        }
+    };
 
 
     useEffect(() => {
@@ -235,19 +248,24 @@ export default function TableBooking() {
                                 </TabPanel>
 
                                 <TabPanel value="2">
+
                                     {storeBookingData.map((item, index) => (
                                         <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
                                             <ListItem>
-                                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                    <ListItemText primary={`${item.username} | ${item.phone_num}`} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
-                                                    <Stack direction="row" spacing={1}>
-                                                        <Chip label="ยืนยัน" color="success" />
-                                                    </Stack>
-                                                    <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
-                                                        <a href="/">
-                                                            <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
-                                                        </a>
+                                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                                                    <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
+                                                        <ListItemText primary={`${item.username} | ${item.phone_num}`} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
+                                                        <Stack direction="row" spacing={1}>
+                                                            <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
+                                                        </Stack>
                                                     </Box>
+
+                                                    {/* <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
+                                                        <Button onClick={handleOpen}>
+                                                            <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
+                                                        </Button>
+
+                                                    </Box> */}
                                                 </Box>
 
                                             </ListItem>
