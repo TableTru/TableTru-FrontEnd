@@ -1,6 +1,8 @@
 import CategoryCard from "@/components/cards/active/CategoryCard";
 
 const HorizontalScrollCards = () => {
+    //
+
     return (
         <>
                 <div className="flex overflow-x-scroll pb-10 hide-scroll-bar">

@@ -12,9 +12,11 @@ import TabPanel from "@mui/lab/TabPanel";
 import CardRating from "./detailBox/RatingBox"
 import MenuImage from "./detailBox/MenuImage";
 import AboutRestaurantBox from "./detailBox/AboutRestaurantBox"
+import MainComment from "./detailBox/comments/MainComment";
+import Divider from '@mui/material/Divider';
 
 export default function DetailBox() {
-    const [value, setValue] = React.useState("Menu");
+    const [value, setValue] = React.useState("Review");
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -31,17 +33,12 @@ export default function DetailBox() {
                                         onChange={handleChange}
                                         aria-label="lab API tabs example"
                                     >
-                                        <Tab label="เมนู" value="Menu" />
-                                        <Tab label="รายละเอียด" value="Detail" />
                                         <Tab label="รีวิว" value="Review" />
+                                        <Tab label="รายละเอียด" value="Detail" />
+                                        <Tab label="เมนู" value="Menu" />
+
                                     </TabList>
                                 </Box>
-                                <TabPanel value="Menu">
-                                    <MenuImage/>
-                                </TabPanel>
-                                <TabPanel value="Detail">
-                                    <AboutRestaurantBox/>
-                                </TabPanel>
                                 <TabPanel value="Review">
                                     <div className="flex flex-row">
                                         <div className="flex flex-col">
@@ -67,10 +64,20 @@ export default function DetailBox() {
 
                                         <h3 className="text-5xl pl-4 py-2 text-center mg:pl-4">4.8</h3>
                                     </div>
+                                    <Divider>การตอบกลับ</Divider>
                                     <div>
-                                            <CardRating/>
-                                        </div>
+                                        <MainComment/>
+                                        <CardRating/>
+                                    </div>
                                 </TabPanel>
+
+                                <TabPanel value="Detail">
+                                    <AboutRestaurantBox/>
+                                </TabPanel>
+                                <TabPanel value="Menu">
+                                    <MenuImage/>
+                                </TabPanel>
+
                             </TabContext>
                         </div>
                     </div>
