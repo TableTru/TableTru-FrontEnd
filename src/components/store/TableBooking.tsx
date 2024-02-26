@@ -41,6 +41,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 interface StoreTableBooking {
     table_booking_id: number;
+    store_id: number;
     user_id: number;
     table_booking_status: string;
     table_booking_count: number;
@@ -52,6 +53,7 @@ interface StoreTableBooking {
 const storeBookingTemp: StoreTableBooking[] = [
     {
         table_booking_id: 1,
+        store_id:1,
         user_id: 1,
         table_booking_status: 'ยังไม่ถึงกำหนด',
         table_booking_count: 4,
@@ -61,6 +63,7 @@ const storeBookingTemp: StoreTableBooking[] = [
     },
     {
         table_booking_id: 2,
+        store_id:1,
         user_id: 1,
         table_booking_status: 'อยู่ระหว่างดำเนินการ',
         table_booking_count: 2,
@@ -70,6 +73,7 @@ const storeBookingTemp: StoreTableBooking[] = [
     },
     {
         table_booking_id: 3,
+        store_id:1,
         user_id: 1,
         table_booking_status: 'เสร็จสิ้น',
         table_booking_count: 3,
@@ -79,6 +83,7 @@ const storeBookingTemp: StoreTableBooking[] = [
     },
     {
         table_booking_id: 4,
+        store_id:1,
         user_id: 1,
         table_booking_status: 'ยกเลิก',
         table_booking_count: 3,

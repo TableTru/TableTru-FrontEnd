@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Tabs,
@@ -42,30 +42,6 @@ import LoyaltyIcon from '@mui/icons-material/Loyalty';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const bookingList = [
-  {
-    store: "โรลลิ่งริบส์ บริวบาร์ & บาร์บีคิว ",
-    time: "12 ม.ค. 2567",
-    count: 1,
-  },
-  {
-    store: "บัดดี้ส์ บาร์แอนด์กริล ",
-    time: "13 ม.ค. 2567",
-    count: 3,
-  },
-  {
-    store: "แบงค็อก 78  ",
-    time: "14 ม.ค. 2567",
-    count: 2,
-  },
-  {
-    store: "โทรวแบ็ค บีเคเค",
-    time: "15 ม.ค. 2567",
-    count: 4,
-  },
-];
-
-
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -79,16 +55,58 @@ const style = {
   p: 4,
 };
 
+interface TableBooking {
+  table_booking_id: number;
+  store_id: number;
+  user_id: number;
+  table_booking_status: string;
+  table_booking_count: number;
+  table_booking_time: string;
+  store_name: string;
+}
+
+const tableBookingTemp: TableBooking[] = [
+  {
+    table_booking_id: 1,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'ยังไม่ถึงกำหนด',
+    table_booking_count: 4,
+    table_booking_time: '2024-02-25T17:00',
+    store_name: 'โรลลิ่งริบส์ บริวบาร์ & บาร์บีคิว'
+  },
+  {
+    table_booking_id: 2,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'อยู่ระหว่างดำเนินการ',
+    table_booking_count: 2,
+    table_booking_time: '2024-02-25T17:00',
+    store_name: 'บัดดี้ส์ บาร์แอนด์กริล '
+  },
+  {
+    table_booking_id: 3,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'เสร็จสิ้น',
+    table_booking_count: 3,
+    table_booking_time: '2024-02-25T16:04',
+    store_name: 'แบงค็อก 78  '
+  },
+  {
+    table_booking_id: 4,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'ยกเลิก',
+    table_booking_count: 3,
+    table_booking_time: '2024-02-25T16:04',
+    store_name: 'โทรวแบ็ค บีเคเค'
+  },
+]
+
 export default function TabSelect() {
   const [value, setValue] = useState('1');
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
-
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [open, setOpen] = useState(false);
 
   const [storeName, setStoreName] = useState("TeaPot 01");
   const [seat, setSeat] = useState(2);
@@ -97,7 +115,81 @@ export default function TabSelect() {
   //เลือกจาก select
   const [promocode, setPromocode] = useState("ส่วนลด 10%");
 
+  const [bookingData, setBookingData] = useState<object[]>([])
 
+  const timeOptions = { hour: 'numeric', minute: 'numeric' };
+
+  const fetchData = async () => {
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+
+    // if (userData) {
+    //     const store_id = userDataJson.store_id
+
+    //     const tableBookingArray = [];
+    //     const data = await getTableBookingByStoreId(store_id);
+
+    //     if (data) {
+    //         for (const tableBookingObject of data) {
+    //             tableBookingArray.push(tableBookingObject);
+    //         }
+    //         setStoreBookingData(tableBookingArray);
+    //         console.log(tableBookingArray);
+    //     }
+    // }
+
+    const tableBookingTempWithDate = tableBookingTemp.map(booking => ({
+      ...booking,
+      table_booking_time: new Date(booking.table_booking_time),
+    }));
+    console.log(tableBookingTempWithDate);
+
+    setBookingData(tableBookingTempWithDate)
+  };
+
+  const handleOpen = () =>{
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+
+    // if (userData) {
+    //     const store_id = userDataJson.store_id
+
+    //     const tableBookingArray = [];
+    //     const data = await getTableBookingByStoreId(store_id);
+
+    //     if (data) {
+    //         for (const tableBookingObject of data) {
+    //             tableBookingArray.push(tableBookingObject);
+    //         }
+    //         setModalData(tableBookingArray);
+    //         console.log(tableBookingArray);
+    //     }
+    // }
+    setOpen(true)
+  } 
+
+  const handleClose = () => setOpen(false);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'ยกเลิก':
+        return 'error'; // สีแดง
+      case 'อยู่ระหว่างดำเนินการ':
+        return 'warning'; // สีเหลือง
+      case 'เสร็จสิ้น':
+        return 'success'; // สีเขียว
+      default:
+        return 'default'; // สีเทา
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <Box sx={{ mt: 8, width: '100%', typography: 'body1' }}>
@@ -122,18 +214,18 @@ export default function TabSelect() {
             </List>
           ))} */}
 
-          {bookingList.map((item, index) => (
+          {bookingData.map((item, index) => (
             <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
               <ListItem>
-                <Box sx={{width: '100%',display: 'flex', flexDirection: 'row' }}>
-                  <Box sx={{ width:"80%", display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
+                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                  <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
+                    <ListItemText primary={item.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
                     <Stack direction="row" spacing={1}>
-                      <Chip label="ยืนยัน" color="success" />
+                      <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
                     </Stack>
                   </Box>
 
-                  <Box sx={{width:"20%", display: 'flex', flexDirection: 'column',alignItems: 'right' }}>
+                  <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
                     <Button onClick={handleOpen}>
                       <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
                     </Button>
@@ -182,18 +274,18 @@ export default function TabSelect() {
         </Modal>
 
         <TabPanel value="2">
-        {bookingList.map((item, index) => (
+          {bookingData.map((item, index) => (
             <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
               <ListItem>
-                <Box sx={{width: '100%',display: 'flex', flexDirection: 'row' }}>
-                  <Box sx={{ width:"80%", display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
+                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                  <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
+                    <ListItemText primary={item.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
                     <Stack direction="row" spacing={1}>
-                      <Chip label="ยืนยัน" color="success" />
+                      <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
                     </Stack>
                   </Box>
 
-                  <Box sx={{width:"20%", display: 'flex', flexDirection: 'column',alignItems: 'right' }}>
+                  <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
                     <Button onClick={handleOpen}>
                       <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
                     </Button>
