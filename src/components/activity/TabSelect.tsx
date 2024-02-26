@@ -100,7 +100,7 @@ export default function TabSelect() {
 
 
   return (
-    <Box sx={{ mt:8, width: '100%', typography: 'body1' }}>
+    <Box sx={{ mt: 8, width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} textColor="primary" indicatorColor="primary" centered aria-label="lab API tabs example">
@@ -111,7 +111,7 @@ export default function TabSelect() {
         </Box>
 
         <TabPanel value="1">
-          {bookingList.map((item) => (
+          {/* {bookingList.map((item) => (
             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
               <ListItem>
                   <ListItemText primary={item.store} secondary={item.time} />
@@ -120,51 +120,87 @@ export default function TabSelect() {
                   </Link>
               </ListItem>
             </List>
+          ))} */}
+
+          {bookingList.map((item, index) => (
+            <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
+              <ListItem>
+                <Box sx={{width: '100%',display: 'flex', flexDirection: 'row' }}>
+                  <Box sx={{ width:"80%", display: 'flex', flexDirection: 'column' }}>
+                    <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
+                    <Stack direction="row" spacing={1}>
+                      <Chip label="ยืนยัน" color="success" />
+                    </Stack>
+                  </Box>
+
+                  <Box sx={{width:"20%", display: 'flex', flexDirection: 'column',alignItems: 'right' }}>
+                    <Button onClick={handleOpen}>
+                      <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
+                    </Button>
+
+                  </Box>
+                </Box>
+
+              </ListItem>
+            </List>
           ))}
         </TabPanel>
 
 
         {/*Modal*/}
         <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h5" component="h2">{storeName}</Typography>
-            <Typography id="modal-modal-description" sx={{ mt:2, mb:2 }} variant="h6" component="h3"> รายละเอียด </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2, mb: 2 }} variant="h6" component="h3"> รายละเอียด </Typography>
             <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
               <li className="flex items-center">
-                <PersonIcon/>
+                <PersonIcon />
                 {seat} ที่นั่ง
               </li>
               <li className="flex items-center">
-                <CalendarMonthIcon/>
+                <CalendarMonthIcon />
                 {date}
               </li>
               <li className="flex items-center">
-                <AccessTimeIcon/>
+                <AccessTimeIcon />
                 {time}
               </li>
               <li className="flex items-center">
-                <LoyaltyIcon/>
+                <LoyaltyIcon />
                 {promocode}
               </li>
             </ul>
             <div className={"mt-8"}>
-            <Map address="1600 Amphitheatre Parkway, Mountain View, CA" className={"width:400, height:400"} />
+              <Map address="1600 Amphitheatre Parkway, Mountain View, CA" className={"width:400, height:400"} />
             </div>
           </Box>
         </Modal>
 
         <TabPanel value="2">
-          {bookingList.map((item) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        {bookingList.map((item, index) => (
+            <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
               <ListItem>
-                <ListItemButton>
-                  <ListItemText primary={item.store} secondary={item.time} />
-                </ListItemButton>
+                <Box sx={{width: '100%',display: 'flex', flexDirection: 'row' }}>
+                  <Box sx={{ width:"80%", display: 'flex', flexDirection: 'column' }}>
+                    <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
+                    <Stack direction="row" spacing={1}>
+                      <Chip label="ยืนยัน" color="success" />
+                    </Stack>
+                  </Box>
+
+                  <Box sx={{width:"20%", display: 'flex', flexDirection: 'column',alignItems: 'right' }}>
+                    <Button onClick={handleOpen}>
+                      <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
+                    </Button>
+
+                  </Box>
+                </Box>
+
               </ListItem>
             </List>
           ))}
