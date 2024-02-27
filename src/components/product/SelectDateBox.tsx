@@ -2,7 +2,10 @@ import DatePick from "./selectBox/DatePick";
 import TimePick from "./selectBox/TimePick";
 import MenuList from './selectBox/MenuList';
 import DateTimePicker from "./selectBox/DateTimePicker"
-export default function SelectDateBox() {
+
+
+
+export default function SelectDateBox({seats}:{seats:number}) {
   return (
     <>
       <div className="mb-6 ">
@@ -12,9 +15,10 @@ export default function SelectDateBox() {
         <div className="bg-gray-100 dark:bg-gray-700 rounded-xl ">
           <div className="p-2 lg:p-5">
             <div className="flex flex-col justify-center gap-x-10 gap-y-4">
+
               <DateTimePicker/>
 
-                <MenuList/>
+              <MenuList seats={seats}/>
             </div>
           </div>
         </div>

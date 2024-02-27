@@ -24,6 +24,7 @@
     "axios": "^1.6.5",
     "dayjs": "^1.11.10",
     "flowbite": "^2.2.1",
+    "flowbite-react": "^0.7.2",
     "framer-motion": "^10.16.16",
     "material-ui-popup-state": "^5.0.10",
     "mime-types": "^2.1.35",
