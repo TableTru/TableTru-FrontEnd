@@ -14,8 +14,18 @@ import MenuImage from "./detailBox/MenuImage";
 import AboutRestaurantBox from "./detailBox/AboutRestaurantBox"
 import MainComment from "./detailBox/comments/MainComment";
 import Divider from '@mui/material/Divider';
+import { StoreInterface, Store } from "@/interfaces/StoreInterface";
 
-export default function DetailBox() {
+
+type TimeTemp = {
+
+    day: string
+    open_time: string
+    close_time: string
+
+}
+
+export default function DetailBox({description,openTime} : {description:string, openTime:Array<TimeTemp>} ) {
     const [value, setValue] = React.useState("Review");
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -72,7 +82,7 @@ export default function DetailBox() {
                                 </TabPanel>
 
                                 <TabPanel value="Detail">
-                                    <AboutRestaurantBox/>
+                                    <AboutRestaurantBox description={description} openTime={openTime}/>
                                 </TabPanel>
                                 <TabPanel value="Menu">
                                     <MenuImage/>
