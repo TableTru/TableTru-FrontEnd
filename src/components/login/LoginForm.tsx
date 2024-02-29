@@ -21,6 +21,7 @@ interface User {
   password: string;
   profile_image: string;
   user_status: string;
+  store_id: number| null;
   email: string;
   phone_num: string;
   latitude: number;
@@ -35,6 +36,7 @@ const userTemp: User =
   username: "Aungpor",
   password: "por1234",
   user_status: "merchant",
+  store_id: 1,
   profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
   email: "aungpor.napat@gmail.com",
   phone_num: "0813111234",

@@ -36,5 +36,5 @@ function Map({ address }) {
       }
     });
   }, [address, geocoder]);
-  return <div style={{ height: "400px" }} ref={mapRef} />;
+  return <div style={{ height: "200px" }} ref={mapRef} />;
 } export default Map;

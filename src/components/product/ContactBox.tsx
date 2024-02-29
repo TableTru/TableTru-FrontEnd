@@ -1,19 +1,37 @@
-"use client";
+'use client';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function PhoneNumber() {
-  return (
-    <>
-      <div className="py-6 flex flex-col mb-6 border-t border-b border-gray-200 dark:border-gray-700">
-        <span className="text-base my-4 text-gray-600 dark:text-gray-400">
-          เลือกโค๊ดส่วนลด
-        </span>
-          <button type="button"
-                  className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-              เลือกโค๊ตส่วนลด
-          </button>
+export default function ContentBox() {
+    const [seat, setSeat] = React.useState('');
 
+    const handleChange = (event: SelectChangeEvent) => {
+        setSeat(event.target.value as string);
+    };
 
-      </div>
-    </>
-  );
+    return (
+        <div className={"mb-6"}>
+        <Box sx={{ minWidth: 120 }}>
+            <p className={"mb-2"}>โปรโมชั่น</p>
+            <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">เลือกโค้ดส่วนลด</InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={seat}
+                    label="เลิอกโค้ตส่วนลด"
+                    onChange={handleChange}
+                >
+                    <MenuItem value={1}>ส่วนลด 10%</MenuItem>
+                    <MenuItem value={2}>ส่วนลด 20%</MenuItem>
+                    <MenuItem value={3}>ส่วนลด 30%</MenuItem>
+                </Select>
+            </FormControl>
+        </Box>
+        </div>
+    );
 }

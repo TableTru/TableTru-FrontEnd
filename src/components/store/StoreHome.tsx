@@ -50,6 +50,13 @@ interface Store {
     OpenTimes: object[];
 }
 
+interface StoreImage {
+    store_image_id: number;
+    store_id: number;
+    store_image_name: string;
+    store_image_type: string;
+}
+
 const storeTemp: Store =
 {
     store_id: 1,
@@ -75,12 +82,21 @@ const storeTemp: Store =
     ]
 }
 
+const storeImageTemp: StoreImage = {
+    store_image_id: 1,
+    store_id: 1,
+    store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+    store_image_type: "ภาพปกร้าน"
+}
+
 export default function StoreHome() {
     const theme = useTheme();
     const [storeData, setStoreData] = useState<Store>();
+    const [storeImageData, setStoreImageData] = useState<StoreImage[]>()
+    const [coverImage, setCoverImage] = useState<StoreImage>()
 
     const fetchData = async () => {
-        // const data = await getStore();
+        // const data = await getStoreById();
         // console.log(data);
 
         // if (data) {
@@ -88,7 +104,21 @@ export default function StoreHome() {
         //     console.log(data);
         // }
 
+        // const imageArray = [];
+        // const storeImages = await getStoreImageByType(data.store_id, "ภาพเมนู" );
+        // console.log(storeImages);
+
+        // if (storeImages) {
+        //     for (const storeImageObject of storeImages) {
+        //         imageArray.push(storeImageObject);
+        //     }
+        //     setStoreImageData(imageArray);
+        //     console.log(imageArray);
+        // }
+
         setStoreData(storeTemp);
+        // setStoreImageData(storeImageTemp);
+        setCoverImage(storeImageTemp)
     };
 
     useEffect(() => {
@@ -106,7 +136,7 @@ export default function StoreHome() {
                         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
 
                             <Box sx={{ width: '20%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <Avatar src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" sx={{ width: 150, height: 150, m: 1, bgcolor: 'secondary.main' }} />
+                                <Avatar src={coverImage?.store_image_name} sx={{ width: 150, height: 150, m: 1, bgcolor: 'secondary.main' }} />
                             </Box>
 
                             <Box sx={{ margin: 2, width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
