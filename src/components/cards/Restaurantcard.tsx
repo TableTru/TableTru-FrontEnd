@@ -119,7 +119,7 @@ export default function Restaurantcard({store}:{store:Store}) {
               <CardMedia
                 component="img"
                 height="194"
-                image="./images/Wineconnection.jpg"
+                image="../images/Wineconnection.jpg"
                 alt="Paella dish"
               />
               <CardContent>

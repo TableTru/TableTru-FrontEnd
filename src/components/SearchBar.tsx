@@ -1,5 +1,11 @@
-// 'use client';
-// import * as React from 'react';
+'use client';
+import Link from 'next/link';
+import * as React from 'react';
+import { storeTemp } from '@/data/store';
+import { Store } from '@/interfaces/StoreInterface';
+
+import "./SearchBar.css"
+
 // import PropTypes from "prop-types";
 // import TextField from '@mui/material/TextField';
 // import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
@@ -218,22 +224,109 @@
 //   { title: 'Monty Python and the Holy Grail', year: 1975 },
 // ];
 
+const productsTemp = [
+  {
+    store_id: 1,
+    category_id: 1,
+    location_id: 1,
+    store_name: "ร้านค้าของฉัน",
+    store_description: "hahahahahahahahahaha",
+    table_booking: 8,
+    sum_rating: 3.25,
+    Latitude: "",
+    longitude: "",
+    OpenTimes: [
+      {
+        day: "วันจันทร์",
+        open_time: "11:00",
+        close_time: "21:00",
+      },
+      {
+        day: "วันอังคาร",
+        open_time: "12:00",
+        close_time: "23:00",
+      },
+    ],
+  },
+  {
+    store_id: 2,
+    category_id: 2,
+    location_id: 2,
+    store_name: "ร้านค้า 2",
+    store_description:
+      "Lorem ipsum dolor sit amet, ctum id et est. Nam est lacus, tempus at libero eu, laoreet dignissim lorem.",
+    table_booking: 8,
+    sum_rating: 40,
+    Latitude: "",
+    longitude: "",
+    OpenTimes: [
+      {
+        day: "วันจันทร์",
+        open_time: "",
+        close_time: "",
+      },
+      {
+        day: "วันอังคาร",
+        open_time: "",
+        close_time: "",
+      },
+    ],
+  },
+];
 
-export default function Search(){
-  return(
-      <>
-        <label htmlFor="simple-search" className="sr-only">Search</label>
-        <div className="relative w-full">
-          <div
-              className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-            </svg>
-          </div>
-          <input type="text" id="simple-search"
-                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                 placeholder="Search Keyword..." required/>
+
+export default function Search({ placeholder }: { placeholder: string }) {
+  const [filteredData, setfilteredData] = React.useState([]);
+  const [wordEntered, setWordEntered] = React.useState("");
+
+  //logic FilterSearch by keyword
+  function handleFilter(event) {
+    const searchWord = event.target.value;
+    const newFilter: Array<Store> = productsTemp.filter((item) => {
+      return item.store_name.toLowerCase().includes(searchWord.toLowerCase());
+    });
+    if (searchWord === "") {
+      setfilteredData([]);
+    } else {
+      setfilteredData(newFilter);
+    }
+  }
+
+
+  return (
+    <>
+      <label htmlFor="simple-search" className="sr-only">Search</label>
+      <div className="relative w-full">
+        <div
+          className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+          <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+          </svg>
         </div>
-      </>
+        <input type="text" id="simple-search"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder={placeholder} required onChange={handleFilter} />
+        {
+          filteredData.length != 0 && (
+            <div className='dataResult'>
+              {
+                filteredData.map((item,index) => {
+                  return (
+                    <>
+                      <Link className={"dataItem"} href={`/search/${item.store_name}`} key={item.store_id} target="_blank">
+                        {
+                          <p>{item.store_name}</p>
+                        }
+                      </Link>
+
+                    </>
+                  );
+                })
+              }
+            </div>
+          )
+        }
+      </div>
+    </>
   );
 }

@@ -21,7 +21,7 @@ export default function Component() {
   const router = useRouter();
 
   return (
-    <div className="max-w-[900px] gap-2 grid grid-cols-12 px-8">
+    <div className="max-w-[900px] gap-4 grid grid-cols-12 px-8">
       {/*list โค๊ตส่วนลด*/}
       <Card
         className="col-span-10 sm:col-span-4 h-[300px]"
@@ -29,7 +29,7 @@ export default function Component() {
         onPress={() => router.push("/promo")}
       >
         <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-          <h2 className="text-black font-medium text-2xl">โค๊ตส่วนลด</h2>
+          <h2 className="text-black font-medium text-2xl">โค้ดส่วนลด</h2>
         </CardHeader>
         <Image
           removeWrapper
@@ -43,7 +43,7 @@ export default function Component() {
 
       <Card
         className="col-span-10 sm:col-span-4 h-[300px]"
-        isPressable isHoverable onPress={() => router.push('/search')}
+        isPressable isHoverable onPress={() => router.push(`/search/`)}
       >
         <CardHeader className="absolute z-10 top-1 flex-col !items-start">
           <h2 className="text-black font-medium text-2xl">ร้านอาหารแนะนำ</h2>
