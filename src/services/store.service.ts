@@ -57,12 +57,40 @@ export const getStoreImageByType = async (storeId: number, type: string) => {
   });
 }
 
+export const createOpenTime = async (data: any) => {
+  console.log(data);
+  return await axios.post(url + '/opentimes/', data).then((res: AxiosResponse) => {
+    return res;
+  }).catch((err: { response: { data: any; }; }) => {
+    console.log("err: ", err.response);
+    return err?.response?.data ? err?.response?.data : {};
+  });
+}
+
 export const editOpenTime = async (id: number, data: any) => {
   return await axios.put(url + `/opentimes/${id}`, data).then((res: AxiosResponse) => {
     return res.data;
   }).catch((err: { response: { data: any; }; }) => {
     console.log("err: ", err.response);
     return err?.response?.data ? err?.response?.data : {};
+  });
+}
+
+export const checkStoreByName = async (storeName: string) => {
+  return await axios.get(url + `/stores/checkStoreByName?storeName=${storeName}`).then((res: AxiosResponse) => {
+    return res.data.data;
+  }).catch((err: any) => {
+    catchError(err, null, "getUser");
+    return [];
+  });
+}
+
+export const GetStoreImageByType = async (id: number, imageType: string) => {
+  return await axios.get(url + `/storeImages/GetStoreImageByType?id=${id}&imageType=${imageType}`).then((res: AxiosResponse) => {
+    return res.data.data;
+  }).catch((err: any) => {
+    catchError(err, null, "getUser");
+    return [];
   });
 }
 
