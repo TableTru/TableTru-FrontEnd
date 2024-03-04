@@ -53,6 +53,7 @@ import CreateStoreDetail from "@/components/store/CreateStoreDetail";
 import ImageUpload from "@/components/store/ImageUpload";
 import Map from "@/components/Map";
 import dayjs, { Dayjs } from 'dayjs';
+import { getStoreById, editStore, editOpenTime } from '@/services/store.service'
 
 
 interface Store {
@@ -140,31 +141,18 @@ const storeImageTemp: StoreImage[] = [
     },
 ]
 
-const categoryData = [
-    { label: "The Shawshank Redemption", year: 1994 },
-    {
-        label: "The Godfather",
-        year: 1972,
-    },
-    { label: "The Godfather: Part II", year: 1974 },
-];
-
 export default function EditStore() {
-    const [storeData, setStoreData] = useState<Store>();
-    const [storeImageData, setStoreImageData] = useState<StoreImage[]>()
-    const [coverImage, setCoverImage] = useState<StoreImage>()
-    const [value, setValue] = React.useState<Dayjs | null>(dayjs('2022-04-17T15:30'));
-    const [formData, setFormData] = useState<Store>({
-        store_id: storeTemp.store_id,
-        category_id: storeTemp.category_id,
-        location_id: storeTemp.location_id,
-        store_name: storeTemp.store_name,
-        table_booking: storeTemp.table_booking,
-        sum_rating: storeTemp.sum_rating,
-        store_description: storeTemp.store_description,
-        Latitude: storeTemp.Latitude,
-        longitude: storeTemp.longitude,
-        OpenTimes: storeTemp.OpenTimes,
+    const [formData, setFormData] = useState<object>({
+        store_id: null,
+        category_id: null,
+        location_id: null,
+        store_name: '',
+        table_booking: null,
+        sum_rating: null,
+        store_description: '',
+        Latitude: '',
+        longitude: '',
+        OpenTimes: [],
     })
 
     const handleChange = (e) => {
@@ -193,22 +181,34 @@ export default function EditStore() {
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         console.log(formData);
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+
+        const editRes = await editStore(userDataJson.user_id, formData)
+        console.log(editRes);
+
+        for (const openTimeObject of formData.OpenTimes) {
+            const editOpenTimeRes = await editOpenTime(openTimeObject.openTime_id, openTimeObject)
+        }
+
         // window.location.replace('/profile')
     };
 
 
 
     const fetchData = async () => {
-        // const data = await getStoreById();
-        // console.log(data);
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+        const data = await getStoreById(userDataJson.user_id);
+        console.log(data);
 
-        // if (data) {
-        //     setStoreData(data);
-        //     console.log(data);
-        // }
+        if (data) {
+            setFormData(data)
+            console.log(data);
+        }
 
         // const imageArray = [];
         // const storeImages = await getStoreImageByType(data.store_id, "ภาพเมนู" );
@@ -221,10 +221,7 @@ export default function EditStore() {
         //     setStoreImageData(imageArray);
         //     console.log(imageArray);
         // }
-
-        setStoreData(storeTemp);
         // setStoreImageData(storeImageTemp);
-        setCoverImage(storeImageTemp)
     };
 
     useEffect(() => {
@@ -310,14 +307,6 @@ export default function EditStore() {
                                             <Grid container spacing={2}>
                                                 <Grid item xs={12}>
                                                     <Typography variant="subtitle1">หมวดหมู่</Typography>
-                                                    {/* <Autocomplete
-                                                        disablePortal
-                                                        id="combo-box-demo"
-                                                        options={categoryData}
-                                                        renderInput={(params) => (
-                                                            <TextField {...params} label="หมวดหมู่" />
-                                                        )}
-                                                    /> */}
 
                                                     <FormControl fullWidth>
                                                         {/* <InputLabel id="demo-simple-select-label">หมวดหมู่</InputLabel> */}
