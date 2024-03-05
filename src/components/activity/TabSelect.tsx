@@ -30,20 +30,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-<<<<<<< HEAD
-import Ongoing from "@/components/activity/Ongoing";
-import Historical from "@/components/activity/Historical";
-import Modal from '@mui/material/Modal';
-import ModalComponent from '@/components/activity/ModalDetail';
-import Map from "@/components/Map";
-import PersonIcon from '@mui/icons-material/Person';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LoyaltyIcon from '@mui/icons-material/Loyalty';
-
-=======
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
->>>>>>> develop
 
 const bookingList = [
   {
@@ -82,6 +69,14 @@ const style = {
   p: 4,
 };
 
+type timeTemp = {
+
+  day: string
+  open_time: string
+  close_time: string
+
+}
+
 export default function TabSelect() {
   const [value, setValue] = useState('1');
 
@@ -113,71 +108,10 @@ export default function TabSelect() {
 
         </Box>
 
-<<<<<<< HEAD
-        <TabPanel value="1">
-          {bookingList.map((item) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem>
-                  <ListItemText primary={item.store} secondary={item.time} />
-                  <Link onClick={handleOpen}>
-                    กดดูรายละเอียด
-                  </Link>
-              </ListItem>
-            </List>
-          ))}
-        </TabPanel>
-
-
-        {/*Modal*/}
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h5" component="h2">{storeName}</Typography>
-            <Typography id="modal-modal-description" sx={{ mt:2, mb:2 }} variant="h6" component="h3"> รายละเอียด </Typography>
-            <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-              <li className="flex items-center">
-                <PersonIcon/>
-                {seat} ที่นั่ง
-              </li>
-              <li className="flex items-center">
-                <CalendarMonthIcon/>
-                {date}
-              </li>
-              <li className="flex items-center">
-                <AccessTimeIcon/>
-                {time}
-              </li>
-              <li className="flex items-center">
-                <LoyaltyIcon/>
-                {promocode}
-              </li>
-            </ul>
-            <div className={"mt-8"}>
-            <Map address="1600 Amphitheatre Parkway, Mountain View, CA" className={"width:400, height:400"} />
-            </div>
-          </Box>
-        </Modal>
-
-        <TabPanel value="2">
-          {bookingList.map((item) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem>
-                <ListItemButton>
-                  <ListItemText primary={item.store} secondary={item.time} />
-                </ListItemButton>
-              </ListItem>
-            </List>
-          ))}
-        </TabPanel>
-=======
         <Box sx={{ marginBottom: 8 }}>
           <TabPanel value="1">
-            {bookingList.map((item) => (
-              <List className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            {bookingList.map((item, index) => (
+              <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 <ListItem>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
@@ -186,7 +120,7 @@ export default function TabSelect() {
                     </Stack>
                     <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
                       <a href="/">
-                        <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
+                        <p className="activity">กดดูรายละเอียด <ArrowForwardIcon /></p>
                       </a>
                     </Box>
                   </Box>
@@ -197,8 +131,8 @@ export default function TabSelect() {
           </TabPanel>
 
           <TabPanel value="2">
-            {bookingList.map((item) => (
-              <List className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            {bookingList.map((item, index) => (
+              <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 <ListItem>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
@@ -219,7 +153,6 @@ export default function TabSelect() {
         </Box>
 
 
->>>>>>> develop
 
       </TabContext>
     </Box>

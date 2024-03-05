@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import Image from "next/image";
 
 const ReplyBox = () => {
     return (
@@ -9,7 +10,7 @@ const ReplyBox = () => {
                 <form action="#" method="POST">
                     <div className="flex space-x-4">
                         <div className="flex-shrink-0">
-                            <img src="https://via.placeholder.com/40" alt="User Avatar"
+                            <Image src="https://via.placeholder.com/40" alt="User Avatar"
                                  className="w-8 h-8 rounded-full"/>
                         </div>
                         <div className="flex-1">

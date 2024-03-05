@@ -21,6 +21,7 @@ import { useParams } from "next/navigation";
 
 import { StoreInterface, Store } from "@/interfaces/StoreInterface";
 import { storeTemp } from "@/data/store";
+import { Review } from "@/interfaces/Review";
 
 import { getStore } from "@/services/store.service";
 
@@ -74,6 +75,22 @@ const productsTemp = [
     },
 ];
 
+const reviewTemp : Review[] = [
+    {
+        store_id: 1,
+        store_name: "ร้าน1",
+        review_comment: "ข้าวหมูกรอบอร่อยมาก",
+        createAt: new Date(),
+        updateAt: new Date()
+    },
+    {
+        store_id: 2,
+        store_name: "ร้าน2",
+        review_comment: "สู่ความเวิ้งว้างอันไกลโพ้นนนนนนนนนนนนนนนนน",
+        createAt: new Date(),
+        updateAt: new Date()
+    },
+]
 
 
 const ProductDetail = () => {
@@ -106,6 +123,23 @@ const ProductDetail = () => {
         ],
     });
 
+
+const reviewTemp: Review[] = [
+    {
+        store_id: 1,
+        store_name: "ร้าน1",
+        review_comment: "ข้าวหมูกรอบอร่อยมาก",
+        createAt: new Date(),
+        updateAt: new Date()
+    },
+    {
+        store_id: 2,
+        store_name: "ร้าน2",
+        review_comment: "สู่ความเวิ้งว้างอันไกลโพ้นนนนนนนนนนนนนนนนน",
+        createAt: new Date(),
+        updateAt: new Date()
+    },
+]
     //เรียกข้อมูลจากต่อหลังบ้าน 
     function callBackEnd(id: string) {
         //ส่วน backend เตรียม filter มาให้ (version mock up data) ให้
@@ -128,7 +162,10 @@ const ProductDetail = () => {
     console.log(params.productId);
 
     //from data/products
-    const [storeData, setStoreData] = useState<Store>();
+    const [storeData, setStoreData] = useState<Store[]>();
+
+    //from data/reviews
+    const [reviewData, setReviewData] = useState<Review[]>([])
 
     const fetchData = async () => {
         // const data = await getStoreById(params.store_id);
@@ -139,7 +176,8 @@ const ProductDetail = () => {
         //     console.log(data);
         // }
 
-        setStoreData(storeTemp);
+        setStoreData(productsTemp);
+        setReviewData(reviewTemp);
     };
 
     //   useEffect(() => {
@@ -279,7 +317,7 @@ const ProductDetail = () => {
                             </div>
                         </div>
                     </div>
-                    <DetailBox description={detail?.store_description} openTime={detail.OpenTimes}/>
+                    <DetailBox description={detail?.store_description} openTime={detail.OpenTimes} review={reviewData}/>
                 </div>
             </section>
         </>

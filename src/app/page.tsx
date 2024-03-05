@@ -3,14 +3,12 @@ import Appbar from "@/components/HeaderAppBar";
 import RestaurantCard from "@/components/cards/Restaurantcard";
 import CardHomePage from "@/components/CardSelected";
 import CategoriesScrollCards from "@/components/cards/active/HorizontalScrollCards";
-import LocationScrollCards from "@/components/cards/location/HorizontalScrollCard";
 import { Button } from "@nextui-org/react";
 import Footer from "@/components/Footer"
 import { useRouter } from "next/navigation";
 import IconBottonSelect from "@/components/botton/MyLocation";
 import BackgroundCard from "@/components/BackgroundImage";
 import CategoryCard from "@/components/cards/active/CategoryCard";
-import LocationCard from "@/components/cards/location/LocationCard";
 import {storeTemp} from "@/data/store"
  
 
@@ -118,19 +116,19 @@ export default function Home() {
             ที่อยู่
           </h1>
           {/* <LocationScrollCards /> */}
-          <CategoriesScrollCards>{
+          {/* <CategoriesScrollCards>{
             LocationtempData.map((location) => {
               return (
                 <>
                   <div className="inline-block px-3">
-                    <LocationCard location={location} />
+                 
                   </div>
                 </>
               )
             })
           }
 
-          </CategoriesScrollCards>
+          </CategoriesScrollCards> */}
         </div>
 
         <div className="flex flex-col  m-auto p-auto">
