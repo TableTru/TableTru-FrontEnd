@@ -48,6 +48,24 @@ export const getUserBookingByStatus = async (userId: number, status: string) => 
     });
   }
 
+  export const getStoreBookingById = async (storeId: number) => {
+    return await axios.get(url + `/tableBookings/getStoreBookingByStatus?storeId=${storeId}&status=${status}`).then((res: AxiosResponse) => {
+      return res.data.data.rows;
+    }).catch((err: any) => {
+      catchError(err, null, "getTableBooking");
+      return [];
+    });
+  }
+
+  export const getStoreBookingByStatus = async (storeId: number, status: string) => {
+    return await axios.get(url + `/tableBookings/getStoreBookingByStatus?storeId=${storeId}&status=${status}`).then((res: AxiosResponse) => {
+      return res.data.data.rows;
+    }).catch((err: any) => {
+      catchError(err, null, "getTableBooking");
+      return [];
+    });
+  }
+
 function catchError(error: any, path: any, func: any): void {
   try {
     return;
