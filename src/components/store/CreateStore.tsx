@@ -53,6 +53,8 @@ import CreateStoreDetail from "@/components/store/CreateStoreDetail";
 import ImageUpload from "@/components/store/ImageUpload";
 import Map from "@/components/Map";
 import dayjs, { Dayjs } from 'dayjs';
+import { createStore, checkStoreByName } from '@/services/store.service'
+import { editUser } from "@/services/user.service";
 
 
 const OpenTimes = [
@@ -108,12 +110,12 @@ const storeImageTemp: StoreImage[] = [
     },
 ]
 export default function EditStore() {
-    const [formData, setFormData] = useState<object>({
-        category_id: '',
-        location_id: '',
+    const [formData, setFormData] = useState<any>({
+        category_id: null,
+        location_id: null,
         store_name: '',
         table_booking: '',
-        sum_rating: '',
+        sum_rating: null,
         store_description: '',
         Latitude: '',
         longitude: '',
@@ -134,7 +136,7 @@ export default function EditStore() {
     const handleOpenTimeChange = (index: number, newValue: any) => {
         const newOpenTimes = [...formData.OpenTimes];
         console.log(newOpenTimes);
-        
+
         newOpenTimes[index].open_time = newValue.format('YYYY-MM-DD HH:mm:ss');
         setFormData({ ...formData, OpenTimes: newOpenTimes });
         console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
@@ -148,10 +150,28 @@ export default function EditStore() {
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         console.log(formData);
-        // window.location.replace('/profile')
+        const checkStoreNameRes = await checkStoreByName(formData.store_name)
+        if (checkStoreNameRes) {
+            const createStoreRes = await createStore(formData)
+            const userData = localStorage.getItem("userData")
+            const userDataJson = JSON.parse(userData || "[]");
+            const newUserData = {
+                user_id: userDataJson.user_id,
+                user_status: "merchant"
+            }
+            await editUser(newUserData)
+
+            // window.location.replace('/profile')
+        }
+        else {
+            console.log("error");
+
+        }
+
+
     };
 
 
@@ -256,7 +276,7 @@ export default function EditStore() {
                                                         <Select
                                                             labelId="demo-simple-select-label"
                                                             id="category_id"
-                                                            name="category_id   "
+                                                            name="category_id"
                                                             value={formData.category_id}
                                                             label="เลิอกโค้ตส่วนลด"
                                                             onChange={handleChange}

@@ -35,6 +35,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import {getStoreById, getStoreImageByType } from '@/services/store.service'
 
 
 interface Store {
@@ -43,6 +44,7 @@ interface Store {
     location_id: number;
     store_name: string;
     store_description: string;
+    store_cover_image: string;
     table_booking: number;
     sum_rating: number;
     Latitude: string;
@@ -92,33 +94,17 @@ const storeImageTemp: StoreImage = {
 export default function StoreHome() {
     const theme = useTheme();
     const [storeData, setStoreData] = useState<Store>();
-    const [storeImageData, setStoreImageData] = useState<StoreImage[]>()
-    const [coverImage, setCoverImage] = useState<StoreImage>()
 
     const fetchData = async () => {
-        // const data = await getStoreById();
-        // console.log(data);
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+        const data = await getStoreById(userDataJson.user_id);
+        console.log(data);
 
-        // if (data) {
-        //     setStoreData(data);
-        //     console.log(data);
-        // }
-
-        // const imageArray = [];
-        // const storeImages = await getStoreImageByType(data.store_id, "ภาพเมนู" );
-        // console.log(storeImages);
-
-        // if (storeImages) {
-        //     for (const storeImageObject of storeImages) {
-        //         imageArray.push(storeImageObject);
-        //     }
-        //     setStoreImageData(imageArray);
-        //     console.log(imageArray);
-        // }
-
-        setStoreData(storeTemp);
-        // setStoreImageData(storeImageTemp);
-        setCoverImage(storeImageTemp)
+        if (data) {
+            setStoreData(data);
+            console.log(data);
+        }
     };
 
     useEffect(() => {
@@ -136,15 +122,15 @@ export default function StoreHome() {
                         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
 
                             <Box sx={{ width: '20%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <Avatar src={coverImage?.store_image_name} sx={{ width: 150, height: 150, m: 1, bgcolor: 'secondary.main' }} />
+                                <Avatar src={storeData?.store_cover_image} sx={{ width: 150, height: 150, m: 1, bgcolor: 'secondary.main' }} />
                             </Box>
 
                             <Box sx={{ margin: 2, width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
                                 <Typography component="h1" variant="h5"> {storeData?.store_name} </Typography>
-                                <Stack direction="row" spacing={1}>
+                                {/* <Stack direction="row" spacing={1}>
                                     <Chip label="ยืนยัน" color="success" />
                                     <Chip label="ยืนยัน" color="success" />
-                                </Stack>
+                                </Stack> */}
                             </Box>
 
                         </Box>

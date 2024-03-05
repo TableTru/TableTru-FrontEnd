@@ -21,7 +21,7 @@ import ConfirmButton from "@/components/botton/ConfirmButton";
 import { StoreInterface, Store } from "@/interfaces/StoreInterface"
 import { storeTemp } from "@/data/store"
 
-import { getStore } from "@/services/store.service";
+import { getAllStore } from "@/services/store.service";
 
 
 const product = {
