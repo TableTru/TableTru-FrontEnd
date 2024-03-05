@@ -142,7 +142,7 @@ const storeImageTemp: StoreImage[] = [
 ]
 
 export default function EditStore() {
-    const [formData, setFormData] = useState<object>({
+    const [formData, setFormData] = useState<any>({
         store_id: null,
         category_id: null,
         location_id: null,
@@ -155,9 +155,9 @@ export default function EditStore() {
         OpenTimes: [],
     })
 
-    const handleChange = (e) => {
+    const handleChange = (e: any) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
+        setFormData((prevData: any) => ({
             ...prevData,
             [name]: value,
         }));
