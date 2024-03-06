@@ -223,9 +223,14 @@ export default function EditStore() {
         // }
         // setStoreImageData(storeImageTemp);
     };
+    
+    const fetchTempData = async () => {
+        setFormData(storeTemp)
+    };
 
     useEffect(() => {
-        fetchData();
+        // fetchData();
+        fetchTempData()
     }, []);
 
     return (
