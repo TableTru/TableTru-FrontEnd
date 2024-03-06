@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "@nextui-org/react";
 import {
     Tabs,
@@ -39,44 +39,154 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const bookingList = [
-    {
-        user: "aungpor1",
-        phone: "0813119090",
-        people_num: "5",
-        date: "2/2",
-        time: "14.00"
-    },
-    {
-        user: "aungpor2",
-        phone: "0813119090",
-        people_num: "2",
-        date: "2/2",
-        time: "14.30"
-    },
-    {
-        user: "aungpor3",
-        phone: "0813119090",
-        people_num: "3",
-        date: "2/2",
-        time: "15.00"
-    },
-    {
-        user: "aungpor4",
-        phone: "0813119090",
-        people_num: "2",
-        date: "2/2",
-        time: "16.00"
-    },
+interface StoreTableBooking {
+    table_booking_id: number;
+    store_id: number;
+    user_id: number;
+    table_booking_status: string;
+    table_booking_count: number;
+    table_booking_time: string;
+    username: string;
+    phone_num: string;
+}
 
-];
+const storeBookingTemp: StoreTableBooking[] = [
+    {
+        table_booking_id: 1,
+        store_id:1,
+        user_id: 1,
+        table_booking_status: 'ยังไม่ถึงกำหนด',
+        table_booking_count: 4,
+        table_booking_time: '2024-02-25T17:00',
+        username: 'aungpor',
+        phone_num: '0813111234',
+    },
+    {
+        table_booking_id: 2,
+        store_id:1,
+        user_id: 1,
+        table_booking_status: 'อยู่ระหว่างดำเนินการ',
+        table_booking_count: 2,
+        table_booking_time: '2024-02-25T17:00',
+        username: 'aungpor',
+        phone_num: '0813111234',
+    },
+    {
+        table_booking_id: 3,
+        store_id:1,
+        user_id: 1,
+        table_booking_status: 'เสร็จสิ้น',
+        table_booking_count: 3,
+        table_booking_time: '2024-02-25T16:04',
+        username: 'aungpor',
+        phone_num: '0813111234',
+    },
+    {
+        table_booking_id: 4,
+        store_id:1,
+        user_id: 1,
+        table_booking_status: 'ยกเลิก',
+        table_booking_count: 3,
+        table_booking_time: '2024-02-25T16:04',
+        username: 'aungpor',
+        phone_num: '0813111234',
+    },
+]
+
 
 export default function TableBooking() {
     const [value, setValue] = useState('1');
+    const [storeBookingData, setStoreBookingData] = useState<object[]>([])
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric' };
+
+    const fetchData = async () => {
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+
+        // if (userData) {
+        //     const store_id = userDataJson.store_id
+
+        //     const tableBookingArray = [];
+        //     const data = await getTableBookingByStoreId(store_id);
+
+        //     if (data) {
+        //         for (const tableBookingObject of data) {
+        //             tableBookingArray.push(tableBookingObject);
+        //         }
+        //         setStoreBookingData(tableBookingArray);
+        //         console.log(tableBookingArray);
+        //     }
+        // }
+
+        const storeBookingTempWithDate = storeBookingTemp.map(booking => ({
+            ...booking,
+            table_booking_time: new Date(booking.table_booking_time),
+        }));
+        console.log(storeBookingTempWithDate);
+        //เอาไปใส่ใน loop ข้างบนทีหลัง
+
+
+        for (const tableBookingObject of storeBookingTempWithDate) {
+            const diff = Math.abs(tableBookingObject.table_booking_time.getTime() - new Date().getTime());
+            const diffInHours = diff / (1000 * 60 * 60);
+
+            if (diffInHours >= 1) {
+                console.log("auto set booking status active");
+            }
+        }
+
+
+        setStoreBookingData(storeBookingTempWithDate)
+    };
+
+    const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
+
+    const finishButton = (tablebookingId: number) => {
+        const updateData = {
+            table_booking_id: tablebookingId,
+            table_booking_status: 'เสร็จสิ้น'
+        }
+        const updatedStoreBookingTemp = storeBookingData.filter(booking => booking.table_booking_id !== tablebookingId);
+        setStoreBookingData(updatedStoreBookingTemp);
+
+        // const updateBookingRes = tableBookingUpdateById(updateData)
+        // console.log(updateBookingRes);
+    }
+
+    const cancleButton = (tablebookingId: number) => {
+        const updateData = {
+            table_booking_id: tablebookingId,
+            table_booking_status: 'ยกเลิก'
+        }
+        const updatedStoreBookingTemp = storeBookingData.filter(booking => booking.table_booking_id !== tablebookingId);
+        setStoreBookingData(updatedStoreBookingTemp);
+
+        // const updateBookingRes = tableBookingUpdateById(updateData)
+        // console.log(updateBookingRes);
+    }
+
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'ยกเลิก':
+                return 'error'; // สีแดง
+            case 'อยู่ระหว่างดำเนินการ':
+                return 'warning'; // สีเหลือง
+            case 'เสร็จสิ้น':
+                return 'success'; // สีเขียว
+            default:
+                return 'default'; // สีเทา
+        }
+    };
+
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     return (
         <>
             <ThemeProvider theme={createTheme()}>
@@ -92,7 +202,7 @@ export default function TableBooking() {
                     <Box sx={{ width: '100%', typography: 'body1' }}>
                         <TabContext value={value}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                <TabList onChange={handleChange} textColor="primary" indicatorColor="primary" centered aria-label="lab API tabs example">
+                                <TabList onChange={handleTabChange} textColor="primary" indicatorColor="primary" centered aria-label="lab API tabs example">
                                     <Tab label="Ongoing" value="1" />
                                     <Tab label="Historical" value="2" />
                                 </TabList>
@@ -102,18 +212,18 @@ export default function TableBooking() {
                             <Box sx={{ marginBottom: 8 }}>
                                 <TabPanel value="1">
                                     <List>
-                                        {bookingList.map((item, index) => (
-                                            <Accordion key={index}>
+                                        {storeBookingData.map((item, index) => (
+                                            <Accordion key={index} >
                                                 <AccordionSummary
                                                     expandIcon={<ExpandMoreIcon />}
                                                     aria-controls={`panel${index}-content`}
                                                     id={`panel${index}-header`}
                                                 >
                                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                        <Typography>{item.user}</Typography>
-                                                        <Typography variant="subtitle1">เบอร์โทรศัพท์: {item.phone}</Typography>
-                                                        <Typography variant="subtitle1">จำนวนคน: {item.people_num}</Typography>
-                                                        <Typography variant="subtitle1">เวลาจอง: {item.time}</Typography>
+                                                        <Typography>{item.username}</Typography>
+                                                        <Typography variant="subtitle1">เบอร์โทรศัพท์: {item.phone_num}</Typography>
+                                                        <Typography variant="subtitle1">จำนวนคน: {item.table_booking_count}</Typography>
+                                                        <Typography variant="subtitle1">เวลาจอง: {item.table_booking_time.toLocaleDateString(undefined, timeOptions)}</Typography>
                                                     </Box>
                                                 </AccordionSummary>
                                                 {/* <AccordionDetails>
@@ -124,6 +234,7 @@ export default function TableBooking() {
                                                         fullWidth
                                                         variant="outlined"
                                                         sx={{ mt: 3, mb: 2 }}
+                                                        onClick={() => cancleButton(item.table_booking_id)}
                                                     >
                                                         ยกเลิก
                                                     </Button>
@@ -131,6 +242,7 @@ export default function TableBooking() {
                                                         fullWidth
                                                         variant="contained"
                                                         sx={{ mt: 3, mb: 2 }}
+                                                        onClick={() => finishButton(item.table_booking_id)}
                                                     >
                                                         เสร็จสิ้น
                                                     </Button>
@@ -141,19 +253,24 @@ export default function TableBooking() {
                                 </TabPanel>
 
                                 <TabPanel value="2">
-                                    {bookingList.map((item, index) => (
+
+                                    {storeBookingData.map((item, index) => (
                                         <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
                                             <ListItem>
-                                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                    <ListItemText primary={`${item.user} | ${item.phone}`} secondary={`${item.time} จำนวน ${item.people_num} คน`} />
-                                                    <Stack direction="row" spacing={1}>
-                                                        <Chip label="ยืนยัน" color="success" />
-                                                    </Stack>
-                                                    <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
-                                                        <a href="/">
-                                                            <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
-                                                        </a>
+                                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                                                    <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
+                                                        <ListItemText primary={`${item.username} | ${item.phone_num}`} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
+                                                        <Stack direction="row" spacing={1}>
+                                                            <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
+                                                        </Stack>
                                                     </Box>
+
+                                                    {/* <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
+                                                        <Button onClick={handleOpen}>
+                                                            <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
+                                                        </Button>
+
+                                                    </Box> */}
                                                 </Box>
 
                                             </ListItem>

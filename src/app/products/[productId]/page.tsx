@@ -1,5 +1,11 @@
+'use client';
+
+import { useEffect, useState } from "react";
+
 import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
+
+import { NextPage, NextPageContext } from "next";
 import DetailBox from "@/components/product/DetailBox";
 import ContactBox from "@/components/product/ContactBox"
 import SelectDateBox from "@/components/product/SelectDateBox";
@@ -9,12 +15,48 @@ import Stack from "@mui/material/Stack";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Map from "@/components/Map";
+import ConfirmButton from "@/components/botton/ConfirmButton";
 
 
-export default function ProductDetail({ params }: { params: { store_id: string, store_name: string, total_review: string } }) {
+import { StoreInterface, Store } from "@/interfaces/StoreInterface"
+import { storeTemp } from "@/data/store"
+
+import { getStore } from "@/services/store.service";
+
+
+const product = {
+    name: "test",
+    detail: "ร้านอาหารที่เน้นความหลากหลายของเมนูพิซซ่า พาสต้า ชีสนำเข้า เนื้ออบนำเข้า ที่คุณสามารถดีไซน์มื้ออาหารของคุณเองได้ และเรายังมีเบเกอรี่โฮมเมด และขนมอบมีไว้บริการลูกค้า โดยลูกค้าสามารถเลือกรับประทานที่ร้าน หรือซื้อกลับไปฝากคนที่บ้านก็ได้"
+}
+
+const ProductDetail = () => {
+
+
+    //from data/products
+    const [storeData, setStoreData] = useState<Store>();
+
+    
+
+    const fetchData = async () => {
+        // const data = await getStoreById(params.store_id);
+        // console.log(data);
+
+        // if (data) {
+        //     setStoreData(data);
+        //     console.log(data);
+        // }
+
+        setStoreData(storeTemp);
+
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     return (
         <>
-            <section className="py-10 dark:bg-gray-800">
+            <section className="my-24 py-10 dark:bg-gray-800">
                 <div className="max-w-6xl px-4 mx-auto">
 
                     <div className="flex flex-wrap mb-24 -mx-4">
@@ -26,7 +68,7 @@ export default function ProductDetail({ params }: { params: { store_id: string, 
                                     <span className="px-2.5 py-0.5 text-xs text-red-600 bg-red-100 dark:bg-gray-700 rounded-xl dark:text-gray-200">New
                                         Arrival</span>
                                     <h2 className="max-w-xl mt-6 mb-6 text-xl font-semibold leading-loose tracking-wide text-gray-700 md:text-2xl dark:text-gray-300">
-                                        {params.store_id}
+                                        {storeData?.store_name}
                                     </h2>
                                     <div className="flex flex-wrap items-center mb-6">
                                         <ul className="flex mb-4 mr-2 lg:mb-0">
@@ -72,38 +114,42 @@ export default function ProductDetail({ params }: { params: { store_id: string, 
                                             </li>
                                         </ul>
                                         <a className="mb-4 text-xs underline hover:text-red-600 dark:text-gray-400 dark:hover:text-gray-300 lg:mb-0" href="@/app/products/category/[category-slug]/[productId]/page#">
-                                            20 reviews
+                                           {storeData?.sum_rating}
                                         </a>
                                     </div>
                                 </div>
                                 <Stack direction="row" spacing={1}>
-                                    <Chip icon={<RestaurantIcon />} label="ญิ้ปุ่น" />
-                                    <Chip icon={<LocationOnIcon />} label="สาทร" />
+                                    <Chip icon={<RestaurantIcon />} label={`${storeData?.category_id}`} />
+                                    <Chip icon={<LocationOnIcon />} label={`${storeData?.location_id}`} />
                                 </Stack>
 
                                 <SelectDateBox />
 
+                                <div className="mb-6">
+                                    <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">
+                                        <div className="p-3 lg:p-5 ">
+                                            {/* Map */}
+                                            <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
+                                            <div className="p-2 rounded-xl lg:p-6 dark:bg-gray-800 bg-gray-50">
+                                                123/xyz Location
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <ContactBox />
 
-                                <div className="flex gap-4 mb-6">
-                                    <a href="@/app/products/category/[category-slug]/[productId]/page#" className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent dark:border-gray-700 hover:border-red-500 hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl">
-                                        Buy now</a>
+                                <div className="flex flex-cols gap-4 mb-6">
+                                    {/*<button href="@/app/products/category/[category-slug]/[productId]/page#" className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent dark:border-gray-700 hover:border-red-500 hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl" onClick="handleButtonConfirm()">*/}
+                                    {/*    ยืนยันการจอง</button>*/}
+
+                                    <ConfirmButton />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <DetailBox />
-                    <div className="mb-6">
-                        <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">
-                            <div className="p-3 lg:p-5 ">
-                                {/* Map */}
-                                <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
-                                <div className="p-2 rounded-xl lg:p-6 dark:bg-gray-800 bg-gray-50">
-                                    location
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
 
             </section>
@@ -112,3 +158,4 @@ export default function ProductDetail({ params }: { params: { store_id: string, 
         </>
     );
 };
+export default ProductDetail;
