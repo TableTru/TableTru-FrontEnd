@@ -26,6 +26,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { getUserById, createUser, getRegisterCheck } from "@/services/user.service";
 
 interface User {
   user_id: number;
@@ -68,32 +69,22 @@ export default function SignUp() {
     profile_image: ""
   });
 
-  const fetchData = async () => {
-    // const data = await getUser();
-    // console.log(data);
+  // const fetchData = async () => {
+  //   const userData = localStorage.getItem("userData")
+  //   const userDataJson = JSON.parse(userData || "[]");
+  //   const data = await getUser(userDataJson.user_id);
+  //   console.log(data);
 
-    // if (data) {
-    //     setUserData(data);
-    //     console.log(data);
-    // }
+  //   if (data) {
+  //     setUserData(data);
+  //     console.log(data);
+  //   }
 
-    // const reviewArray = [];
-    // const userReviews = await getUserReview();
-    // console.log(userReviews);
+  //   setUserData(userTemp);
 
-    // if (userReviews) {
-    //     for (const reviewObject of userReviews) {
-    //         reviewArray.push(reviewObject);
-    //     }
-    //     setReviewData(reviewArray);
-    //     console.log(reviewArray);
-    // }
+  // };
 
-    setUserData(userTemp);
-
-  };
-
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setUserData((prevData) => ({
       ...prevData,
@@ -101,10 +92,16 @@ export default function SignUp() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log(userData);
-    window.location.replace('/')
+    const checkRegisterRes = await getRegisterCheck(userData.email)
+    if(checkRegisterRes) {
+      await createUser(userData)
+      window.location.replace('/')
+    } else{
+      console.log("already have user");
+    }
   };
 
   useEffect(() => {
@@ -123,8 +120,8 @@ export default function SignUp() {
       >
 
 
-        <Typography sx={{mt: 11}} component="h1" variant="h5">
-        SignUp
+        <Typography sx={{ mt: 11 }} component="h1" variant="h5">
+          SignUp
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <Grid container spacing={2}>

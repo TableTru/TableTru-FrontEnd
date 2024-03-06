@@ -29,6 +29,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { getUserById, getUserReview } from "@/services/user.service";
 
 interface User {
     user_id: number;
@@ -111,28 +112,30 @@ export default function ProfileCard() {
     const [reviewData, setReviewData] = useState<Review[]>([])
 
     const fetchData = async () => {
-        // const data = await getUser();
-        // console.log(data);
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+        const data = await getUserById(userDataJson.user_id);
+        console.log(data);
 
-        // if (data) {
-        //     setUserData(data);
-        //     console.log(data);
-        // }
+        if (data) {
+            setUserData(data);
+            console.log(data);
+        }
 
-        // const reviewArray = [];
-        // const userReviews = await getUserReview();
-        // console.log(userReviews);
+        const reviewArray = [];
+        const userReviews = await getUserReview(userDataJson.user_id);
+        console.log(userReviews);
 
-        // if (userReviews) {
-        //     for (const reviewObject of userReviews) {
-        //         reviewArray.push(reviewObject);
-        //     }
-        //     setReviewData(reviewArray);
-        //     console.log(reviewArray);
-        // }
+        if (userReviews) {
+            for (const reviewObject of userReviews) {
+                reviewArray.push(reviewObject);
+            }
+            setReviewData(reviewArray);
+            console.log(reviewArray);
+        }
 
-        setUserData(userTemp);
-        setReviewData(reviewTemp)
+        // setUserData(userTemp);
+        // setReviewData(reviewTemp)
 
     };
 
