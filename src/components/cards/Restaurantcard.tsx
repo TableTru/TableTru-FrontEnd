@@ -92,18 +92,18 @@ export default function Restaurantcard({store}:{store:Store}) {
   };
 
   const fetchData = async () => {
-    const storeArray = [];
-    const data = await getStore();
-    console.log(data);
+    // const storeArray = [];
+    // const data = await getStore();
+    // console.log(data);
 
-    if (data) {
-      const stores = data;
-      for (const storeObj of stores) {
-        storeArray.push(storeObj);
-      }
-    }
-    setStoreData(storeArray);
-    console.log(storeArray);
+    // if (data) {
+    //   const stores = data;
+    //   for (const storeObj of stores) {
+    //     storeArray.push(storeObj);
+    //   }
+    // }
+    // setStoreData(storeArray);
+    // console.log(storeArray);
   };
 
   useEffect(() => {
