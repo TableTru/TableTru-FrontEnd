@@ -3,6 +3,8 @@ import Appbar from "@/components/HeaderAppBar";
 import ListCode from "@/components/promo/Code";
 import Box from "@mui/joy/Box";
 import BackgroundCard from "@/components/BackgroundImage";
+
+
 function PromoCode() {
   return (
     <>
