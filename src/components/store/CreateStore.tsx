@@ -126,7 +126,7 @@ export default function EditStore() {
         table_booking: '',
         sum_rating: null,
         store_description: '',
-        Latitude: '',
+        latitude: '',
         longitude: '',
         location: '',
         OpenTimes: OpenTimes,
@@ -240,7 +240,9 @@ export default function EditStore() {
                         console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
                         setFormData({
                             ...formData,
-                            location: place.formatted_address
+                            location: place.formatted_address,
+                            latitude: place.geometry.location.lat(),
+                            longitude: place.geometry.location.lng(),
                         });
                         map.setCenter(location);
                         new google.maps.Marker({

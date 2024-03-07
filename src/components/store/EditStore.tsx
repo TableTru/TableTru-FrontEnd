@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Image, Textarea } from "@nextui-org/react";
 import {
     Tabs,
@@ -54,6 +54,13 @@ import ImageUpload from "@/components/store/ImageUpload";
 import Map from "@/components/Map";
 import dayjs, { Dayjs } from 'dayjs';
 import { getStoreById, editStore, editOpenTime } from '@/services/store.service'
+import { Loader } from '@googlemaps/js-api-loader';
+
+const loader = new Loader({
+    apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    version: 'weekly',
+    libraries: ['places'], // เพิ่ม libraries places
+});
 
 
 interface Store {
@@ -64,8 +71,9 @@ interface Store {
     store_description: string;
     table_booking: number;
     sum_rating: number;
-    Latitude: string;
-    longitude: string;
+    latitude: number;
+    longitude: number;
+    location: string;
     OpenTimes: object[];
 }
 
@@ -85,8 +93,9 @@ const storeTemp: Store =
     store_description: 'hahahahahahahahahaha',
     table_booking: 4,
     sum_rating: 3.25,
-    Latitude: '',
-    longitude: '',
+    latitude: 13.8920878,
+    longitude: 100.5267991,
+    location: 'บางตลาด อำเภอปากเกร็ด นนทบุรี 11120 ประเทศไทย',
     OpenTimes: [
         {
             day: 'วันจันทร์',
@@ -150,8 +159,9 @@ export default function EditStore() {
         table_booking: null,
         sum_rating: null,
         store_description: '',
-        Latitude: '',
-        longitude: '',
+        latitude: 13.8920878,
+        longitude: 100.5267991,
+        location: '50 ถนน งามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900 ประเทศไทย',
         OpenTimes: [],
     })
 
@@ -223,9 +233,90 @@ export default function EditStore() {
         // }
         // setStoreImageData(storeImageTemp);
     };
-    
+
     const fetchTempData = async () => {
         setFormData(storeTemp)
+    };
+
+    const mapRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [map, setMap] = useState<google.maps.Map | null>(null);
+    const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+
+    useEffect(() => {
+        loader.load().then(() => {
+            const google = window.google;
+            if (mapRef.current && !map) {
+                const geolocation = navigator.geolocation;
+                const newMap = new google.maps.Map(mapRef.current, {
+                    center: { lat: formData.latitude, lng: formData.longitude }, // ตำแหน่งเริ่มต้นที่กรุงเทพมหานคร,
+                    zoom: 12,
+                });
+            
+                const geocoder = new google.maps.Geocoder();
+                const latLng = new google.maps.LatLng(formData.latitude, formData.longitude);
+                geocoder.geocode({ 'location': latLng }, (results, status) => {
+                    if (status === 'OK') {
+                        if (results[0]) {
+                            const marker = new google.maps.Marker({
+                                map: newMap,
+                                position: latLng,
+                            });
+                            setMap(newMap);
+                            console.log(results[0].formatted_address);
+                            inputRef.current.value = results[0].formatted_address;
+                        } else {
+                            console.log('No results found');
+                        }
+                    } else {
+                        console.error('Geocoder failed due to: ' + status);
+                    }
+                });
+            }
+            if (inputRef.current && google) {
+
+                const autocomplete = new google.maps.places.Autocomplete(inputRef.current);
+                autocomplete.addListener('place_changed', () => {
+                    const place = autocomplete.getPlace();
+                    if (place && place.geometry && map) {
+                        const location = place.geometry.location; //ตำแหน่งแบบ lat long
+                        console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
+                        setFormData({
+                            ...formData,
+                            location: place.formatted_address,
+                            latitude: place.geometry.location.lat(),
+                            longitude: place.geometry.location.lng(),
+                        });
+                        map.setCenter(location);
+                        new google.maps.Marker({
+                            position: location,
+                            map: map,
+                        });
+                    }
+                });
+                autocomplete.addListener('predictions_changed', () => {
+                    setPredictions(autocomplete.getPlacePredictions());
+                });
+            }
+        });
+    }, [map]);
+
+
+    const handleSelectPrediction = (prediction: google.maps.places.AutocompletePrediction) => {
+        console.log(prediction.description);
+
+        if (inputRef.current) {
+            inputRef.current.value = prediction.description;
+            console.log("active");
+
+        }
+        setPredictions([]);
+
+        setFormData({
+            ...formData,
+            location: prediction.description,
+        });
+
     };
 
     useEffect(() => {
@@ -286,11 +377,25 @@ export default function EditStore() {
 
                                 <Grid item xs={12}>
                                     <Typography variant="subtitle1">ค้นหาพิกัดของร้าน</Typography>
-                                    <TextField required fullWidth id="store_Location" />
+                                    <TextField
+                                        inputRef={inputRef}
+                                        required
+                                        fullWidth
+                                    />
+                                    {predictions.length > 0 && (
+                                        <ul>
+                                            {predictions.map((prediction, index) => (
+                                                <li key={index} onClick={() => handleSelectPrediction(prediction)}>
+                                                    {prediction.description}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+
                                 </Grid>
 
                                 <Grid item xs={12}>
-                                    <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
+                                    <div ref={mapRef} style={{ width: '100%', height: '400px' }} />
                                 </Grid>
 
                                 <Grid item xs={12}>

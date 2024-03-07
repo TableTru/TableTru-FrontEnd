@@ -39,8 +39,8 @@ function App() {
             {isLogin ? (
                 <div className="min-h-screen bg-zinc-50 pt-8 space-x-4">
                     <StoreHome />
-                    <GoogleMap/>
-                    <LocationDistance/>
+                    {/* <GoogleMap/>
+                    <LocationDistance/> */}
                 </div>
             ) : (
                 <p>Please Login</p>
