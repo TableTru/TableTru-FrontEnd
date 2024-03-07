@@ -3,6 +3,7 @@
 import StoreHome from '@/components/store/StoreHome'
 import React, { useEffect, useState } from "react";
 import GoogleMap from '@/components/store/MapTest'
+import LocationDistance from '@/components/store/LocationDistance'
 
 function App() {
     const [isLogin, setIsLogin] = useState(false);
@@ -39,6 +40,7 @@ function App() {
                 <div className="min-h-screen bg-zinc-50 pt-8 space-x-4">
                     <StoreHome />
                     <GoogleMap/>
+                    <LocationDistance/>
                 </div>
             ) : (
                 <p>Please Login</p>
