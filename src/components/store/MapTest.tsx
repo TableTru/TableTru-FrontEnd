@@ -10,7 +10,6 @@ const loader = new Loader({
   version: 'weekly',
   libraries: ['places'], // เพิ่ม libraries places
 });
-
 const GoogleMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -23,7 +22,7 @@ const GoogleMap = () => {
       if (mapRef.current && !map) {
         setMap(
           new google.maps.Map(mapRef.current, {
-            center: { lat: -34.397, lng: 150.644 },
+            center: { lat: 13.7563, lng: 100.5018 }, // ตำแหน่งเริ่มต้นที่กรุงเทพมหานคร
             zoom: 12,
           })
         );
@@ -33,8 +32,8 @@ const GoogleMap = () => {
         autocomplete.addListener('place_changed', () => {
           const place = autocomplete.getPlace();
           if (place && place.geometry && map) {
-            const location = place.geometry.location; //ตำแหน่งแบบ lat long
-            console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
+            const location = place.geometry.location; // ตำแหน่งแบบ lat long
+            console.log(place.formatted_address); // ตำแหน่งแบบชื่อ
             map.setCenter(location);
             new google.maps.Marker({
               position: location,
