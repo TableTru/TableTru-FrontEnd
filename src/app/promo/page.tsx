@@ -3,6 +3,7 @@ import Appbar from "@/components/HeaderAppBar";
 import ListCode from "@/components/promo/Code";
 import Box from "@mui/joy/Box";
 import BackgroundCard from "@/components/BackgroundImage";
+import {useEffect} from "react";
 
 const PromotionCode = [
   {
@@ -12,6 +13,7 @@ const PromotionCode = [
     store_id: 1,
     expiration_date: "30/11/2024"
   },
+
   {
     promotion_id: 2,
     promotion_name: "ส่วนลด 20%",
@@ -20,10 +22,30 @@ const PromotionCode = [
     expiration_date: "31/12/2024"
 
   },
-
 ]
 
 function PromoCode() {
+
+  const fetchData = async () => {
+
+    // const PromoArray = [];
+    // const data = await getPromo();
+    // console.log(data);
+    //
+    // if (data) {
+    //   const promo = data;
+    //   for (const promoObj of promo) {
+    //     PromoArray.push(promoObj);
+    //   }
+    // }
+    // setPromoData(PromoArray);
+    // console.log(PromoArray);
+
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
 
   return (

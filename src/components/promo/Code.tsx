@@ -2,15 +2,23 @@
 import React, {useEffect, useState} from "react";
 import { Card, CardHeader, CardBody, CardFooter, Avatar, Button } from "@nextui-org/react";
 import { Promotion } from "@/interfaces/Promo";
+import { PromotionCode } from "@/interfaces/PromoCode"
 import ProfileCard from "@/components/profile/ProfileCard";
 import Botton from "@/components/Botton";
 import StoreHome from "@/components/store/StoreHome";
+import {Store} from "@/interfaces/StoreInterface";
 
 
-export default function PromoCode({promotion, PromoUser} : {promotion:Promotion, Promo:PromoCode}) {
+
+
+
+export default function PromoCode({promotion, PromoUser} : {promotion:Promotion, Promo: PromotionCode}) {
     
     const [isFollowed, setIsFollowed] = React.useState(false);
     const [isLogin, setIsLogin] = useState(false);
+
+    //เก็บข้อมูลโปรโมชั่น โค้ตที่จะเอาไปแสดง
+    const [promocode, setPromocode] = useState <PromotionCode[]> ( );
 
     const checkLoginStatus = () => {
         const userData = localStorage.getItem("userData")
