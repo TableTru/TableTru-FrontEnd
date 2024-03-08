@@ -6,7 +6,7 @@ export interface PromotionCode {
     promotion_code_id: number;
     promotion_id:number;
     user_id: number;
-    code_status:number;
+    code_status:boolean;
     create_date:Date;
     update_date:Date;
 }

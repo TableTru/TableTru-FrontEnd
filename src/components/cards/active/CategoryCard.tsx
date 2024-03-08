@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NextImage from "next/image";
 import { getCategory } from '../../../services/category.service'
+import { CategoryInterface } from "@/interfaces/Category";
+
 
 
 export default function CategoryCard<T>({category}:{category:T}) {
@@ -13,9 +15,9 @@ export default function CategoryCard<T>({category}:{category:T}) {
 
     return (
         <>
-              <div className="w-64 h-64 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
+              <div className="w-64 h-64 max-w-xs overflow-hidden rounded-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
                 <Card
-                  className="col-span-2 sm:col-span-4 h-[300px] "
+                  className="col-span-2 w-[200px] h-[200px] lg:col-span-4 lg:h-[300px] lg:w-[250px] "
                   isPressable
                   isHoverable
                   onPress={() => router.push(`/search/${category.category_name}`)}

@@ -292,7 +292,7 @@ const reviewTemp: Review[] = [
                                     />
                                 </Stack>
 
-                                <SelectDateBox seats={detail?.table_booking} />
+                                <SelectDateBox seats={detail.table_booking} />
 
                                 <div className="mb-6">
                                     <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">

@@ -1,12 +1,41 @@
 "use client";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Card, CardHeader, CardBody, CardFooter, Avatar, Button } from "@nextui-org/react";
 import { Promotion } from "@/interfaces/Promo";
+import ProfileCard from "@/components/profile/ProfileCard";
+import Botton from "@/components/Botton";
+import StoreHome from "@/components/store/StoreHome";
 
 
-export default function PromoCode({promotion} : {promotion:Promotion}) {
-    const [isFollowed, setIsFollowed] = React.useState(false);
+export default function PromoCode({promotion, PromoUser} : {promotion:Promotion, Promo:PromoCode}) {
     
+    const [isFollowed, setIsFollowed] = React.useState(false);
+    const [isLogin, setIsLogin] = useState(false);
+
+    const checkLoginStatus = () => {
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+        if (userData) {
+            console.log(userDataJson);
+            setIsLogin(true)
+        } else {
+            console.log("not login");
+            window.location.replace('/login')
+        }
+    }
+
+    // useEffect((() => {
+    //     checkLoginStatus()
+    // }), [])
+
+    function handleClick(){
+
+    }
+
+    function collectCode(){
+
+    }
+
     return (
         <>
             <div className="flex flex-col items-center justify-center">
@@ -23,17 +52,23 @@ export default function PromoCode({promotion} : {promotion:Promotion}) {
                         <p>
                             {promotion?.promotion_description}
                         </p>
+
+                        <p className="mt-8">
+                            วันหมดอายุ:{promotion?.expiration_date}
+                        </p>
                     </CardBody>
                     <CardFooter className="gap-3">
-                        <Button
-                            className={isFollowed ? "bg-transparent cursor-not-allowed text-foreground border-default-200" : "bg-red-700 text-white"}
-                            radius="full"
-                            size="sm"
-                            variant={isFollowed ? "bordered" : "solid"}
-                            onPress={() => setIsFollowed(!isFollowed)} 
-                        >
-                            {isFollowed ? "เก็บโค้ต" : "เก็บโค้ต"}
-                        </Button>
+
+                            <Button
+                                className={isFollowed ? "bg-transparent cursor-not-allowed text-foreground border-default-200" : "bg-red-700 text-white"}
+                                radius="full"
+                                size="sm"
+                                variant={isFollowed ? "bordered" : "solid"}
+                                onPress={() => setIsFollowed(!isFollowed)}
+                            >
+                                {isFollowed ? "เก็บโค้ต" : "เก็บโค้ต"}
+                            </Button>
+                            <p>Please Login</p>
                     </CardFooter>
                 </Card>
             </div>

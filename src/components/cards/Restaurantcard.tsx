@@ -83,7 +83,7 @@ const handleClick = () => {
   console.info("You clicked the Chip.");
 };
 
-export default function Restaurantcard({store}:{store:Store}) {
+export default function Restaurantcard({store}:{store:Array<Store>}) {
   const [storeData, setStoreData] = useState<Store[]>([]);
 
   const [expanded, setExpanded] = useState(false);

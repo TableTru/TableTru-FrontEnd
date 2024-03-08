@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import IconBottonSelect from "@/components/botton/MyLocation";
 import BackgroundCard from "@/components/BackgroundImage";
 import CategoryCard from "@/components/cards/active/CategoryCard";
+import LocationCard from "@/components/cards/active/LocationCard"
 import {storeTemp} from "@/data/store"
  
 
@@ -94,7 +95,7 @@ export default function Home() {
           <CardHomePage />
         </div>
         <div className="flex flex-col m-auto p-auto">
-          <h1 className="flex py-5 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-4xl text-gray-800">
+          <h1 className="flex py-5 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-2xl lg:text-4xl text-gray-800">
             หมวดหมู่
           </h1>
           <CategoriesScrollCards>
@@ -112,27 +113,28 @@ export default function Home() {
           </CategoriesScrollCards>
         </div>
         <div className="flex flex-col m-auto p-auto">
-          <h1 className="flex py-5 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-4xl text-gray-800">
+          <h1 className="flex py-5 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-2xl lg:text-4xl text-gray-800">
             ที่อยู่
           </h1>
-          {/* <LocationScrollCards /> */}
-          {/* <CategoriesScrollCards>{
-            LocationtempData.map((location) => {
-              return (
-                <>
-                  <div className="inline-block px-3">
-                 
-                  </div>
-                </>
-              )
-            })
-          }
+          <CategoriesScrollCards>
+            {
+              LocationtempData.map((location) => {
+                return (
+                    <>
+                      <div className="inline-block px-3">
+                        <LocationCard location={location} />
+                      </div>
+                    </>
+                )
+              })
+            }
+          </CategoriesScrollCards>
 
-          </CategoriesScrollCards> */}
+
         </div>
 
         <div className="flex flex-col  m-auto p-auto">
-          <h1 className="flex py-4 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-4xl text-gray-800">
+          <h1 className="flex py-5 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-2xl lg:text-4xl text-gray-800">
             ร้านอาหารทั้งหมด
           </h1>
 
@@ -148,7 +150,7 @@ export default function Home() {
             <a href="/products">
               <Button
                 color="primary"
-                className={"bg-red-700 w-96"}
+                className={"bg-red-700 w-72 lg:w-96"}
               >
                 ร้านทั้งหมด
               </Button>
