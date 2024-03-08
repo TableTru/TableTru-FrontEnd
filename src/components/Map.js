@@ -8,8 +8,9 @@ function Map({ address }) {
   useEffect(() => {
     const loader = new Loader({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-      version: "weekly",
-    });
+      version: 'weekly',
+      libraries: ['places'], // เพิ่ม libraries places
+  });
     loader.load().then(() => {
       // Initialize the geocoder after the API is loaded
       setGeocoder(new google.maps.Geocoder());
