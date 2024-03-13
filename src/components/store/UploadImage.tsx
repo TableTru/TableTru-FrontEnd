@@ -1,7 +1,7 @@
 "use client"
 
-import { Input, List, message, Image, Progress, } from 'antd'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
+import { Input, message, Image, Progress, } from 'antd'
+import { List, ListItem, ListItemAvatar, Avatar, ListItemText, ListItemIcon, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Card, CardMedia, CardContent, Typography, Box, CardActions } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import React, { useState } from 'react'
@@ -55,6 +55,10 @@ const UploadImageToStorage = () => {
     }
   }
 
+  const removeImage = () => {
+    
+  }
+
   return (
     <div className="container mt-5">
       <div className="col-lg-8 offset-lg-2">
@@ -73,23 +77,25 @@ const UploadImageToStorage = () => {
           </Box>
         </Box>
 
-
-
-        <div className="mt-5">
-          <Card>
-            {urlData.map((item, index) => (
-              <>
+        <List>
+          {urlData.map((item, index) => (
+            <ListItem key={index}>
+              <ListItemAvatar>
                 <Image
                   key={index}
                   src={item.url}
                   alt={item.url}
-                  style={{ width: 200, height: 200, objectFit: 'cover' }}
+                  style={{ width: 100, height: 100, objectFit: 'cover' }}
                 />
-                <p>{item.url}</p>
-              </>
-            ))}
-          </Card>
-        </div>
+              </ListItemAvatar>
+              <ListItemText primary={item.url} secondary={item.url} />
+              <ListItemIcon>
+                <Button size="small">Learn More</Button>
+              </ListItemIcon>
+            </ListItem>
+          ))}
+        </List>
+
       </div>
     </div>
   )
