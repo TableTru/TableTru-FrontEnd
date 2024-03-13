@@ -55,8 +55,10 @@ const UploadImageToStorage = () => {
     }
   }
 
-  const removeImage = () => {
-    
+  const removeImage = (urlToDelete: string) => {
+    console.log(urlToDelete);
+    const newArray = urlData.filter(item => item.url !== urlToDelete);
+    setUrlData(newArray)
   }
 
   return (
@@ -90,7 +92,7 @@ const UploadImageToStorage = () => {
               </ListItemAvatar>
               <ListItemText primary={item.url} secondary={item.url} />
               <ListItemIcon>
-                <Button size="small">Learn More</Button>
+                <Button onClick={() => removeImage(item.url)} size="small">Remove</Button>
               </ListItemIcon>
             </ListItem>
           ))}
