@@ -4,28 +4,19 @@ import { Button, Card, Input, List, message, Image, Progress } from 'antd'
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import React, { useState } from 'react'
 import { storage } from '@/services/firebaseConfig'
-
 const UploadImageToStorage = () => {
-  const [imageFile, setImageFile] = useState<File>()
   const [downloadURL, setDownloadURL] = useState('')
   const [isUploading, setIsUploading] = useState(false)
   const [progressUpload, setProgressUpload] = useState(0)
 
   const handleSelectedFile = (files: any) => {
     if (files && files[0].size < 10000000) {
-      setImageFile(files[0])
-
-      console.log(files[0])
-    } else {
-      message.error('File size to large')
-    }
-  }
-
-  const handleUploadFile = () => {
-    if (imageFile) {
+      const imageFile = files[0]
       const name = imageFile.name
       const storageRef = ref(storage, `image/${name}`)
       const uploadTask = uploadBytesResumable(storageRef, imageFile)
+
+      setIsUploading(true)
 
       uploadTask.on(
         'state_changed',
@@ -51,15 +42,14 @@ const UploadImageToStorage = () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             //url is download url of file
             setDownloadURL(url)
+            setIsUploading(false)
           })
         },
       )
     } else {
-      message.error('File not found')
+      message.error('File size too large')
     }
   }
-
-  const handleRemoveFile = () => setImageFile(undefined)
 
   return (
     <div className="container mt-5">
@@ -73,37 +63,7 @@ const UploadImageToStorage = () => {
 
         <div className="mt-5">
           <Card>
-            {imageFile && (
-              <>
-                <List.Item
-                  extra={[
-                    <Button
-                      key="btnRemoveFile"
-                      onClick={handleRemoveFile}
-                      type="text"
-                      icon={<i className="fas fa-times"></i>}
-                    />,
-                  ]}
-                >
-                  <List.Item.Meta
-                    title={imageFile.name}
-                    description={`Size: ${imageFile.size}`}
-                  />
-                </List.Item>
-
-                <div className="text-right mt-3">
-                  <Button
-                    loading={isUploading}
-                    type="primary"
-                    onClick={handleUploadFile}
-                  >
-                    Upload
-                  </Button>
-
-                  <Progress percent={progressUpload} />
-                </div>
-              </>
-            )}
+            {isUploading && <Progress percent={progressUpload} />}
 
             {downloadURL && (
               <>
@@ -115,7 +75,6 @@ const UploadImageToStorage = () => {
                 <p>{downloadURL}</p>
               </>
             )}
-            <p></p>
           </Card>
         </div>
       </div>
