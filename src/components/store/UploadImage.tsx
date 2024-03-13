@@ -1,9 +1,12 @@
 "use client"
 
-import { Button, Card, Input, List, message, Image, Progress } from 'antd'
+import { Input, List, message, Image, Progress, } from 'antd'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import React, { useState } from 'react'
 import { storage } from '@/services/firebaseConfig'
+
 const UploadImageToStorage = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [progressUpload, setProgressUpload] = useState(0)
@@ -55,26 +58,35 @@ const UploadImageToStorage = () => {
   return (
     <div className="container mt-5">
       <div className="col-lg-8 offset-lg-2">
-        <Input
-          type="file"
-          placeholder="Select file to upload"
-          accept="image/png"
-          onChange={(files) => handleSelectedFile(files.target.files)}
-        />
+        <Box >
+          <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+            <Input
+              type="file"
+              placeholder="Select file to upload"
+              accept="image/png"
+              onChange={(files) => handleSelectedFile(files.target.files)}
+            />
+          </Box>
+
+          <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+            {isUploading && <Progress percent={progressUpload} />}
+          </Box>
+        </Box>
+
+
 
         <div className="mt-5">
           <Card>
-            {isUploading && <Progress percent={progressUpload} />}
             {urlData.map((item, index) => (
-                <>
-                  <Image
+              <>
+                <Image
                   key={index}
-                    src={item.url}
-                    alt={item.url}
-                    style={{ width: 200, height: 200, objectFit: 'cover' }}
-                  />
-                  <p>{item.url}</p>
-                </>
+                  src={item.url}
+                  alt={item.url}
+                  style={{ width: 200, height: 200, objectFit: 'cover' }}
+                />
+                <p>{item.url}</p>
+              </>
             ))}
           </Card>
         </div>
