@@ -5,9 +5,9 @@ import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import React, { useState } from 'react'
 import { storage } from '@/services/firebaseConfig'
 const UploadImageToStorage = () => {
-  const [downloadURL, setDownloadURL] = useState('')
   const [isUploading, setIsUploading] = useState(false)
   const [progressUpload, setProgressUpload] = useState(0)
+  const [urlData, setUrlData] = useState<object[]>([])
 
   const handleSelectedFile = (files: any) => {
     if (files && files[0].size < 10000000) {
@@ -41,7 +41,8 @@ const UploadImageToStorage = () => {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             //url is download url of file
-            setDownloadURL(url)
+            const newUrl = { id: urlData.length + 1, url: `${url}` };
+            setUrlData([...urlData, newUrl])
             setIsUploading(false)
           })
         },
@@ -64,17 +65,17 @@ const UploadImageToStorage = () => {
         <div className="mt-5">
           <Card>
             {isUploading && <Progress percent={progressUpload} />}
-
-            {downloadURL && (
-              <>
-                <Image
-                  src={downloadURL}
-                  alt={downloadURL}
-                  style={{ width: 200, height: 200, objectFit: 'cover' }}
-                />
-                <p>{downloadURL}</p>
-              </>
-            )}
+            {urlData.map((item, index) => (
+                <>
+                  <Image
+                  key={index}
+                    src={item.url}
+                    alt={item.url}
+                    style={{ width: 200, height: 200, objectFit: 'cover' }}
+                  />
+                  <p>{item.url}</p>
+                </>
+            ))}
           </Card>
         </div>
       </div>
