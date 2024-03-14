@@ -5,8 +5,7 @@ export interface PromotionCodeInterface<T> {
 export interface PromotionCode {
     promotion_code_id: number;
     promotion_id:number;
-    user_id: number;
-    code_status:boolean;
+    store_id: number;
     create_date:Date;
     update_date:Date;
 }

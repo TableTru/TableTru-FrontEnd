@@ -1,15 +1,12 @@
 "use client";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState,  useRef} from "react";
 import { Card, CardHeader, CardBody, CardFooter, Avatar, Button } from "@nextui-org/react";
 import { Promotion } from "@/interfaces/Promo";
-import { PromotionCode } from "@/interfaces/PromoCode"
+import { PromotionCode } from "@/interfaces/PromoPivot"
 import ProfileCard from "@/components/profile/ProfileCard";
 import Botton from "@/components/Botton";
 import StoreHome from "@/components/store/StoreHome";
 import {Store} from "@/interfaces/StoreInterface";
-
-
-
 
 
 export default function PromoCode({promotion, PromoUser} : {promotion:Promotion, Promo: PromotionCode}) {
@@ -36,11 +33,10 @@ export default function PromoCode({promotion, PromoUser} : {promotion:Promotion,
     //     checkLoginStatus()
     // }), [])
 
-    function handleClick(){
-
-    }
 
     function collectCode(){
+        //use backends collect id coding
+
 
     }
 
@@ -73,10 +69,13 @@ export default function PromoCode({promotion, PromoUser} : {promotion:Promotion,
                                 size="sm"
                                 variant={isFollowed ? "bordered" : "solid"}
                                 onPress={() => setIsFollowed(!isFollowed)}
+
                             >
                                 {isFollowed ? "เก็บโค้ต" : "เก็บโค้ต"}
+
                             </Button>
                             <p>Please Login</p>
+
                     </CardFooter>
                 </Card>
             </div>
