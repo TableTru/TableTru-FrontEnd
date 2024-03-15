@@ -7,24 +7,24 @@ export const storeTemp: Store [] = [
         category_id: 1,
         location_id: 1,
         store_name: "ร้านค้าของฉัน",
-        store_description: 'hahahahahahahahahaha',
+        store_description: "hahahahahahahahahaha",
         table_booking: 8,
         sum_rating: 3.25,
-        Latitude: '',
-        longitude: '',
+        Latitude: "",
+        longitude: "",
         OpenTimes: [
             {
-                day: 'วันจันทร์',
-                open_time: 'T10:00',
-                close_time: ''
+                day: "วันจันทร์",
+                open_time: "11:00",
+                close_time: "21:00",
             },
             {
-                day: 'วันอังคาร',
-                open_time: '',
-                close_time: 'T22:00'
-            }
-        ]
-    }
+                day: "วันอังคาร",
+                open_time: "12:00",
+                close_time: "23:00",
+            },
+        ],
+    },
 ]
 
     // {

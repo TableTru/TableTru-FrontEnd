@@ -2,6 +2,14 @@ export interface StoreInterface<T> {
     [key: string]: T;
   }
 
+  type TimeTemp = {
+
+    day: string
+    open_time: string
+    close_time: string
+
+}
+
 export interface Store {
     store_id: number;
     category_id: number;
@@ -12,5 +20,5 @@ export interface Store {
     sum_rating: number;
     Latitude: string;
     longitude: string;
-    OpenTimes: object[];
+    OpenTimes: TimeTemp[];
 }

@@ -41,21 +41,19 @@ import { getAllStore, getPreviewStore } from "@/services/store.service";
 //   }),
 // }));
 
-interface Store {
-  store_id: number;
-  category_id: number;
-  location_id: number;
-  store_name: string;
-  store_description: string;
-  store_menu_image: string;
-  table_booking: number;
-  sum_rating: number;
-  latitude: number;
-  longitude: number;
-  open_time: Date;
-  close_time: Date;
-  createAt: Date;
-  updateAt: Date;
+type Store = {
+  store_id: number
+  category_id: number
+  location_id: number
+  store_name: string
+  store_description: string
+  store_menu_image: string
+  table_booking: number
+  sum_rating: number
+  latitude: number
+  longitude: number
+  open_time: Date
+  close_time: Date
 }
 
 const tempData = [
@@ -95,10 +93,10 @@ const handleClick = () => {
 export default function Restaurantcard() {
   const [storeData, setStoreData] = useState<object[]>();
 
-  // const [expanded, setExpanded] = useState(false);
-  // const handleExpandClick = () => {
-  //   setExpanded(!expanded);
-  // };
+  const [expanded, setExpanded] = useState(false);
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   const fetchData = async () => {
     const storeArray = [];
@@ -128,16 +126,16 @@ export default function Restaurantcard() {
               <CardMedia
                 component="img"
                 height="194"
-                image="./images/Wineconnection.jpg"
+                image="../images/Wineconnection.jpg"
                 alt="Paella dish"
               />
               <CardContent>
                 <Typography gutterBottom variant="h5">
-                  {item.store_name}
+                  {store.store_name}
                 </Typography>
                 <Stack direction="row" spacing={1}>
-                <Rating name="read-only" value={item.sum_rating} readOnly />
-                <Typography component="legend">{item.sum_rating} reviews</Typography>
+                <Rating name="read-only" value={store.sum_rating} readOnly />
+                <Typography component="legend">{store.sum_rating} reviews</Typography>
                 </Stack>
               </CardContent>
 

@@ -189,7 +189,7 @@ export default function TableBooking() {
 
     return (
         <>
-            <ThemeProvider theme={createTheme()}>
+           
                 <Container component="main" maxWidth="md">
                     <CssBaseline />
 
@@ -285,7 +285,7 @@ export default function TableBooking() {
 
 
                 </Container>
-            </ThemeProvider >
+           
         </>
     );
 }
