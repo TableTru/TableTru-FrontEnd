@@ -140,8 +140,7 @@ export default function Restaurantcard() {
               </CardContent>
 
               <CardActions sx={{ my:2 }}>
-                  <Chip icon={<RestaurantIcon />} label={item.category?.category_name} />
-                  <Chip icon={<LocationOnIcon />} label={item.category_id} />
+                  <Chip icon={<RestaurantIcon />} label={item.category_id.category_name} />
               </CardActions>
             </CardActionArea>
           </Card>
