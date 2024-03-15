@@ -8,7 +8,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 //Import Pivot Promocode Table
 import { PromotionCodePivot } from "@/data/promotionPivot"
-import { PromotionCode } from "@/interfaces/PromoPivot"
 import { initialItems } from "@/data/promotion"
 import { Item } from "@/interfaces/Promo"
 import {useState} from "react";
@@ -25,7 +24,7 @@ export default function ContentBox() {
     const [seat, setSeat] = React.useState('');
     const [IsExpiration, setIsExpiration] = React.useState(false);
     
-    const handleChange = (event) => {
+    const handleChange = (event:any) => {
         setSeat(event.target.value as string);
     };
 
