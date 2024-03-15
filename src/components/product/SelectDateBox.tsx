@@ -92,7 +92,6 @@ export default function SelectDateBox({seats} : { seats : number , openTime: Arr
                         );
                       })
                     }
-
                     {/*<MenuItem value={1}>1</MenuItem>*/}
                     {/*<MenuItem value={2}>2</MenuItem>*/}
                     {/*<MenuItem value={3}>3</MenuItem>*/}

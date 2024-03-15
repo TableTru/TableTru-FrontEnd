@@ -12,7 +12,7 @@ export default function TimePick() {
     const now = dayjs()
     const [time, setTime] = React.useState(dayjs());
 
-    const handleChange = (time) => {
+    const handleChange = (time:any) => {
         setTime(time);
     };
 
