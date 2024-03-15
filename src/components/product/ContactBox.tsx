@@ -6,9 +6,16 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function ContentBox() {
-    const [seat, setSeat] = React.useState('');
+//Import Pivot Promocode Table
+import { PromotionCodePivot } from "@/data/promotionPivot"
+import { PromotionCode } from "@/interfaces/PromoPivot"
 
+
+export default function ContentBox() {
+
+    const [promotionCode,setPromotionCode] = React.useState<PromotionCode[]>(PromotionCodePivot);
+    const [seat, setSeat] = React.useState('');
+    
     const handleChange = (event: SelectChangeEvent) => {
         setSeat(event.target.value as string);
     };
@@ -22,13 +29,14 @@ export default function ContentBox() {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={seat}
                     label="เลิอกโค้ตส่วนลด"
                     onChange={handleChange}
                 >
-                    <MenuItem value={1}>ส่วนลด 10%</MenuItem>
-                    <MenuItem value={2}>ส่วนลด 20%</MenuItem>
-                    <MenuItem value={3}>ส่วนลด 30%</MenuItem>
+
+            {/* {filteredPromotionCodes.map(promotionCode => (
+                <MenuItem key={promotionCode.promotion_code_id}>{promotionCode.promotion_id}</MenuItem>
+            ))
+            } */}
                 </Select>
             </FormControl>
         </Box>

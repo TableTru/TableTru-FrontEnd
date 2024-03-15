@@ -4,7 +4,8 @@ import MenuList from './selectBox/MenuList';
 import { DemoItem, DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker, TimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker, DatePicker } from '@mui/x-date-pickers';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import * as React from "react";
 import Box from '@mui/material/Box';
@@ -13,28 +14,41 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+type TimeTemp = {
 
+  day: string
+  open_time: Date
+  close_time: Date
 
-export default function SelectDateBox({seats} : { seats : number }) {
+}
 
-  const now = dayjs()
+export default function SelectDateBox({seats} : { seats : number , openTime: Array<TimeTemp>} ) {
+
+  const now = dayjs();
+
   const [time, setTime] = React.useState(dayjs());
 
-  const handleChangeTime = (time) => {
+  const handleChangeTime = (time:any) => {
     setTime(time);
   };
 
+  const [value, setValue] = React.useState(null);
 
-  const [seat, setSeat] = React.useState("");
 
-  const seatNumbers = [];
+  const seatNumbers = Array.from({ length:seats },(_,index)=> index+1);
   // seatNumbers = Array.from({length: seats}, (_, i) => i + 1)
+  const [seat, setSeat] = React.useState("");
 
   console.log(seatNumbers)
 
   const handleChange = (event: SelectChangeEvent) => {
     setSeat(event.target.value as string);
   };
+
+  React.useEffect(() => {
+    console.log(setSeat);
+}, [setSeat])
+
   return (
     <>
       <div className="mb-6 ">
@@ -44,11 +58,9 @@ export default function SelectDateBox({seats} : { seats : number }) {
         <div className="bg-gray-100 dark:bg-gray-700 rounded-xl ">
           <div className="p-2 lg:p-5">
             <div className="flex flex-col justify-center gap-x-10 gap-y-4">
-
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['DateTimePicker',]}>
+                <DemoContainer components={['DatePicker']}>
                   <DateTimePicker
-                      defaultValue={now}
                       className='w-full'
                       label='วันที่และเวลา'
                       disablePast
@@ -71,10 +83,10 @@ export default function SelectDateBox({seats} : { seats : number }) {
                       onChange={handleChange}
                   >
                     {
-                      seatNumbers.map((num) => {
+                      seatNumbers?.map((num,index) => {
                         return(
                             <>
-                                <MenuItem value={1}>{num}</MenuItem>
+                                <MenuItem key={index} value={seatNumbers[index]}>{num}</MenuItem>
                             </>
                         );
                       })
