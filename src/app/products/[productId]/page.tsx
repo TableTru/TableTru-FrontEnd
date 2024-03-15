@@ -63,7 +63,7 @@ const productsTemp = [
         store_name: "ร้านค้า 2",
         store_description:
             "Lorem ipsum dolor sit amet, ctum id et est. Nam est lacus, tempus at libero eu, laoreet dignissim lorem.",
-        table_booking: 8,
+        table_booking: 2,
         sum_rating: 40,
         Latitude: "",
         longitude: "",

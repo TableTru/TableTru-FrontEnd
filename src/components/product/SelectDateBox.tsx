@@ -37,12 +37,16 @@ export default function SelectDateBox({seats} : { seats : number , openTime: Arr
 
   const seatNumbers = Array.from({ length:seats },(_,index)=> index+1);
   // seatNumbers = Array.from({length: seats}, (_, i) => i + 1)
-  const [seat, setSeat] = React.useState("");
+  const [seat, setSeat] = React.useState();
 
   console.log(seatNumbers)
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setSeat(event.target.value as string);
+  const handleChangeSeat = (event:any) => {
+    // setSeat(prevState => ({
+    //   ...prevState,
+    //   [event.target.name]:[event.target.value]
+    // }));
+    setSeat(event.target.value)
   };
 
   React.useEffect(() => {
@@ -64,7 +68,7 @@ export default function SelectDateBox({seats} : { seats : number , openTime: Arr
                       className='w-full'
                       label='วันที่และเวลา'
                       disablePast
-                      onChange={handleChangeTime}
+                      onChange={handleChangeSeat}
                       minDateTime={now}
                       timeSteps={{ minutes: 30 }}
                       views={['year', 'month', 'day', 'hours', 'minutes']}
@@ -80,14 +84,11 @@ export default function SelectDateBox({seats} : { seats : number , openTime: Arr
                       id="demo-simple-select"
                       value={seat}
                       label="จำนวนที่นั่ง"
-                      onChange={handleChange}
+                      onChange={handleChangeSeat}
                   >
                     {
-                      seatNumbers?.map((num,index) => {
-                        return(
-                            <>
-                                <MenuItem key={index} value={seatNumbers[index]}>{num}</MenuItem>
-                            </>
+                      seatNumbers.map((num,index) => {
+                        return(<MenuItem key={index} value={index}>{num}</MenuItem>
                         );
                       })
                     }
