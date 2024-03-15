@@ -23,7 +23,8 @@ import { spacing } from '@mui/system';
 
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-import { getStore } from "@/services/store.service";
+
+import { getAllStore } from "@/services/store.service";
 
 // interface ExpandMoreProps extends IconButtonProps {
 //   expand: boolean;
@@ -92,18 +93,18 @@ export default function Restaurantcard({store}:{store:Array<Store>}) {
   };
 
   const fetchData = async () => {
-    // const storeArray = [];
-    // const data = await getStore();
-    // console.log(data);
+    const storeArray = [];
+    const data = await getAllStore();
+    console.log(data);
 
-    // if (data) {
-    //   const stores = data;
-    //   for (const storeObj of stores) {
-    //     storeArray.push(storeObj);
-    //   }
-    // }
-    // setStoreData(storeArray);
-    // console.log(storeArray);
+    if (data) {
+      const stores = data;
+      for (const storeObj of stores) {
+        storeArray.push(storeObj);
+      }
+    }
+    setStoreData(storeArray);
+    console.log(storeArray);
   };
 
   useEffect(() => {

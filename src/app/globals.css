@@ -6,14 +6,19 @@
     padding: 14px 16.5px;
 }
 
+.MuiAppBar-containedPrimary{
+    background-color: #c81e1e;
+}
+
+
 .MuiButton-containedPrimary {
-    background-color: #c53030;
+    background-color: #c81e1e;
   }
 
 .MuiButton-containedPrimary:hover {
     background-color: transparent;
     /* ปิด hover */
-    color: #3c52b2;
+    color: #c81e1e;
     /* ปิด hover */
 }
 
@@ -22,7 +27,7 @@
 }
 
 .activity {
-    color: #c53030;
+    color: #c81e1e;
     padding-left: 10px;
 }
 

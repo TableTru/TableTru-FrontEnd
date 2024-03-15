@@ -52,7 +52,7 @@ export default function HeaderAppBar() {
 
   const checkLoginStatus = () => {
     const userData = localStorage.getItem("userData")
-    const userDataJson: LocalStorageUser = JSON.parse(userData || "[]");
+    const userDataJson = JSON.parse(userData || "[]");
     if (userData) {
       console.log(userDataJson);
       setIsLogin(true)

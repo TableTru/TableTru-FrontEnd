@@ -29,6 +29,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { getUserById, getUserReview } from "@/services/user.service";
 
 interface User {
     user_id: number;
@@ -36,13 +37,14 @@ interface User {
     password: string;
     profile_image: string;
     user_status: string;
+    store_id: number| null;
     email: string;
     phone_num: string;
     latitude: number;
     longitude: number;
     createAt: Date;
     updateAt: Date;
-}
+  }
 
 interface Review {
     store_id: number;
@@ -51,13 +53,14 @@ interface Review {
     createAt: Date;
     updateAt: Date;
 }
-
-const userTemp: User =
-{
+  
+  const userTemp: User =
+  {
     user_id: 1,
     username: "Aungpor",
     password: "por1234",
-    user_status: "user",
+    user_status: "merchant",
+    store_id: 1,
     profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
     email: "aungpor.napat@gmail.com",
     phone_num: "0813111234",
@@ -65,8 +68,8 @@ const userTemp: User =
     longitude: 0,
     createAt: new Date(),
     updateAt: new Date(),
-
-}
+  
+  }
 
 const reviewTemp: Review[] = [
     {
@@ -85,33 +88,54 @@ const reviewTemp: Review[] = [
     },
 ]
 
+const reviewList = [
+    {
+        review: "ข้าวหมูกรอบอร่อยมาก",
+        store: "ร้าน1",
+    },
+    {
+        review: "ข้าวหมูกรอบอร่อยมาก",
+        store: "ร้าน2",
+    },
+    {
+        review: "ข้าวหมูกรอบอร่อยมาก",
+        store: "ร้าน3",
+    },
+    {
+        review: "ข้าวหมูกรอบอร่อยมาก",
+        store: "ร้าน4",
+    },
+];
+
 export default function ProfileCard() {
     const [userData, setUserData] = useState<User>();
     const [reviewData, setReviewData] = useState<Review[]>([])
 
     const fetchData = async () => {
-        // const data = await getUser();
-        // console.log(data);
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+        const data = await getUserById(userDataJson.user_id);
+        console.log(data);
 
-        // if (data) {
-        //     setUserData(data);
-        //     console.log(data);
-        // }
+        if (data) {
+            setUserData(data);
+            console.log(data);
+        }
 
-        // const reviewArray = [];
-        // const userReviews = await getUserReview();
-        // console.log(userReviews);
+        const reviewArray = [];
+        const userReviews = await getUserReview(userDataJson.user_id);
+        console.log(userReviews);
 
-        // if (userReviews) {
-        //     for (const reviewObject of userReviews) {
-        //         reviewArray.push(reviewObject);
-        //     }
-        //     setReviewData(reviewArray);
-        //     console.log(reviewArray);
-        // }
+        if (userReviews) {
+            for (const reviewObject of userReviews) {
+                reviewArray.push(reviewObject);
+            }
+            setReviewData(reviewArray);
+            console.log(reviewArray);
+        }
 
-        setUserData(userTemp);
-        setReviewData(reviewTemp)
+        // setUserData(userTemp);
+        // setReviewData(reviewTemp)
 
     };
 
