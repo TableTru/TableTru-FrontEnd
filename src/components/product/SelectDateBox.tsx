@@ -17,8 +17,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 type TimeTemp = {
 
   day: string
-  open_time: Date
-  close_time: Date
+  open_time: string
+  close_time: string
 
 }
 
