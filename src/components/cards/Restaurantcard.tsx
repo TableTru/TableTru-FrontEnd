@@ -115,7 +115,7 @@ export default function Restaurantcard() {
 
   return (
     <>
-      {tempData.map((item) => (
+      {storeData.map((item) => (
         <Link href={`/products/${item.store_id}`}  key={item.store_id}>
           <Card sx={{ maxWidth: 345 }}>
             <CardActionArea>
@@ -136,8 +136,7 @@ export default function Restaurantcard() {
               </CardContent>
 
               <CardActions sx={{ my:2 }}>
-                  <Chip icon={<RestaurantIcon />} label={item.category_id} />
-                  <Chip icon={<LocationOnIcon />} label={item.category_id} />
+                  <Chip icon={<RestaurantIcon />} label={item.category_id.category_name} />
               </CardActions>
             </CardActionArea>
           </Card>
