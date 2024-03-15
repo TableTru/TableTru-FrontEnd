@@ -23,7 +23,7 @@ import { StoreInterface, Store } from "@/interfaces/StoreInterface";
 import { storeTemp } from "@/data/store";
 import { Review } from "@/interfaces/Review";
 
-import { getStore } from "@/services/store.service";
+import { getAllStore } from "@/services/store.service";
 
 const productsTemp = [
     {

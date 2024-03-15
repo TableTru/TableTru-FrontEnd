@@ -26,6 +26,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { getUserById, getUserReview, editUser } from "@/services/user.service";
 
 interface User {
   user_id: number;
@@ -33,71 +34,68 @@ interface User {
   password: string;
   profile_image: string;
   user_status: string;
+  store_id: number| null;
   email: string;
   phone_num: string;
   latitude: number;
   longitude: number;
+  createAt: Date;
+  updateAt: Date;
 }
 
-const userTemp =
+const userTemp: User =
 {
   user_id: 1,
   username: "Aungpor",
   password: "por1234",
-  user_status: "user",
+  user_status: "merchant",
+  store_id: 1,
   profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
   email: "aungpor.napat@gmail.com",
   phone_num: "0813111234",
   latitude: 0,
   longitude: 0,
+  createAt: new Date(),
+  updateAt: new Date(),
 
 }
 
 export default function EditProfileCard() {
-  const [userData, setUserData] = useState({
-    username: userTemp.username,
-    password: userTemp.password,
-    email: userTemp.email,
-    phone_num: userTemp.phone_num,
-    profile_image: userTemp.profile_image
+  const [userDataForm, setUserDataForm] = useState({
+    username: '',
+    password: '',
+    email: '',
+    phone_num: '',
+    profile_image: ''
   });
 
   const fetchData = async () => {
-    // const data = await getUser();
-    // console.log(data);
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+    const data = await getUserById(userDataJson.user_id);
+    console.log(data);
 
-    // if (data) {
-    //     setUserData(data);
-    //     console.log(data);
-    // }
-
-    // const reviewArray = [];
-    // const userReviews = await getUserReview();
-    // console.log(userReviews);
-
-    // if (userReviews) {
-    //     for (const reviewObject of userReviews) {
-    //         reviewArray.push(reviewObject);
-    //     }
-    //     setReviewData(reviewArray);
-    //     console.log(reviewArray);
-    // }
-
-    setUserData(userTemp);
+    if (data) {
+        setUserDataForm(data);
+    }
+    // setUserData(userTemp);
 
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setUserData((prevData) => ({
+    setUserDataForm((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: any) => {
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
     e.preventDefault();
-    console.log(userData);
+    const createRes = await editUser(userDataJson.user_id , userDataForm)
+    console.log(createRes);
     window.location.replace('/profile')
   };
 
@@ -126,7 +124,7 @@ export default function EditProfileCard() {
 
               <Box
                 sx={{ mb: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                <Avatar src={`${userData.profile_image}`} sx={{ width: 200, height: 200, mt: 2, mb: 2, bgcolor: 'secondary.main' }} />
+                <Avatar src={`${userDataForm.profile_image}`} sx={{ width: 200, height: 200, mt: 2, mb: 2, bgcolor: 'secondary.main' }} />
               </Box>
 
               <TextField
@@ -136,7 +134,7 @@ export default function EditProfileCard() {
                 name="username"
                 label="Username"
                 autoComplete="username"
-                value={userData.username}
+                value={userDataForm.username}
                 onChange={handleChange}
               />
             </Grid>
@@ -148,7 +146,7 @@ export default function EditProfileCard() {
                 name="password"
                 label="password"
                 autoComplete="password"
-                value={userData.password}
+                value={userDataForm.password}
                 onChange={handleChange}
               />
             </Grid>
@@ -160,7 +158,7 @@ export default function EditProfileCard() {
                 name="email"
                 label="email"
                 autoComplete="email"
-                value={userData.email}
+                value={userDataForm.email}
                 onChange={handleChange}
               />
             </Grid>
@@ -172,7 +170,7 @@ export default function EditProfileCard() {
                 name="phone_num"
                 label="phone_num"
                 autoComplete="phone_num"
-                value={userData.phone_num}
+                value={userDataForm.phone_num}
                 onChange={handleChange}
               />
             </Grid>

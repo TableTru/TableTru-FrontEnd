@@ -2,9 +2,9 @@ import axios, { AxiosResponse } from "axios";
 
 const url = "http://localhost:8000";
 
-export const getUser = async () => {
-  return await axios.get(url + '/users/').then((res: AxiosResponse) => {
-    return res.data.data.rows;
+export const getUserById = async (id: number) => {
+  return await axios.get(url + `/users/${id}`).then((res: AxiosResponse) => {
+    return res.data.data;
   }).catch((err: any) => {
     catchError(err, null, "getUser");
     return [];
@@ -21,12 +21,30 @@ export const createUser = async (data: any) => {
   });
 }
 
-export const editUser = async (data: any) => {
-  return await axios.put(url + '/users/', data).then((res: AxiosResponse) => {
+export const editUser = async (id: number, data: any) => {
+  return await axios.put(url + `/users/${id}`, data).then((res: AxiosResponse) => {
     return res.data;
   }).catch((err: { response: { data: any; }; }) => {
     console.log("err: ", err.response);
     return err?.response?.data ? err?.response?.data : {};
+  });
+}
+
+export const getRegisterCheck = async (email: string) => {
+  return await axios.get(url + `/users/getRegisterCheck/${email}`).then((res: AxiosResponse) => {
+    return res.data.data;
+  }).catch((err: any) => {
+    catchError(err, null, "getUser");
+    return [];
+  });
+}
+
+export const getUserReview = async (id: number) => {
+  return await axios.get(url + `/users/getUserReview/${id}`).then((res: AxiosResponse) => {
+    return res.data.data;
+  }).catch((err: any) => {
+    catchError(err, null, "getUser");
+    return [];
   });
 }
 

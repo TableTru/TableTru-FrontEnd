@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Tabs,
@@ -30,31 +30,17 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import Ongoing from "@/components/activity/Ongoing";
+import Historical from "@/components/activity/Historical";
+import Modal from '@mui/material/Modal';
+import ModalComponent from '@/components/activity/ModalDetail';
+import Map from "@/components/Map";
+import PersonIcon from '@mui/icons-material/Person';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
+
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-
-const bookingList = [
-  {
-    store: "โรลลิ่งริบส์ บริวบาร์ & บาร์บีคิว ",
-    time: "12 ม.ค. 2567",
-    count: 1,
-  },
-  {
-    store: "บัดดี้ส์ บาร์แอนด์กริล ",
-    time: "13 ม.ค. 2567",
-    count: 3,
-  },
-  {
-    store: "แบงค็อก 78  ",
-    time: "14 ม.ค. 2567",
-    count: 2,
-  },
-  {
-    store: "โทรวแบ็ค บีเคเค",
-    time: "15 ม.ค. 2567",
-    count: 4,
-  },
-];
-
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -69,24 +55,58 @@ const style = {
   p: 4,
 };
 
-type timeTemp = {
-
-  day: string
-  open_time: string
-  close_time: string
-
+interface TableBooking {
+  table_booking_id: number;
+  store_id: number;
+  user_id: number;
+  table_booking_status: string;
+  table_booking_count: number;
+  table_booking_time: string;
+  store_name: string;
 }
+
+const tableBookingTemp: TableBooking[] = [
+  {
+    table_booking_id: 1,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'ยังไม่ถึงกำหนด',
+    table_booking_count: 4,
+    table_booking_time: '2024-02-25T17:00',
+    store_name: 'โรลลิ่งริบส์ บริวบาร์ & บาร์บีคิว'
+  },
+  {
+    table_booking_id: 2,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'อยู่ระหว่างดำเนินการ',
+    table_booking_count: 2,
+    table_booking_time: '2024-02-25T17:00',
+    store_name: 'บัดดี้ส์ บาร์แอนด์กริล '
+  },
+  {
+    table_booking_id: 3,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'เสร็จสิ้น',
+    table_booking_count: 3,
+    table_booking_time: '2024-02-25T16:04',
+    store_name: 'แบงค็อก 78  '
+  },
+  {
+    table_booking_id: 4,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'ยกเลิก',
+    table_booking_count: 3,
+    table_booking_time: '2024-02-25T16:04',
+    store_name: 'โทรวแบ็ค บีเคเค'
+  },
+]
 
 export default function TabSelect() {
   const [value, setValue] = useState('1');
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
-
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [open, setOpen] = useState(false);
 
   const [storeName, setStoreName] = useState("TeaPot 01");
   const [seat, setSeat] = useState(2);
@@ -95,10 +115,84 @@ export default function TabSelect() {
   //เลือกจาก select
   const [promocode, setPromocode] = useState("ส่วนลด 10%");
 
+  const [bookingData, setBookingData] = useState<object[]>([])
 
+  const timeOptions = { hour: 'numeric', minute: 'numeric' };
+
+  const fetchData = async () => {
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+
+    // if (userData) {
+    //     const store_id = userDataJson.store_id
+
+    //     const tableBookingArray = [];
+    //     const data = await getTableBookingByStoreId(store_id);
+
+    //     if (data) {
+    //         for (const tableBookingObject of data) {
+    //             tableBookingArray.push(tableBookingObject);
+    //         }
+    //         setStoreBookingData(tableBookingArray);
+    //         console.log(tableBookingArray);
+    //     }
+    // }
+
+    const tableBookingTempWithDate = tableBookingTemp.map(booking => ({
+      ...booking,
+      table_booking_time: new Date(booking.table_booking_time),
+    }));
+    console.log(tableBookingTempWithDate);
+
+    setBookingData(tableBookingTempWithDate)
+  };
+
+  const handleOpen = () =>{
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+
+    // if (userData) {
+    //     const store_id = userDataJson.store_id
+
+    //     const tableBookingArray = [];
+    //     const data = await getTableBookingByStoreId(store_id);
+
+    //     if (data) {
+    //         for (const tableBookingObject of data) {
+    //             tableBookingArray.push(tableBookingObject);
+    //         }
+    //         setModalData(tableBookingArray);
+    //         console.log(tableBookingArray);
+    //     }
+    // }
+    setOpen(true)
+  } 
+
+  const handleClose = () => setOpen(false);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'ยกเลิก':
+        return 'error'; // สีแดง
+      case 'อยู่ระหว่างดำเนินการ':
+        return 'warning'; // สีเหลือง
+      case 'เสร็จสิ้น':
+        return 'success'; // สีเขียว
+      default:
+        return 'default'; // สีเทา
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
-    <Box sx={{ width: '100%', typography: 'body1' }}>
+    <Box sx={{ mt: 8, width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} textColor="primary" indicatorColor="primary" centered aria-label="lab API tabs example">
@@ -108,51 +202,101 @@ export default function TabSelect() {
 
         </Box>
 
-        <Box sx={{ marginBottom: 8 }}>
-          <TabPanel value="1">
-            {bookingList.map((item, index) => (
-              <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                <ListItem>
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
+        <TabPanel value="1">
+          {/* {bookingList.map((item) => (
+            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+              <ListItem>
+                  <ListItemText primary={item.store} secondary={item.time} />
+                  <Link onClick={handleOpen}>
+                    กดดูรายละเอียด
+                  </Link>
+              </ListItem>
+            </List>
+          ))} */}
+
+          {bookingData.map((item, index) => (
+            <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
+              <ListItem>
+                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                  <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
+                    <ListItemText primary={item.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
                     <Stack direction="row" spacing={1}>
-                      <Chip label="ยืนยัน" color="success" />
+                      <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
                     </Stack>
-                    <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
-                      <a href="/">
-                        <p className="activity">กดดูรายละเอียด <ArrowForwardIcon /></p>
-                      </a>
-                    </Box>
                   </Box>
 
-                </ListItem>
-              </List>
-            ))}
-          </TabPanel>
+                  <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
+                    <Button onClick={handleOpen}>
+                      <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
+                    </Button>
 
-          <TabPanel value="2">
-            {bookingList.map((item, index) => (
-              <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                <ListItem>
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store} secondary={`${item.time} จำนวน ${item.count} คน`} />
+                  </Box>
+                </Box>
+
+              </ListItem>
+            </List>
+          ))}
+        </TabPanel>
+
+
+        {/*Modal*/}
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h5" component="h2">{storeName}</Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2, mb: 2 }} variant="h6" component="h3"> รายละเอียด </Typography>
+            <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+              <li className="flex items-center">
+                <PersonIcon />
+                {seat} ที่นั่ง
+              </li>
+              <li className="flex items-center">
+                <CalendarMonthIcon />
+                {date}
+              </li>
+              <li className="flex items-center">
+                <AccessTimeIcon />
+                {time}
+              </li>
+              <li className="flex items-center">
+                <LoyaltyIcon />
+                {promocode}
+              </li>
+            </ul>
+            <div className={"mt-8"}>
+              <Map address="1600 Amphitheatre Parkway, Mountain View, CA" className={"width:400, height:400"} />
+            </div>
+          </Box>
+        </Modal>
+
+        <TabPanel value="2">
+          {bookingData.map((item, index) => (
+            <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
+              <ListItem>
+                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                  <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
+                    <ListItemText primary={item.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
                     <Stack direction="row" spacing={1}>
-                      <Chip label="ยืนยัน" color="success" />
+                      <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
                     </Stack>
-                    <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
-                      <a href="/">
-                        <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
-                      </a>
-                    </Box>
                   </Box>
 
-                </ListItem>
-              </List>
-            ))}
-          </TabPanel>
-        </Box>
+                  <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
+                    <Button onClick={handleOpen}>
+                      <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
+                    </Button>
 
+                  </Box>
+                </Box>
 
+              </ListItem>
+            </List>
+          ))}
+        </TabPanel>
 
       </TabContext>
     </Box>
