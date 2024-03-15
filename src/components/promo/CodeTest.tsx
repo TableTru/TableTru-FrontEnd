@@ -12,8 +12,7 @@ import { useRouter } from "next/navigation";
 
 import { initialItems } from "@/data/promotion"
 import { Item } from "@/interfaces/Promo"
-
-
+import { PromotionCodePivot } from "@/data/promotionPivot";
 
 type PromotionCode = {
   promotion_code: number;
@@ -22,15 +21,6 @@ type PromotionCode = {
 };
 
 
-const PromotionCodePivot: PromotionCode[] = [
-  { promotion_code: 1, store_id: 1, promotion_id: 1 },
-
-  { promotion_code: 2, store_id: 1, promotion_id: 2 },
-
-  { promotion_code: 3, store_id: 2, promotion_id: 2 },
-
-  { promotion_code: 4, store_id: 2, promotion_id: 3 },
-];
 
 export default function MyComponent() {
   const [items, setItems] = useState<Item[]>(initialItems);

@@ -7,7 +7,7 @@ import NextImage from "next/image";
 
 import { NextPage, NextPageContext } from "next";
 import DetailBox from "@/components/product/DetailBox";
-import ContactBox from "@/components/product/ContactBox";
+import PromotionList from "@/components/product/ContactBox";
 import SelectDateBox from "@/components/product/SelectDateBox";
 import Galleries from "@/components/product/Galleries";
 import Chip from "@mui/material/Chip";
@@ -24,6 +24,13 @@ import { storeTemp } from "@/data/store";
 import { Review } from "@/interfaces/Review";
 
 import { getAllStore } from "@/services/store.service";
+
+// Import Promotion Code 
+import { initialItems } from "@/data/promotion"
+import { Item } from "@/interfaces/Promo"
+
+
+
 
 const productsTemp = [
     {
@@ -56,7 +63,7 @@ const productsTemp = [
         store_name: "ร้านค้า 2",
         store_description:
             "Lorem ipsum dolor sit amet, ctum id et est. Nam est lacus, tempus at libero eu, laoreet dignissim lorem.",
-        table_booking: 8,
+        table_booking: 2,
         sum_rating: 40,
         Latitude: "",
         longitude: "",
@@ -95,11 +102,10 @@ const reviewTemp : Review[] = [
 
 const ProductDetail = () => {
     // products/[productId]
-
     const params = useParams<{ productId: string }>();
     let show: Store;
 
-    const [detail, setDetail] = useState<Store>( {
+    const [detail, setDetail] = useState<Store>({
         store_id: 1,
         category_id: 1,
         location_id: 1,
@@ -124,22 +130,22 @@ const ProductDetail = () => {
     });
 
 
-const reviewTemp: Review[] = [
-    {
-        store_id: 1,
-        store_name: "ร้าน1",
-        review_comment: "ข้าวหมูกรอบอร่อยมาก",
-        createAt: new Date(),
-        updateAt: new Date()
-    },
-    {
-        store_id: 2,
-        store_name: "ร้าน2",
-        review_comment: "สู่ความเวิ้งว้างอันไกลโพ้นนนนนนนนนนนนนนนนน",
-        createAt: new Date(),
-        updateAt: new Date()
-    },
-]
+    const reviewTemp: Review[] = [
+        {
+            store_id: 1,
+            store_name: "ร้าน1",
+            review_comment: "ข้าวหมูกรอบอร่อยมาก",
+            createAt: new Date(),
+            updateAt: new Date()
+        },
+        {
+            store_id: 2,
+            store_name: "ร้าน2",
+            review_comment: "สู่ความเวิ้งว้างอันไกลโพ้นนนนนนนนนนนนนนนนน",
+            createAt: new Date(),
+            updateAt: new Date()
+        },
+    ]
     //เรียกข้อมูลจากต่อหลังบ้าน 
     function callBackEnd(id: string) {
         //ส่วน backend เตรียม filter มาให้ (version mock up data) ให้
@@ -166,6 +172,7 @@ const reviewTemp: Review[] = [
 
     //from data/reviews
     const [reviewData, setReviewData] = useState<Review[]>([])
+    //from PromotionCode
 
     const fetchData = async () => {
         // const data = await getStoreById(params.store_id);
@@ -306,7 +313,7 @@ const reviewTemp: Review[] = [
                                     </div>
                                 </div>
 
-                                <ContactBox />
+                                <PromotionList />
 
                                 <div className="flex flex-cols gap-4 mb-6">
                                     {/*<button href="@/app/products/category/[category-slug]/[productId]/page#" className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent dark:border-gray-700 hover:border-red-500 hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl" onClick="handleButtonConfirm()">*/}
@@ -317,7 +324,7 @@ const reviewTemp: Review[] = [
                             </div>
                         </div>
                     </div>
-                    <DetailBox description={detail?.store_description} openTime={detail.OpenTimes} review={reviewData}/>
+                    <DetailBox description={detail.store_description} openTime={detail.OpenTimes} review={reviewData} />
                 </div>
             </section>
         </>

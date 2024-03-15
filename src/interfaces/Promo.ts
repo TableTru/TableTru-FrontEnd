@@ -5,6 +5,7 @@ export interface PromotionInterface<T> {
   export interface Item {
     id: number;
     name: string;
+    store_id:number;
     set: boolean;
     limit: number;
     created_at: Date;
