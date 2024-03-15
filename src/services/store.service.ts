@@ -94,6 +94,15 @@ export const GetStoreImageByType = async (id: number, imageType: string) => {
   });
 }
 
+export const getPreviewStore = async () => {
+  return await axios.get(url + '/stores/getPreviewStore').then((res: AxiosResponse) => {
+    return res.data.data;
+  }).catch((err: any) => {
+    catchError(err, null, "getStore");
+    return [];
+  });
+}
+
 function catchError(error: any, path: any, func: any): void {
   try {
     return;

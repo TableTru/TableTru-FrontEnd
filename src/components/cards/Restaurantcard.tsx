@@ -24,7 +24,7 @@ import { spacing } from '@mui/system';
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 
-import { getAllStore } from "@/services/store.service";
+import { getAllStore, getPreviewStore } from "@/services/store.service";
 
 // interface ExpandMoreProps extends IconButtonProps {
 //   expand: boolean;
@@ -63,21 +63,27 @@ const tempData = [
     store_id: "1",
     store_name: "ร้านค้า1",
     sum_rating: "4",
-    category_id: "1",
+    category: {
+      category_name: "หมวดหมู่"
+    },
     location_id: "2",
   },
   {
     store_id: "2",
     store_name: "ร้านค้า2",
     sum_rating: "2",
-    category_id: "3",
+    category: {
+      category_name: "หมวดหมู่"
+    },
     location_id: "2",
   },
   {
     store_id: "3",
     store_name: "ร้านค้า3",
     sum_rating: "4",
-    category_name: "เกาหลี",
+    category: {
+      category_name: "หมวดหมู่"
+    },
     location_id: "สาทร",
   },
 ];
@@ -87,7 +93,7 @@ const handleClick = () => {
 };
 
 export default function Restaurantcard() {
-  const [storeData, setStoreData] = useState<Store[]>([]);
+  const [storeData, setStoreData] = useState<object[]>();
 
   // const [expanded, setExpanded] = useState(false);
   // const handleExpandClick = () => {
@@ -96,7 +102,7 @@ export default function Restaurantcard() {
 
   const fetchData = async () => {
     const storeArray = [];
-    const data = await getAllStore();
+    const data = await getPreviewStore();
     console.log(data);
 
     if (data) {
@@ -115,7 +121,7 @@ export default function Restaurantcard() {
 
   return (
     <>
-      {tempData.map((item) => (
+      {storeData.map((item) => (
         <Link href={`/products/${item.store_id}`}  key={item.store_id}>
           <Card sx={{ maxWidth: 345 }}>
             <CardActionArea>
@@ -136,7 +142,7 @@ export default function Restaurantcard() {
               </CardContent>
 
               <CardActions sx={{ my:2 }}>
-                  <Chip icon={<RestaurantIcon />} label={item.category_id} />
+                  <Chip icon={<RestaurantIcon />} label={item.category?.category_name} />
                   <Chip icon={<LocationOnIcon />} label={item.category_id} />
               </CardActions>
             </CardActionArea>
