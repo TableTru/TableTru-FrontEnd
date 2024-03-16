@@ -17,8 +17,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 type TimeTemp = {
 
   day: string
-  open_time: Date
-  close_time: Date
+  open_time: string
+  close_time: string
 
 }
 
@@ -92,7 +92,6 @@ export default function SelectDateBox({seats} : { seats : number , openTime: Arr
                         );
                       })
                     }
-
                     {/*<MenuItem value={1}>1</MenuItem>*/}
                     {/*<MenuItem value={2}>2</MenuItem>*/}
                     {/*<MenuItem value={3}>3</MenuItem>*/}
