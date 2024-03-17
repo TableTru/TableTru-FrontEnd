@@ -39,8 +39,8 @@ export const editReview = async (id: number, data: any) => {
   });
 }
 
-export const GetAllReviewByStoreId = async () => {
-    return await axios.get(url + '/reviews/GetAllReviewByStoreId').then((res: AxiosResponse) => {
+export const GetAllReviewByStoreId = async (storeId: number) => {
+    return await axios.get(url + `/reviews/getAllReviewByStoreId?StoreId=${storeId}`).then((res: AxiosResponse) => {
       return res.data.data.rows;
     }).catch((err: any) => {
       catchError(err, null, "getReview");
@@ -48,8 +48,8 @@ export const GetAllReviewByStoreId = async () => {
     });
   }
 
-  export const GetAllReviewByUserId = async () => {
-    return await axios.get(url + '/reviews/GetAllReviewByUserId').then((res: AxiosResponse) => {
+  export const GetAllReviewByUserId = async (userId: number) => {
+    return await axios.get(url + `/reviews/getAllReviewByUserId=${userId}`).then((res: AxiosResponse) => {
       return res.data.data.rows;
     }).catch((err: any) => {
       catchError(err, null, "getReview");

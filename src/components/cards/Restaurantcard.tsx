@@ -24,7 +24,7 @@ import { spacing } from '@mui/system';
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 
-import { getAllStore, getPreviewStore } from "@/services/store.service";
+import { getAllStore, getStorePreview } from "@/services/store.service";
 
 // interface ExpandMoreProps extends IconButtonProps {
 //   expand: boolean;
@@ -100,7 +100,8 @@ export default function Restaurantcard() {
 
   const fetchData = async () => {
     const storeArray = [];
-    const data = await getPreviewStore();
+    // const data = await getStorePreview();
+    const data = await getAllStore(); 
     console.log(data);
 
     if (data) {

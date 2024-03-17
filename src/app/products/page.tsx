@@ -1,6 +1,5 @@
 import RestaurantCard from "@/components/cards/Restaurantcard";
 import Appbar from "@/components/HeaderAppBar";
-import SearchFilterBar from "@/components/SearchHeader";
 import SearchBar from "@/components/SearchBar";
 import FilterBar from "@/components/FilterBar";
 

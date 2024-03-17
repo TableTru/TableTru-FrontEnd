@@ -39,8 +39,8 @@ export const editPromotion = async (id: number, data: any) => {
   });
 }
 
-export const GetAllPromotionByStoreId = async () => {
-    return await axios.get(url + '/promotions/GetAllPromotionByStoreId').then((res: AxiosResponse) => {
+export const GetAllPromotionByStoreId = async (storeId: number) => {
+    return await axios.get(url + `/promotions/GetAllPromotionByStoreId?storeId=${storeId}`).then((res: AxiosResponse) => {
       return res.data.data.rows;
     }).catch((err: any) => {
       catchError(err, null, "getPromotion");
@@ -48,8 +48,8 @@ export const GetAllPromotionByStoreId = async () => {
     });
   }
 
-  export const GetAllPromotionByUserId = async () => {
-    return await axios.get(url + '/promotions/GetAllPromotionByUserId').then((res: AxiosResponse) => {
+  export const GetAllPromotionByUserId = async (userId: number) => {
+    return await axios.get(url + `/promotions/GetAllPromotionByUserId?userId=${userId}`).then((res: AxiosResponse) => {
       return res.data.data.rows;
     }).catch((err: any) => {
       catchError(err, null, "getPromotion");
