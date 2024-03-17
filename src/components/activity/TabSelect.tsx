@@ -41,6 +41,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { getUserBookingByStatus, getBokingByUserId } from '@/services/tableBooking.service'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -79,7 +80,7 @@ const tableBookingTemp: TableBooking[] = [
     table_booking_id: 2,
     store_id: 1,
     user_id: 1,
-    table_booking_status: 'อยู่ระหว่างดำเนินการ',
+    table_booking_status: 'ยังไม่ถึงกำหนด',
     table_booking_count: 2,
     table_booking_time: '2024-02-25T17:00',
     store_name: 'บัดดี้ส์ บาร์แอนด์กริล '
@@ -115,7 +116,17 @@ export default function TabSelect() {
   //เลือกจาก select
   const [promocode, setPromocode] = useState("ส่วนลด 10%");
 
-  const [bookingData, setBookingData] = useState<object[]>([])
+  const [onGoingData, setOnGoingData] = useState<object[]>([])
+  const [historicalData, setHistoricalData] = useState<object[]>([])
+  const [bookingModalData, setBookingModalData] = useState<object>({
+    store_name: "",
+    table_booking_count: null,
+    table_booking_time: "",
+    latitude: null,
+    longitude: null,
+    promotion: "ส่วนลด 10%"
+
+  })
 
   const timeOptions = { hour: 'numeric', minute: 'numeric' };
 
@@ -123,31 +134,66 @@ export default function TabSelect() {
     const userData = localStorage.getItem("userData")
     const userDataJson = JSON.parse(userData || "[]");
 
-    // if (userData) {
-    //     const store_id = userDataJson.store_id
+    if (userData) {
+      const store_id = userDataJson.store_id
 
-    //     const tableBookingArray = [];
-    //     const data = await getTableBookingByStoreId(store_id);
+      const onGoingDataArray = [];
+      const onGoingData = await getUserBookingByStatus(store_id, "ยังไม่ถึงกำหนด");
 
-    //     if (data) {
-    //         for (const tableBookingObject of data) {
-    //             tableBookingArray.push(tableBookingObject);
-    //         }
-    //         setStoreBookingData(tableBookingArray);
-    //         console.log(tableBookingArray);
-    //     }
-    // }
+      if (onGoingData) {
+        for (const tableBookingObject of onGoingData) {
+          const tableBookingTempWithDate = {
+            ...tableBookingObject,
+            table_booking_time: new Date(tableBookingObject.table_booking_time)
+          };
+          onGoingDataArray.push(tableBookingTempWithDate);
+        }
 
-    const tableBookingTempWithDate = tableBookingTemp.map(booking => ({
-      ...booking,
-      table_booking_time: new Date(booking.table_booking_time),
-    }));
-    console.log(tableBookingTempWithDate);
+        setOnGoingData(onGoingDataArray);
+        console.log(onGoingDataArray);
+      }
 
-    setBookingData(tableBookingTempWithDate)
+      const historicalDataArray = [];
+      const historicalData = await getBokingByUserId(store_id);
+
+      if (historicalData) {
+        for (const tableBookingObject of historicalData) {
+          const tableBookingTempWithDate = {
+            ...tableBookingObject,
+            table_booking_time: new Date(tableBookingObject.table_booking_time)
+          };
+          historicalDataArray.push(tableBookingTempWithDate);
+        }
+
+        setHistoricalData(historicalDataArray);
+        console.log(historicalDataArray);
+      }
+    }
   };
 
-  const handleOpen = () =>{
+  const fetchTempData = async () => {
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+
+    if (userData) {
+      const store_id = userDataJson.store_id
+
+      const tableBookingArray = [];
+      for (const tableBookingObject of tableBookingTemp) {
+        const tableBookingTempWithDate = {
+          ...tableBookingObject,
+          table_booking_time: new Date(tableBookingObject.table_booking_time)
+        };
+        tableBookingArray.push(tableBookingTempWithDate);
+      }
+
+      setOnGoingData(tableBookingArray);
+      console.log(tableBookingArray);
+    }
+
+  };
+
+  const handleOpen = () => {
     const userData = localStorage.getItem("userData")
     const userDataJson = JSON.parse(userData || "[]");
 
@@ -166,7 +212,7 @@ export default function TabSelect() {
     //     }
     // }
     setOpen(true)
-  } 
+  }
 
   const handleClose = () => setOpen(false);
 
@@ -178,7 +224,7 @@ export default function TabSelect() {
     switch (status) {
       case 'ยกเลิก':
         return 'error'; // สีแดง
-      case 'อยู่ระหว่างดำเนินการ':
+      case 'ยังไม่ถึงกำหนด':
         return 'warning'; // สีเหลือง
       case 'เสร็จสิ้น':
         return 'success'; // สีเขียว
@@ -189,6 +235,7 @@ export default function TabSelect() {
 
   useEffect(() => {
     fetchData();
+    // fetchTempData()
   }, []);
 
   return (
@@ -214,12 +261,12 @@ export default function TabSelect() {
             </List>
           ))} */}
 
-          {bookingData.map((item, index) => (
+          {onGoingData.map((item, index) => (
             <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
               <ListItem>
                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
                   <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
+                    <ListItemText primary={item.store.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
                     <Stack direction="row" spacing={1}>
                       <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
                     </Stack>
@@ -274,12 +321,12 @@ export default function TabSelect() {
         </Modal>
 
         <TabPanel value="2">
-          {bookingData.map((item, index) => (
+          {historicalData.map((item, index) => (
             <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
               <ListItem>
                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
                   <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
+                    <ListItemText primary={item.store.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
                     <Stack direction="row" spacing={1}>
                       <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
                     </Stack>

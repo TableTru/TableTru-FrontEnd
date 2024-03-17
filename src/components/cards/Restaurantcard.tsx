@@ -24,7 +24,7 @@ import { spacing } from '@mui/system';
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 
-import { getAllStore } from "@/services/store.service";
+import { getAllStore, getStorePreview } from "@/services/store.service";
 
 // interface ExpandMoreProps extends IconButtonProps {
 //   expand: boolean;
@@ -61,21 +61,27 @@ const tempData = [
     store_id: "1",
     store_name: "ร้านค้า1",
     sum_rating: "4",
-    category_id: "1",
+    category: {
+      category_name: "หมวดหมู่"
+    },
     location_id: "2",
   },
   {
     store_id: "2",
     store_name: "ร้านค้า2",
     sum_rating: "2",
-    category_id: "3",
+    category: {
+      category_name: "หมวดหมู่"
+    },
     location_id: "2",
   },
   {
     store_id: "3",
     store_name: "ร้านค้า3",
     sum_rating: "4",
-    category_name: "เกาหลี",
+    category: {
+      category_name: "หมวดหมู่"
+    },
     location_id: "สาทร",
   },
 ];
@@ -84,8 +90,8 @@ const handleClick = () => {
   console.info("You clicked the Chip.");
 };
 
-export default function Restaurantcard({store}:{store:Array<Store>}) {
-  const [storeData, setStoreData] = useState<Store[]>([]);
+export default function Restaurantcard() {
+  const [storeData, setStoreData] = useState<object[]>(tempData);
 
   const [expanded, setExpanded] = useState(false);
   const handleExpandClick = () => {
@@ -94,7 +100,8 @@ export default function Restaurantcard({store}:{store:Array<Store>}) {
 
   const fetchData = async () => {
     const storeArray = [];
-    const data = await getAllStore();
+    // const data = await getStorePreview();
+    const data = await getAllStore(); 
     console.log(data);
 
     if (data) {
@@ -113,8 +120,8 @@ export default function Restaurantcard({store}:{store:Array<Store>}) {
 
   return (
     <>
-      {tempData.map((store) => (
-        <Link href={`/products/${store.store_id}`}  key={store.store_id}>
+      {storeData.map((item) => (
+        <Link href={`/products/${item.store_id}`}  key={item.store_id}>
           <Card sx={{ maxWidth: 345 }}>
             <CardActionArea>
               <CardMedia
@@ -125,17 +132,16 @@ export default function Restaurantcard({store}:{store:Array<Store>}) {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5">
-                  {store.store_name}
+                  {item.store_name}
                 </Typography>
                 <Stack direction="row" spacing={1}>
-                <Rating name="read-only" value={store.sum_rating} readOnly />
-                <Typography component="legend">{store.sum_rating} reviews</Typography>
+                <Rating name="read-only" value={item.sum_rating} readOnly />
+                <Typography component="legend">{item.sum_rating} reviews</Typography>
                 </Stack>
               </CardContent>
 
               <CardActions sx={{ my:2 }}>
-                  <Chip icon={<RestaurantIcon />} label={store.category_id} />
-                  <Chip icon={<LocationOnIcon />} label={store.location_id} />
+                  <Chip icon={<RestaurantIcon />} label={item.category_id} />
               </CardActions>
             </CardActionArea>
           </Card>

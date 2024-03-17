@@ -13,8 +13,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-var customParseFormat = require('dayjs/plugin/customParseFormat')
-dayjs.extend(customParseFormat)
 
 type TimeTemp = {
 
@@ -24,16 +22,17 @@ type TimeTemp = {
 
 }
 
-export default function SelectDateBox({seats,openTime} : { seats : number , openTime:Array<TimeTemp>} ) {
+export default function SelectDateBox({seats,openTime} : { seats : number , openTime: Array<TimeTemp>} ) {
+
 
   const now = dayjs();
 
+  const [times, setTimes] = React.useState< Dayjs| null >(null);
+
   console.log(openTime)
 
-  const [times, setTimes] = React.useState<Dayjs | null>(null);
-
-  const handleChangeTime = (event:SelectChangeEvent) => {
-    setTimes(event.target.value as string);
+  const handleChangeTime = (time:any) => {
+    setTimes(time);
   };
 
   const [value, setValue] = React.useState(null);
@@ -41,10 +40,11 @@ export default function SelectDateBox({seats,openTime} : { seats : number , open
 
   const seatNumbers = Array.from({ length:seats },(_,index)=> index+1);
   // seatNumbers = Array.from({length: seats}, (_, i) => i + 1)
-  const [seat, setSeat] = React.useState("");
+  const [seat, setSeat] = React.useState();
+
   console.log(seatNumbers)
 
-  const handleChangeSeat = (event:SelectChangeEvent) => {
+  const handleChangeSeat = (event:any) => {
     // setSeat(prevState => ({
     //   ...prevState,
     //   [event.target.name]:[event.target.value]
@@ -52,15 +52,9 @@ export default function SelectDateBox({seats,openTime} : { seats : number , open
     setSeat(event.target.value)
   };
 
-
   React.useEffect(() => {
     console.log(setSeat);
 }, [setSeat])
-
-
-  React.useEffect(() => {
-    console.log(setTimes);
-  },[setTimes])
 
   return (
     <>
@@ -81,13 +75,10 @@ export default function SelectDateBox({seats,openTime} : { seats : number , open
                       onChange={handleChangeTime}
                       minDateTime={now}
                       timeSteps={{ minutes: 30 }}
-                      // maxTime={openTime.open_time}
                       views={['year', 'month', 'day', 'hours', 'minutes']}
-                />
+                  />
                 </DemoContainer>
               </LocalizationProvider>
-
-
 
               <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth>

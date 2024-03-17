@@ -13,7 +13,7 @@ export const getTest = async () => {
 
 export const getAllStore = async () => {
   return await axios.get(url + '/stores/').then((res: AxiosResponse) => {
-    return res.data.data;
+    return res.data.data.rows;
   }).catch((err: any) => {
     catchError(err, null, "getStore");
     return [];
@@ -90,6 +90,15 @@ export const GetStoreImageByType = async (id: number, imageType: string) => {
     return res.data.data;
   }).catch((err: any) => {
     catchError(err, null, "getUser");
+    return [];
+  });
+}
+
+export const getStorePreview = async () => {
+  return await axios.get(url + '/stores/getStorePreview').then((res: AxiosResponse) => {
+    return res.data;
+  }).catch((err: any) => {
+    catchError(err, null, "getStore");
     return [];
   });
 }

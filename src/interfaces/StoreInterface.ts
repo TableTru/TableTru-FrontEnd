@@ -1,5 +1,4 @@
-import {Dayjs} from "dayjs";
-
+import dayjs, {Dayjs} from "dayjs";
 export interface StoreInterface<T> {
     [key: string]: T;
   }
