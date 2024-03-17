@@ -28,10 +28,12 @@ export default function SelectDateBox({seats,openTime} : { seats : number , open
 
   const now = dayjs();
 
-  const [time, setTime] = React.useState<Dayjs | null>(null);
+  console.log(openTime)
+
+  const [times, setTimes] = React.useState<Dayjs | null>(null);
 
   const handleChangeTime = (event:SelectChangeEvent) => {
-    setTime(event.target.value as string);
+    setTimes(event.target.value as string);
   };
 
   const [value, setValue] = React.useState(null);
@@ -57,8 +59,8 @@ export default function SelectDateBox({seats,openTime} : { seats : number , open
 
 
   React.useEffect(() => {
-    console.log(setTime);
-  },[setTime])
+    console.log(setTimes);
+  },[setTimes])
 
   return (
     <>
@@ -75,8 +77,8 @@ export default function SelectDateBox({seats,openTime} : { seats : number , open
                       className='w-full'
                       label='วันที่และเวลา'
                       disablePast
-                      value={time}
-                      onChange={(newValue)=>setTime(newValue)}
+                      value={times}
+                      onChange={handleChangeTime}
                       minDateTime={now}
                       timeSteps={{ minutes: 30 }}
                       // maxTime={openTime.open_time}
