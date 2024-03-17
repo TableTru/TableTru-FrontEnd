@@ -61,8 +61,8 @@ const userTemp: User =
 type TimeTemp = {
 
     day: string
-    open_time: string
-    close_time: string
+    start_time: string
+    end_time: string
 
 }
 
@@ -277,8 +277,8 @@ export default function DetailBox({ description, openTime, review }: { descripti
 
                                                                         <tr className="flex flex-col flex-no wrap  sm:table-row mb-2 sm:mb-0">
                                                                             <td className="ิborder-grey-light border bg-gray-100  p-3">{time.day}</td>
-                                                                            <td className="border-grey-light border  p-3">{time.open_time}</td>
-                                                                            <td className="border-grey-light border  p-3">{time.close_time}</td>
+                                                                            <td className="border-grey-light border  p-3">{time.start_time}</td>
+                                                                            <td className="border-grey-light border  p-3">{time.end_time}</td>
                                                                         </tr>
 
                                                                     </>

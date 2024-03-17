@@ -23,173 +23,53 @@ import { StoreInterface, Store } from "@/interfaces/StoreInterface";
 import { storeTemp } from "@/data/store";
 import { Review } from "@/interfaces/Review";
 
-import { getAllStore } from "@/services/store.service";
+import { getStoreById } from "@/services/store.service";
+import {GetAllReviewByStoreId} from '@/services/review.service'
 
 // Import Promotion Code 
 import { initialItems } from "@/data/promotion"
 import { Item } from "@/interfaces/Promo"
 
-
-
-
-const productsTemp = [
-    {
-        store_id: 1,
-        category_id: 1,
-        location_id: 1,
-        store_name: "ร้านค้าของฉัน",
-        store_description: "hahahahahahahahahaha",
-        table_booking: 8,
-        sum_rating: 3.25,
-        Latitude: "",
-        longitude: "",
-        OpenTimes: [
-            {
-                day: "วันจันทร์",
-                open_time: "11:00",
-                close_time: "21:00",
-            },
-            {
-                day: "วันอังคาร",
-                open_time: "12:00",
-                close_time: "23:00",
-            },
-        ],
-    },
-    {
-        store_id: 2,
-        category_id: 2,
-        location_id: 2,
-        store_name: "ร้านค้า 2",
-        store_description:
-            "Lorem ipsum dolor sit amet, ctum id et est. Nam est lacus, tempus at libero eu, laoreet dignissim lorem.",
-        table_booking: 2,
-        sum_rating: 40,
-        Latitude: "",
-        longitude: "",
-        OpenTimes: [
-            {
-                day: "วันจันทร์",
-                open_time: "",
-                close_time: "",
-            },
-            {
-                day: "วันอังคาร",
-                open_time: "",
-                close_time: "",
-            },
-        ],
-    },
-];
-
-const reviewTemp : Review[] = [
-    {
-        store_id: 1,
-        store_name: "ร้าน1",
-        review_comment: "ข้าวหมูกรอบอร่อยมาก",
-        createAt: new Date(),
-        updateAt: new Date()
-    },
-    {
-        store_id: 2,
-        store_name: "ร้าน2",
-        review_comment: "สู่ความเวิ้งว้างอันไกลโพ้นนนนนนนนนนนนนนนนน",
-        createAt: new Date(),
-        updateAt: new Date()
-    },
-]
-
-
 const ProductDetail = () => {
-    // products/[productId]
-    const params = useParams<{ productId: string }>();
-    let show: Store;
-
-    const [detail, setDetail] = useState<Store>({
-        store_id: 1,
-        category_id: 1,
-        location_id: 1,
-        store_name: "ร้านค้าของฉัน",
-        store_description: "hahahahahahahahahaha",
-        table_booking: 8,
-        sum_rating: 3.25,
-        Latitude: "",
-        longitude: "",
-        OpenTimes: [
-            {
-                day: "วันจันทร์",
-                open_time: "10:00",
-                close_time: "",
-            },
-            {
-                day: "วันอังคาร",
-                open_time: "",
-                close_time: "22:00",
-            },
-        ],
+    const params = useParams();
+    const [storeData, setStoreData] = useState<object[]>({
+        store_name: '',
+        table_booking: '',
+        store_description:'',
+        OpenTimes: [{
+            start_time:'',
+            end_time:'',
+            day:''
+        }]
     });
-
-
-    const reviewTemp: Review[] = [
-        {
-            store_id: 1,
-            store_name: "ร้าน1",
-            review_comment: "ข้าวหมูกรอบอร่อยมาก",
-            createAt: new Date(),
-            updateAt: new Date()
-        },
-        {
-            store_id: 2,
-            store_name: "ร้าน2",
-            review_comment: "สู่ความเวิ้งว้างอันไกลโพ้นนนนนนนนนนนนนนนนน",
-            createAt: new Date(),
-            updateAt: new Date()
-        },
-    ]
-    //เรียกข้อมูลจากต่อหลังบ้าน 
-    function callBackEnd(id: string) {
-        //ส่วน backend เตรียม filter มาให้ (version mock up data) ให้
-        const temp: Array<Store> = productsTemp.filter(function (item: Store) {
-            //หยิบ item ใน productsTemp ดูว่า id ตรงกับ param ไหม 
-            if (item.store_id == parseInt(id)) {
-                //จะถูก save ใน show ทันที
-                return item
-            }
-        })
-        show = temp[0]
-        //ได้ detail แต่ละ product
-        setDetail(show) //เปรียบเหมือนเอาคำตอบของ backend มา
-        console.log(detail)
-    }
-    useEffect(() => {
-        callBackEnd(params.productId);
-    }, [])
-
-    console.log(params.productId);
-
-    //from data/products
-    const [storeData, setStoreData] = useState<Store[]>();
-
-    //from data/reviews
     const [reviewData, setReviewData] = useState<Review[]>([])
-    //from PromotionCode
 
     const fetchData = async () => {
-        // const data = await getStoreById(params.store_id);
-        // console.log(data);
+        const storeId = Number(params.productId)
+        console.log(storeId)
+        const data = await getStoreById(storeId);
+        console.log(data);
 
-        // if (data) {
-        //     setStoreData(data);
-        //     console.log(data);
-        // }
+        if (data) {
+            setStoreData(data);
+        }
 
-        setStoreData(productsTemp);
-        setReviewData(reviewTemp);
+        const reviewArray = [];
+        const reviews = await GetAllReviewByStoreId(storeId);
+        console.log(reviews);
+
+        if (reviews) {
+            for (const reviewObject of reviews) {
+                reviewArray.push(reviewObject);
+            }
+            setReviewData(reviewArray);
+            console.log(reviewArray);
+        }
     };
 
-    //   useEffect(() => {
-    //     fetchData();
-    //   }, []);
+      useEffect(() => {
+        fetchData();
+      }, []);
 
     return (
         <>
@@ -201,11 +81,11 @@ const ProductDetail = () => {
                         <div className="w-full px-4 md:w-1/2">
                             <div className="lg:pl-20">
                                 <div className="mb-6 ">
-                                    <span className="px-2.5 py-0.5 text-xs text-red-600 bg-red-100 dark:bg-gray-700 rounded-xl dark:text-gray-200">
+                                    {/* <span className="px-2.5 py-0.5 text-xs text-red-600 bg-red-100 dark:bg-gray-700 rounded-xl dark:text-gray-200">
                                         New Arrival
-                                    </span>
+                                    </span> */}
                                     <h2 className="max-w-xl mt-6 mb-6 text-xl font-semibold leading-loose tracking-wide text-gray-700 md:text-2xl dark:text-gray-300">
-                                        {detail?.store_name}
+                                        {storeData.store_name}
                                     </h2>
                                     <div className="flex flex-wrap items-center mb-6">
                                         <ul className="flex mb-4 mr-2 lg:mb-0">
@@ -284,22 +164,22 @@ const ProductDetail = () => {
                                             className="mb-4 text-xs underline hover:text-red-600 dark:text-gray-400 dark:hover:text-gray-300 lg:mb-0"
                                             href="@/app/products/category/[category-slug]/[productId]/page#"
                                         >
-                                            {detail?.sum_rating} reviews
+                                            1 reviews
                                         </a>
                                     </div>
                                 </div>
                                 <Stack direction="row" spacing={1}>
                                     <Chip
                                         icon={<RestaurantIcon />}
-                                        label={`${detail?.category_id}`}
+                                        label={`1`}
                                     />
                                     <Chip
                                         icon={<LocationOnIcon />}
-                                        label={`${detail?.location_id}`}
+                                        label={`1`}
                                     />
                                 </Stack>
 
-                                <SelectDateBox seats={detail.table_booking} openTime={detail.OpenTimes} />
+                                <SelectDateBox seats={storeData.table_booking} openTime={storeData.OpenTimes} />
 
                                 <div className="mb-6">
                                     <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">
@@ -324,7 +204,7 @@ const ProductDetail = () => {
                             </div>
                         </div>
                     </div>
-                    <DetailBox description={detail.store_description} openTime={detail.OpenTimes} review={reviewData} />
+                    <DetailBox description={storeData.store_description} openTime={storeData.OpenTimes} review={reviewData} />
                 </div>
             </section>
         </>
