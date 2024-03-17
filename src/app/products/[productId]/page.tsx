@@ -16,6 +16,7 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Map from "@/components/Map";
 import ConfirmButton from "@/components/botton/ConfirmButton";
+import dayjs from "dayjs";
 
 import { useParams } from "next/navigation";
 
@@ -32,7 +33,7 @@ import { Item } from "@/interfaces/Promo"
 
 const ProductDetail = () => {
     const params = useParams();
-    const [storeData, setStoreData] = useState<object[]>({
+    const [storeData, setStoreData] = useState<object>({
         store_name: '',
         table_booking: '',
         store_description:'',
@@ -42,12 +43,14 @@ const ProductDetail = () => {
             day:''
         }]
     });
+    // const [storeData,setStoreData] = useState<Store[]>([])
     const [reviewData, setReviewData] = useState<Review[]>([])
 
     const fetchData = async () => {
         const storeId = Number(params.productId)
         console.log(storeId)
         const data = await getStoreById(storeId);
+
         console.log(data);
 
         if (data) {

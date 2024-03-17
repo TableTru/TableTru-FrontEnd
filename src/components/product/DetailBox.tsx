@@ -32,6 +32,7 @@ import { useParams } from "next/navigation";
 import ReplyBox from "@/components/product/detailBox/comments/ReplyBox"
 import { styled } from "@mui/material/styles";
 import "./TableResponsive.css"
+import {Dayjs} from "dayjs";
 
 
 const Root = styled("div")(({ theme }) => ({
@@ -61,8 +62,8 @@ const userTemp: User =
 type TimeTemp = {
 
     day: string
-    start_time: string
-    end_time: string
+    start_time: Dayjs
+    end_time: Dayjs
 
 }
 
@@ -285,9 +286,7 @@ export default function DetailBox({ description, openTime, review }: { descripti
 
                                                                 );
                                                             })
-
                                                         }
-
                                                     </tbody>
                                                 </table>
                                             </div>

@@ -17,19 +17,22 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 type TimeTemp = {
 
   day: string
-  open_time: string
-  close_time: string
+  open_time: Dayjs
+  close_time: Dayjs
 
 }
 
-export default function SelectDateBox({seats} : { seats : number , openTime: Array<TimeTemp>} ) {
+export default function SelectDateBox({seats,openTime} : { seats : number , openTime: Array<TimeTemp>} ) {
+
 
   const now = dayjs();
 
-  const [time, setTime] = React.useState(dayjs());
+  const [times, setTimes] = React.useState< Dayjs| null >(null);
+
+  console.log(openTime)
 
   const handleChangeTime = (time:any) => {
-    setTime(time);
+    setTimes(time);
   };
 
   const [value, setValue] = React.useState(null);
@@ -68,7 +71,8 @@ export default function SelectDateBox({seats} : { seats : number , openTime: Arr
                       className='w-full'
                       label='วันที่และเวลา'
                       disablePast
-                      onChange={handleChangeSeat}
+                      value={times}
+                      onChange={handleChangeTime}
                       minDateTime={now}
                       timeSteps={{ minutes: 30 }}
                       views={['year', 'month', 'day', 'hours', 'minutes']}
