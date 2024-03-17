@@ -13,23 +13,25 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+var customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
 
 type TimeTemp = {
 
   day: string
-  open_time: string
-  close_time: string
+  open_time: Dayjs
+  close_time: Dayjs
 
 }
 
-export default function SelectDateBox({seats} : { seats : number , openTime: Array<TimeTemp>} ) {
+export default function SelectDateBox({seats,openTime} : { seats : number , openTime:Array<TimeTemp>} ) {
 
   const now = dayjs();
 
-  const [time, setTime] = React.useState(dayjs());
+  const [time, setTime] = React.useState<Dayjs | null>(null);
 
-  const handleChangeTime = (time:any) => {
-    setTime(time);
+  const handleChangeTime = (event:SelectChangeEvent) => {
+    setTime(event.target.value as string);
   };
 
   const [value, setValue] = React.useState(null);
@@ -37,11 +39,10 @@ export default function SelectDateBox({seats} : { seats : number , openTime: Arr
 
   const seatNumbers = Array.from({ length:seats },(_,index)=> index+1);
   // seatNumbers = Array.from({length: seats}, (_, i) => i + 1)
-  const [seat, setSeat] = React.useState();
-
+  const [seat, setSeat] = React.useState("");
   console.log(seatNumbers)
 
-  const handleChangeSeat = (event:any) => {
+  const handleChangeSeat = (event:SelectChangeEvent) => {
     // setSeat(prevState => ({
     //   ...prevState,
     //   [event.target.name]:[event.target.value]
@@ -49,9 +50,15 @@ export default function SelectDateBox({seats} : { seats : number , openTime: Arr
     setSeat(event.target.value)
   };
 
+
   React.useEffect(() => {
     console.log(setSeat);
 }, [setSeat])
+
+
+  React.useEffect(() => {
+    console.log(setTime);
+  },[setTime])
 
   return (
     <>
@@ -68,13 +75,17 @@ export default function SelectDateBox({seats} : { seats : number , openTime: Arr
                       className='w-full'
                       label='วันที่และเวลา'
                       disablePast
-                      onChange={handleChangeSeat}
+                      value={time}
+                      onChange={(newValue)=>setTime(newValue)}
                       minDateTime={now}
                       timeSteps={{ minutes: 30 }}
+                      // maxTime={openTime.open_time}
                       views={['year', 'month', 'day', 'hours', 'minutes']}
-                  />
+                />
                 </DemoContainer>
               </LocalizationProvider>
+
+
 
               <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth>

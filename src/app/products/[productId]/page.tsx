@@ -22,12 +22,19 @@ import { useParams } from "next/navigation";
 import { StoreInterface, Store } from "@/interfaces/StoreInterface";
 import { storeTemp } from "@/data/store";
 import { Review } from "@/interfaces/Review";
+import dayjs from "dayjs";
 
 import { getAllStore } from "@/services/store.service";
 
 // Import Promotion Code 
 import { initialItems } from "@/data/promotion"
 import { Item } from "@/interfaces/Promo"
+
+
+var customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
+
+
 
 
 
@@ -46,13 +53,15 @@ const productsTemp = [
         OpenTimes: [
             {
                 day: "วันจันทร์",
-                open_time: "11:00",
-                close_time: "21:00",
+                // open_time: dayjs("09:00", "HH:mm"),
+                // close_time: dayjs("21:00", "HH:mm"),
+                open_time: dayjs().set('hour', 9).set('minute',0),
+                close_time: dayjs().set('hour',21).set('minute',0)
             },
             {
                 day: "วันอังคาร",
-                open_time: "12:00",
-                close_time: "23:00",
+                open_time: dayjs().set('hour', 9).set('minute',0),
+                close_time: dayjs().set('hour',21).set('minute',0)
             },
         ],
     },
@@ -70,13 +79,18 @@ const productsTemp = [
         OpenTimes: [
             {
                 day: "วันจันทร์",
-                open_time: "",
-                close_time: "",
+                // open_time: dayjs("10:00", "HH:mm"),
+                // close_time: dayjs("21:00", "HH:mm"),
+                open_time: dayjs().set('hour', 10).set('minute', 0),
+                close_time: dayjs().set('hour',22).set('minute', 0),
             },
             {
                 day: "วันอังคาร",
-                open_time: "",
-                close_time: "",
+                // open_time: dayjs("10:00", "HH:mm"),
+                // close_time: dayjs("21:00", "HH:mm"),
+                open_time: dayjs().set('hour', 10).set('minute', 0),
+                close_time: dayjs().set('hour',22).set('minute', 0),
+
             },
         ],
     },
@@ -118,13 +132,13 @@ const ProductDetail = () => {
         OpenTimes: [
             {
                 day: "วันจันทร์",
-                open_time: "10:00",
-                close_time: "",
+                open_time: dayjs().set('hour', 9),
+                close_time: dayjs().set('hour',21)
             },
             {
                 day: "วันอังคาร",
-                open_time: "",
-                close_time: "22:00",
+                open_time: dayjs().set('hour', 9),
+                close_time: dayjs().set('hour',21)
             },
         ],
     });
@@ -299,7 +313,7 @@ const ProductDetail = () => {
                                     />
                                 </Stack>
 
-                                <SelectDateBox seats={detail.table_booking} openTime={detail.OpenTimes} />
+                                <SelectDateBox seats={detail.table_booking} openTime={detail.OpenTimes}/>
 
                                 <div className="mb-6">
                                     <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">

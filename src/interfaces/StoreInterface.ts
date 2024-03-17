@@ -1,3 +1,5 @@
+import {Dayjs} from "dayjs";
+
 export interface StoreInterface<T> {
     [key: string]: T;
   }
@@ -5,8 +7,8 @@ export interface StoreInterface<T> {
   type TimeTemp = {
 
     day: string
-    open_time: string
-    close_time: string
+    open_time: Dayjs
+    close_time: Dayjs
 
 }
 
