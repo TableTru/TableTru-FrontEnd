@@ -91,7 +91,7 @@ const handleClick = () => {
 };
 
 export default function Restaurantcard() {
-  const [storeData, setStoreData] = useState<object[]>();
+  const [storeData, setStoreData] = useState<object[]>(tempData);
 
   const [expanded, setExpanded] = useState(false);
   const handleExpandClick = () => {
@@ -132,16 +132,16 @@ export default function Restaurantcard() {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5">
-                  {store.store_name}
+                  {item.store_name}
                 </Typography>
                 <Stack direction="row" spacing={1}>
-                <Rating name="read-only" value={store.sum_rating} readOnly />
-                <Typography component="legend">{store.sum_rating} reviews</Typography>
+                <Rating name="read-only" value={item.sum_rating} readOnly />
+                <Typography component="legend">{item.sum_rating} reviews</Typography>
                 </Stack>
               </CardContent>
 
               <CardActions sx={{ my:2 }}>
-                  <Chip icon={<RestaurantIcon />} label={item.category_id.category_name} />
+                  <Chip icon={<RestaurantIcon />} label={item.category_id} />
               </CardActions>
             </CardActionArea>
           </Card>
