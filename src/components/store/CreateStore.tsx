@@ -53,7 +53,7 @@ import CreateStoreDetail from "@/components/store/CreateStoreDetail";
 import ImageUpload from "@/components/store/ImageUpload";
 import Map from "@/components/Map";
 import dayjs, { Dayjs } from 'dayjs';
-import { createStore, checkStoreByName } from '@/services/store.service'
+import { createStore, checkStoreByName, getStoreById } from '@/services/store.service'
 import { editUser } from "@/services/user.service";
 import { Loader } from '@googlemaps/js-api-loader';
 
@@ -103,7 +103,7 @@ const OpenTimes = [
     }
 ]
 
-const storeImageTemp: StoreImage[] = [
+const storeImageTemp: object[] = [
     {
         store_image_id: 1,
         store_id: 1,
@@ -118,16 +118,16 @@ const storeImageTemp: StoreImage[] = [
     },
 ]
 
-export default function EditStore() {
+export default function CreateStore() {
     const [formData, setFormData] = useState<any>({
         category_id: null,
-        location_id: null,
         store_name: '',
-        table_booking: '',
+        table_booking: null,
+        max_people_booking: null,
         sum_rating: null,
         store_description: '',
-        latitude: '',
-        longitude: '',
+        latitude: null,
+        longitude: null,
         location: '',
         OpenTimes: OpenTimes,
     })
@@ -140,7 +140,7 @@ export default function EditStore() {
         }));
         console.log(name);
         console.log(value);
-        console.log(formData.OpenTimes);
+        // console.log(formData.OpenTimes);
     };
 
     const handleOpenTimeChange = (index: number, newValue: any) => {
@@ -183,6 +183,15 @@ export default function EditStore() {
     };
 
     const fetchData = async () => {
+        // const userData = localStorage.getItem("userData")
+        // const userDataJson = JSON.parse(userData || "[]");
+        // const data = await getStoreById(userDataJson.user_id);
+        // console.log(data);
+
+        // if (data) {
+        //     setFormData(data)
+        //     console.log(data);
+        // }
     };
 
     const mapRef = useRef<HTMLDivElement>(null);
@@ -407,7 +416,7 @@ export default function EditStore() {
                                                     <ImageUpload />
                                                 </Grid>
 
-                                                <Grid item xs={12}>
+                                                <Grid item xs={6}>
                                                     <Typography variant="subtitle1">
                                                         จำนวนโต๊ะที่เปิดให้จอง
                                                     </Typography>
@@ -418,6 +427,21 @@ export default function EditStore() {
                                                         label="table_booking"
                                                         autoComplete="table_booking"
                                                         value={formData.table_booking}
+                                                        onChange={handleChange}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item xs={6}>
+                                                    <Typography variant="subtitle1">
+                                                        ที่นั่งสำหรับ 1 โต๊ะ
+                                                    </Typography>
+                                                    <TextField required
+                                                        fullWidth
+                                                        id="max_people_booking"
+                                                        name="max_people_booking"
+                                                        label="max_people_booking"
+                                                        autoComplete="max_people_booking"
+                                                        value={formData.max_people_booking}
                                                         onChange={handleChange}
                                                     />
                                                 </Grid>

@@ -62,21 +62,6 @@ const loader = new Loader({
     libraries: ['places'], // เพิ่ม libraries places
 });
 
-
-interface Store {
-    store_id: number;
-    category_id: number;
-    location_id: number;
-    store_name: string;
-    store_description: string;
-    table_booking: number;
-    sum_rating: number;
-    latitude: number;
-    longitude: number;
-    location: string;
-    OpenTimes: object[];
-}
-
 interface StoreImage {
     store_image_id: number;
     store_id: number;
@@ -84,7 +69,7 @@ interface StoreImage {
     store_image_type: string;
 }
 
-const storeTemp: Store =
+const storeTemp: object =
 {
     store_id: 1,
     category_id: 1,
@@ -92,6 +77,7 @@ const storeTemp: Store =
     store_name: "ร้านค้าของฉัน",
     store_description: 'hahahahahahahahahaha',
     table_booking: 4,
+    max_people_booking: 10,
     sum_rating: 3.25,
     latitude: 13.8920878,
     longitude: 100.5267991,
@@ -154,9 +140,9 @@ export default function EditStore() {
     const [formData, setFormData] = useState<any>({
         store_id: null,
         category_id: null,
-        location_id: null,
         store_name: '',
         table_booking: null,
+        max_people_booking: null,
         sum_rating: null,
         store_description: '',
         latitude: 13.8920878,
@@ -320,8 +306,8 @@ export default function EditStore() {
     };
 
     useEffect(() => {
-        // fetchData();
-        fetchTempData()
+        fetchData();
+        // fetchTempData()
     }, []);
 
     return (
@@ -444,7 +430,7 @@ export default function EditStore() {
                                                     <ImageUpload />
                                                 </Grid>
 
-                                                <Grid item xs={12}>
+                                                <Grid item xs={6}>
                                                     <Typography variant="subtitle1">
                                                         จำนวนโต๊ะที่เปิดให้จอง
                                                     </Typography>
@@ -455,6 +441,21 @@ export default function EditStore() {
                                                         label="table_booking"
                                                         autoComplete="table_booking"
                                                         value={formData.table_booking}
+                                                        onChange={handleChange}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item xs={6}>
+                                                    <Typography variant="subtitle1">
+                                                        ที่นั่งสำหรับ 1 โต๊ะ
+                                                    </Typography>
+                                                    <TextField required
+                                                        fullWidth
+                                                        id="max_people_booking"
+                                                        name="max_people_booking"
+                                                        label="max_people_booking"
+                                                        autoComplete="max_people_booking"
+                                                        value={formData.max_people_booking}
                                                         onChange={handleChange}
                                                     />
                                                 </Grid>
