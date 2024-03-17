@@ -15,9 +15,12 @@ interface StoreImage {
 }
 
 const UploadImageToStorage = () => {
-  const [isUploading, setIsUploading] = useState(false)
-  const [progressUpload, setProgressUpload] = useState(0)
-  const [urlData, setUrlData] = useState<StoreImage[]>([])
+  const [menuUploading, setMenuUploading] = useState(false)
+  const [subImageUpload, setSubImageUpload]  = useState(false)
+  const [menuProgressUpload, setProgressUpload] = useState(0)
+  const [subImageProgressUpload, setSubImageProgressUpload] = useState(0)
+  const [menuData, setMenuData] = useState<StoreImage[]>([])
+  const [subImageData, setSubImageData] = useState<StoreImage[]>([])
 
   const handleSelectedMenuImage = (files: any) => {
     if (files && files[0].size < 10000000) {
@@ -26,7 +29,7 @@ const UploadImageToStorage = () => {
       const storageRef = ref(storage, `image/${name}`)
       const uploadTask = uploadBytesResumable(storageRef, imageFile)
 
-      setIsUploading(true)
+      setMenuUploading(true)
 
       uploadTask.on(
         'state_changed',
@@ -53,17 +56,23 @@ const UploadImageToStorage = () => {
             const userData = localStorage.getItem("userData")
         const userDataJson = JSON.parse(userData || "[]");
             //url is download url of file
-            const newUrl = { id: urlData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพเมนู" };
+            const newUrl = { id: menuData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพเมนู" };
             console.log(newUrl);
             
-            setUrlData([...urlData, newUrl])
-            setIsUploading(false)
+            setMenuData([...menuData, newUrl])
+            setMenuUploading(false)
           })
         },
       )
     } else {
       message.error('File size too large')
     }
+  }
+
+  const removeMenuImage = (urlToDelete: string) => {
+    console.log(urlToDelete);
+    const newArray = menuData.filter(item => item.store_image_name !== urlToDelete);
+    setMenuData(newArray)
   }
 
   const handleSelectedSubImage = (files: any) => {
@@ -73,7 +82,7 @@ const UploadImageToStorage = () => {
       const storageRef = ref(storage, `image/${name}`)
       const uploadTask = uploadBytesResumable(storageRef, imageFile)
 
-      setIsUploading(true)
+      setSubImageUpload(true)
 
       uploadTask.on(
         'state_changed',
@@ -81,7 +90,7 @@ const UploadImageToStorage = () => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
 
-          setProgressUpload(progress) // to show progress upload
+            setSubImageProgressUpload(progress) // to show progress upload
 
           switch (snapshot.state) {
             case 'paused':
@@ -100,11 +109,11 @@ const UploadImageToStorage = () => {
             const userData = localStorage.getItem("userData")
         const userDataJson = JSON.parse(userData || "[]");
             //url is download url of file
-            const newUrl = { id: urlData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพประกอบ" };
+            const newUrl = { id: subImageData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพประกอบ" };
             console.log(newUrl);
             
-            setUrlData([...urlData, newUrl])
-            setIsUploading(false)
+            setSubImageData([...subImageData, newUrl])
+            setSubImageUpload(false)
           })
         },
       )
@@ -113,11 +122,13 @@ const UploadImageToStorage = () => {
     }
   }
 
-  const removeImage = (urlToDelete: string) => {
+  const removeSubImage = (urlToDelete: string) => {
     console.log(urlToDelete);
-    const newArray = urlData.filter(item => item.store_image_name !== urlToDelete);
-    setUrlData(newArray)
+    const newArray = subImageData.filter(item => item.store_image_name !== urlToDelete);
+    setSubImageData(newArray)
   }
+
+  
 
   return (
     <div className="container mt-5">
@@ -133,12 +144,12 @@ const UploadImageToStorage = () => {
           </Box>
 
           <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
-            {isUploading && <Progress percent={progressUpload} />}
+            {menuUploading && <Progress percent={menuProgressUpload} />}
           </Box>
         </Box>
 
         <List>
-          {urlData.map((item, index) => (
+          {menuData.map((item, index) => (
             <ListItem key={index}>
               <ListItemAvatar>
                 <Image
@@ -150,7 +161,7 @@ const UploadImageToStorage = () => {
               </ListItemAvatar>
               <ListItemText primary={item.name} />
               <ListItemIcon>
-                <Button onClick={() => removeImage(item.store_image_name)} size="small">Remove</Button>
+                <Button onClick={() => removeMenuImage(item.store_image_name)} size="small">Remove</Button>
               </ListItemIcon>
             </ListItem>
           ))}
@@ -170,12 +181,12 @@ const UploadImageToStorage = () => {
           </Box>
 
           <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
-            {isUploading && <Progress percent={progressUpload} />}
+            {subImageUpload && <Progress percent={subImageProgressUpload} />}
           </Box>
         </Box>
 
         <List>
-          {urlData.map((item, index) => (
+          {subImageData.map((item, index) => (
             <ListItem key={index}>
               <ListItemAvatar>
                 <Image
@@ -187,7 +198,7 @@ const UploadImageToStorage = () => {
               </ListItemAvatar>
               <ListItemText primary={item.name} />
               <ListItemIcon>
-                <Button onClick={() => removeImage(item.store_image_name)} size="small">Remove</Button>
+                <Button onClick={() => removeSubImage(item.store_image_name)} size="small">Remove</Button>
               </ListItemIcon>
             </ListItem>
           ))}

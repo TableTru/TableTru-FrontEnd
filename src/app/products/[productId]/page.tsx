@@ -32,15 +32,22 @@ import { Item } from "@/interfaces/Promo"
 
 const ProductDetail = () => {
     const params = useParams();
-    const [storeData, setStoreData] = useState<object[]>({
+    const [storeData, setStoreData] = useState<object>({
         store_name: '',
         table_booking: '',
         store_description:'',
-        OpenTimes: [{
-            start_time:'',
-            end_time:'',
-            day:''
-        }]
+        OpenTimes: [
+            {
+                start_time:'',
+                end_time:'',
+                day:''
+            },
+            {
+                start_time:'',
+                end_time:'',
+                day:''
+            }
+        ]
     });
     const [reviewData, setReviewData] = useState<Review[]>([])
 

@@ -66,7 +66,7 @@ type TimeTemp = {
 
 }
 
-export default function DetailBox({ description, openTime, review }: { description: string, openTime: Array<TimeTemp>, review: Array<Review> }) {
+export default function DetailBox({ description, openTime, review }: { description: string, openTime: Array<object>, review: Array<Review> }) {
 
     const [value, setValue] = React.useState("Review");
     const [countStar, setcountStar] = React.useState<number | null>(2);
@@ -90,6 +90,8 @@ export default function DetailBox({ description, openTime, review }: { descripti
     }
     React.useEffect(() => {
         callBackend(params.reviewId);
+        console.log(openTime);
+        
     }, [])
 
     const [showReply, setShowReply] = React.useState(false)
