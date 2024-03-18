@@ -52,11 +52,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CreateStoreDetail from "@/components/store/CreateStoreDetail";
 import Map from "@/components/Map";
 import dayjs, { Dayjs } from 'dayjs';
-import { getStoreById, editStore, editOpenTime } from '@/services/store.service'
 import { Loader } from '@googlemaps/js-api-loader';
 import { Input, message, Image, Progress, } from 'antd'
 import { storage } from '@/services/firebaseConfig'
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
+import { getStoreById, editStore, editOpenTime, createStoreImage,checkStoreByName } from '@/services/store.service'
 
 const loader = new Loader({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -211,24 +211,44 @@ export default function EditStore() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         console.log(formData);
-        const userData = localStorage.getItem("userData")
-        const userDataJson = JSON.parse(userData || "[]");
+        const checkStoreNameRes = await checkStoreByName(formData.store_name)
+        if (checkStoreNameRes) {
+            const userData = localStorage.getItem("userData")
+            const userDataJson = JSON.parse(userData || "[]");
 
-        const editRes = await editStore(userDataJson.user_id, formData)
-        console.log(editRes);
+            const editRes = await editStore(userDataJson.user_id, formData)
+            console.log(editRes);
 
-        for (const openTimeObject of formData.OpenTimes) {
-            const editOpenTimeRes = await editOpenTime(openTimeObject.openTime_id, openTimeObject)
+            for (const openTimeObject of formData.OpenTimes) {
+                const editOpenTimeRes = await editOpenTime(openTimeObject.openTime_id, openTimeObject)
+            }
+
+            const newmenuImageData = menuData.filter(item => item.data_type !== "old");
+            const newSubImageData = menuData.filter(item => item.data_type !== "old");
+
+            for (const menuImageObject of newmenuImageData) {
+                const menuImageWithStoreId = {
+                    store_id: menuImageObject.store_id,
+                    store_image_name: menuImageObject.store_image_name,
+                    store_image_type: menuImageObject.store_image_type
+                }
+                await createStoreImage(menuImageWithStoreId)
+            }
+
+            for (const subImageObject of newSubImageData) {
+                const menuImageWithStoreId = {
+                    store_id: subImageObject.store_id,
+                    store_image_name: subImageObject.store_image_name,
+                    store_image_type: subImageObject.store_image_type
+                }
+                await createStoreImage(menuImageWithStoreId)
+            }
+            // window.location.replace('/profile')
+        }else {
+            setCreateError("มีร้านค้าชื่อนี้แล้ว")
+            console.log("error");
         }
 
-        const newmenuData = menuData.filter(item => item.data_type !== "old");
-
-
-        console.log(removeImage);
-        console.log(menuData);
-        console.log(newmenuData);
-
-        // window.location.replace('/profile')
     };
 
 
@@ -403,7 +423,7 @@ export default function EditStore() {
                         const userData = localStorage.getItem("userData")
                         const userDataJson = JSON.parse(userData || "[]");
                         //url is download url of file
-                        const newUrl = { id: menuData.length + 1, store_id: formData.store_id ,name: name, store_image_name: `${url}`, store_image_type: "ภาพเมนู", data_type: "new" };
+                        const newUrl = { id: menuData.length + 1, store_id: formData.store_id, name: name, store_image_name: `${url}`, store_image_type: "ภาพเมนู", data_type: "new" };
                         console.log(newUrl);
 
                         setMenuData([...menuData, newUrl])
@@ -477,7 +497,7 @@ export default function EditStore() {
     }
 
     const removeSubImage = (image: object) => {
-        
+
         if (image.data_type == "old") {
             const newArray = subImageData.filter(item => item.store_image_name !== image.store_image_name);
             setSubImageData(newArray)
