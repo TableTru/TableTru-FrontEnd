@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import GoogleMap from '@/components/store/MapTest'
 import LocationDistance from '@/components/store/LocationDistance'
 import UploadImageToStorage from '@/components/store/UploadImage'
+import UploadSingleImage from '@/components/store/UploadSingleImage'
 
 function App() {
     const [isLogin, setIsLogin] = useState(false);
@@ -43,6 +44,7 @@ function App() {
                     {/* <GoogleMap/>
                     <LocationDistance/> */}
                     <UploadImageToStorage/>
+                    <UploadSingleImage/>
                 </div>
             ) : (
                 <p>Please Login</p>

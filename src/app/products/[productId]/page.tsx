@@ -37,11 +37,18 @@ const ProductDetail = () => {
         store_name: '',
         table_booking: '',
         store_description:'',
-        OpenTimes: [{
-            start_time:'',
-            end_time:'',
-            day:''
-        }]
+        OpenTimes: [
+            {
+                start_time:'',
+                end_time:'',
+                day:''
+            },
+            {
+                start_time:'',
+                end_time:'',
+                day:''
+            }
+        ]
     });
     // const [storeData,setStoreData] = useState<Store[]>([])
     const [reviewData, setReviewData] = useState<Review[]>([])

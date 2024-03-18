@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { Image, Textarea } from "@nextui-org/react";
 import {
     Tabs,
     Tab,
@@ -34,6 +33,7 @@ import {
     MenuItem,
     Select,
     FormControl,
+    ListItemIcon,
 
 
 } from "@mui/material";
@@ -42,28 +42,24 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import ImageIcon from "@mui/icons-material/Image";
-import WorkIcon from "@mui/icons-material/Work";
-import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CreateStoreDetail from "@/components/store/CreateStoreDetail";
-import ImageUpload from "@/components/store/ImageUpload";
 import Map from "@/components/Map";
 import dayjs, { Dayjs } from 'dayjs';
-import { createStore, checkStoreByName } from '@/services/store.service'
-import { editUser } from "@/services/user.service";
 import { Loader } from '@googlemaps/js-api-loader';
+import { storage } from '@/services/firebaseConfig'
+import { Input, message, Image, Progress, } from 'antd'
+import CloseIcon from '@mui/icons-material/Close';
+import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
+import { createStore, checkStoreByName, getStoreById, createStoreImage } from '@/services/store.service'
+import { editUser } from "@/services/user.service";
 
 const loader = new Loader({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     version: 'weekly',
     libraries: ['places'], // เพิ่ม libraries places
 });
-
-
 
 const OpenTimes = [
     {
@@ -103,32 +99,41 @@ const OpenTimes = [
     }
 ]
 
-const storeImageTemp: StoreImage[] = [
-    {
-        store_image_id: 1,
-        store_id: 1,
-        store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
-        store_image_type: "ภาพปกร้าน"
-    },
-    {
-        store_image_id: 1,
-        store_id: 1,
-        store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
-        store_image_type: "ภาพปกร้าน"
-    },
-]
+interface StoreImage {
+    id: number;
+    name: string;
+    store_image_name: string;
+    store_image_type: string;
+}
 
-export default function EditStore() {
+export default function CreateStore() {
+    const [menuUploading, setMenuUploading] = useState(false)
+    const [subImageUpload, setSubImageUpload] = useState(false)
+    const [menuProgressUpload, setProgressUpload] = useState(0)
+    const [subImageProgressUpload, setSubImageProgressUpload] = useState(0)
+    const [menuData, setMenuData] = useState<StoreImage[]>([])
+    const [subImageData, setSubImageData] = useState<StoreImage[]>([])
+    const [mainImage, setMainImage] = useState('')
+    const [isMainImageUpload, setIsMainImageUpload] = useState(false)
+    const [mainProgressUpload, setMainProgressUpload] = useState(0)
+
+    const [createError, setCreateError] = useState('')
+    const [locationData, setLocationData] = useState<object>({
+        location: '',
+        latitude: null,
+        longitude: null,
+    })
     const [formData, setFormData] = useState<any>({
         category_id: null,
-        location_id: null,
         store_name: '',
-        table_booking: '',
+        table_booking: null,
+        max_people_booking: null,
         sum_rating: null,
         store_description: '',
-        latitude: '',
-        longitude: '',
+        latitude: null,
+        longitude: null,
         location: '',
+        store_image_name: '',
         OpenTimes: OpenTimes,
     })
 
@@ -140,7 +145,7 @@ export default function EditStore() {
         }));
         console.log(name);
         console.log(value);
-        console.log(formData.OpenTimes);
+        // console.log(formData.OpenTimes);
     };
 
     const handleOpenTimeChange = (index: number, newValue: any) => {
@@ -163,26 +168,62 @@ export default function EditStore() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         console.log(formData);
-        const checkStoreNameRes = await checkStoreByName(formData.store_name)
-        if (checkStoreNameRes) {
-            const createStoreRes = await createStore(formData)
-            const userData = localStorage.getItem("userData")
-            const userDataJson = JSON.parse(userData || "[]");
-            const newUserData = {
-                user_id: userDataJson.user_id,
-                user_status: "merchant"
+
+        if (
+            formData.category_id !== null &&
+            formData.store_name !== "" &&
+            formData.table_booking !== null &&
+            formData.max_people_booking !== null &&
+            formData.sum_rating !== null &&
+            formData.store_description !== "" &&
+            formData.latitude !== null &&
+            formData.longitude !== null &&
+            formData.location !== "" &&
+            formData.store_image_name !== ""
+        ) {
+            const checkStoreNameRes = await checkStoreByName(formData.store_name)
+            if (checkStoreNameRes) {
+                // const createStoreRes = await createStore(formData)
+                const createStoreRes = { store_id: 1 }
+                const userData = localStorage.getItem("userData")
+                const userDataJson = JSON.parse(userData || "[]");
+                const newUserData = {
+                    user_id: userDataJson.user_id,
+                    store_id: createStoreRes.store_id,
+                    user_status: "merchant"
+                }
+                await editUser(userDataJson.user_id, newUserData)
+
+                for (const menuImageObject of menuData) {
+                    const menuImageWithStoreId = {
+                        store_id: createStoreRes.store_id,
+                        store_image_name: menuImageObject.store_image_name,
+                        store_image_type: menuImageObject.store_image_type
+                    }
+                    await createStoreImage(menuImageWithStoreId)
+                }
+
+                for (const subImageObject of subImageData) {
+                    const menuImageWithStoreId = {
+                        store_id: createStoreRes.store_id,
+                        store_image_name: subImageObject.store_image_name,
+                        store_image_type: subImageObject.store_image_type
+                    }
+                    await createStoreImage(menuImageWithStoreId)
+                }
+
+                // window.location.replace('/profile')
             }
-            await editUser(newUserData)
+            else {
+                setCreateError("มีร้านค้าชื่อนี้แล้ว")
+                console.log("error");
 
-            // window.location.replace('/profile')
+            }
+        } else {
+            setCreateError("โปรดใสข้อมูลให้ครบ")
         }
-        else {
-            console.log("error");
 
-        }
-    };
 
-    const fetchData = async () => {
     };
 
     const mapRef = useRef<HTMLDivElement>(null);
@@ -238,12 +279,17 @@ export default function EditStore() {
                     if (place && place.geometry && map) {
                         const location = place.geometry.location; //ตำแหน่งแบบ lat long
                         console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
-                        setFormData({
-                            ...formData,
+                        // setFormData({
+                        //     ...formData,
+                        //     location: place.formatted_address,
+                        //     latitude: place.geometry.location.lat(),
+                        //     longitude: place.geometry.location.lng(),
+                        // });
+                        setLocationData({
                             location: place.formatted_address,
                             latitude: place.geometry.location.lat(),
                             longitude: place.geometry.location.lng(),
-                        });
+                        })
                         map.setCenter(location);
                         new google.maps.Marker({
                             position: location,
@@ -264,7 +310,7 @@ export default function EditStore() {
         if (inputRef.current) {
             inputRef.current.value = prediction.description;
             console.log("active");
-            
+
         }
         setPredictions([]);
 
@@ -275,9 +321,164 @@ export default function EditStore() {
 
     };
 
+    const handleSelectedMenuImage = (files: any) => {
+        if (files && files[0].size < 10000000) {
+            const imageFile = files[0]
+            const name = imageFile.name
+            const storageRef = ref(storage, `image/${name}`)
+            const uploadTask = uploadBytesResumable(storageRef, imageFile)
+
+            setMenuUploading(true)
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+                    setProgressUpload(progress) // to show progress upload
+
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused')
+                            break
+                        case 'running':
+                            console.log('Upload is running')
+                            break
+                    }
+                },
+                (error) => {
+                    message.error(error.message)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        const userData = localStorage.getItem("userData")
+                        const userDataJson = JSON.parse(userData || "[]");
+                        //url is download url of file
+                        const newUrl = { id: menuData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพเมนู" };
+                        console.log(newUrl);
+
+                        setMenuData([...menuData, newUrl])
+                        setMenuUploading(false)
+                    })
+                },
+            )
+        } else {
+            message.error('File size too large')
+        }
+    }
+
+    const removeMenuImage = (urlToDelete: string) => {
+        console.log(urlToDelete);
+        const newArray = menuData.filter(item => item.store_image_name !== urlToDelete);
+        setMenuData(newArray)
+    }
+
+    const handleSelectedSubImage = (files: any) => {
+        if (files && files[0].size < 10000000) {
+            const imageFile = files[0]
+            const name = imageFile.name
+            const storageRef = ref(storage, `image/${name}`)
+            const uploadTask = uploadBytesResumable(storageRef, imageFile)
+
+            setSubImageUpload(true)
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+                    setSubImageProgressUpload(progress) // to show progress upload
+
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused')
+                            break
+                        case 'running':
+                            console.log('Upload is running')
+                            break
+                    }
+                },
+                (error) => {
+                    message.error(error.message)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        const userData = localStorage.getItem("userData")
+                        const userDataJson = JSON.parse(userData || "[]");
+                        //url is download url of file
+                        const newUrl = { id: subImageData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพประกอบ" };
+                        console.log(newUrl);
+
+                        setSubImageData([...subImageData, newUrl])
+                        setSubImageUpload(false)
+                    })
+                },
+            )
+        } else {
+            message.error('File size too large')
+        }
+    }
+
+    const removeSubImage = (urlToDelete: string) => {
+        console.log(urlToDelete);
+        const newArray = subImageData.filter(item => item.store_image_name !== urlToDelete);
+        setSubImageData(newArray)
+    }
+
+    const handleSelectedMainImage = async (files: any) => {
+        if (files && files[0].size < 10000000) {
+            const name = files[0].name
+            const storageRef = ref(storage, `image/${name}`)
+            const uploadTask = uploadBytesResumable(storageRef, files[0])
+
+            setIsMainImageUpload(true)
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+                    setMainProgressUpload(progress) // to show progress upload
+
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused')
+                            break
+                        case 'running':
+                            console.log('Upload is running')
+                            break
+                    }
+                },
+                (error) => {
+                    message.error(error.message)
+                    setIsMainImageUpload(false)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        //url is download url of file
+                        setMainImage(url)
+                        setIsMainImageUpload(false)
+
+                        setFormData({ ...formData, store_image_name: url });
+                    })
+                },
+            )
+        } else {
+            message.error('File size too large')
+        }
+    }
+
     useEffect(() => {
-        fetchData();
-    }, []);
+            setFormData({
+            ...formData,
+            location: locationData.location,
+            latitude: locationData.latitude,
+            longitude: locationData.longitude,
+        });
+    }, [locationData]);
 
     return (
         <>
@@ -353,11 +554,7 @@ export default function EditStore() {
                                     <div ref={mapRef} style={{ width: '100%', height: '400px' }} />
                                 </Grid>
 
-                                <Grid item xs={12}>
-                                    <Typography variant="subtitle1">อัปโหลดเมนู</Typography>
-                                    {/* <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" /> */}
-                                    <ImageUpload />
-                                </Grid>
+
 
                                 <Grid item xs={12}>
                                     <Accordion>
@@ -399,15 +596,7 @@ export default function EditStore() {
 
                                                 </Grid>
 
-                                                <Grid item xs={12}>
-                                                    <Typography variant="subtitle1">
-                                                        แก้ไขรูปภาพ
-                                                    </Typography>
-                                                    {/* <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" /> */}
-                                                    <ImageUpload />
-                                                </Grid>
-
-                                                <Grid item xs={12}>
+                                                <Grid item xs={6}>
                                                     <Typography variant="subtitle1">
                                                         จำนวนโต๊ะที่เปิดให้จอง
                                                     </Typography>
@@ -420,6 +609,132 @@ export default function EditStore() {
                                                         value={formData.table_booking}
                                                         onChange={handleChange}
                                                     />
+                                                </Grid>
+
+                                                <Grid item xs={6}>
+                                                    <Typography variant="subtitle1">
+                                                        ที่นั่งสำหรับ 1 โต๊ะ
+                                                    </Typography>
+                                                    <TextField required
+                                                        fullWidth
+                                                        id="max_people_booking"
+                                                        name="max_people_booking"
+                                                        label="max_people_booking"
+                                                        autoComplete="max_people_booking"
+                                                        value={formData.max_people_booking}
+                                                        onChange={handleChange}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">รูปภาพปกร้าน</Typography>
+                                                    <div className="container mt-5">
+                                                        <div className="col-lg-8 offset-lg-2">
+                                                            <Input
+                                                                type="file"
+                                                                placeholder="Select file to upload"
+                                                                accept="image/png"
+                                                                onChange={(files) => handleSelectedMainImage(files.target.files)}
+                                                            />
+                                                            {isMainImageUpload && <Progress percent={mainProgressUpload} />}
+
+                                                            {mainImage && (
+                                                                <>
+                                                                    <Image
+                                                                        src={mainImage}
+                                                                        alt={mainImage}
+                                                                        style={{ width: "100%", height: 200, objectFit: 'cover' }}
+                                                                    />
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </Grid>
+
+                                                <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">อัปโหลดเมนู</Typography>
+                                                    <div className="container mt-5">
+                                                        <div className="col-lg-8 offset-lg-2">
+                                                            <Box >
+                                                                <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+                                                                    <Input
+                                                                        type="file"
+                                                                        placeholder="Select file to upload"
+                                                                        accept="image/png"
+                                                                        onChange={(files) => handleSelectedMenuImage(files.target.files)}
+                                                                    />
+                                                                </Box>
+
+                                                                <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+                                                                    {menuUploading && <Progress percent={menuProgressUpload} />}
+                                                                </Box>
+                                                            </Box>
+
+                                                            <List>
+                                                                {menuData.map((item, index) => (
+                                                                    <ListItem key={index}>
+                                                                        <ListItemAvatar>
+                                                                            <Image
+                                                                                key={index}
+                                                                                src={item.store_image_name}
+                                                                                alt={item.store_image_name}
+                                                                                style={{ width: 100, height: 100, objectFit: 'cover' }}
+                                                                            />
+                                                                        </ListItemAvatar>
+                                                                        <ListItemText primary={item.name} />
+                                                                        <ListItemIcon>
+                                                                            <Button onClick={() => removeMenuImage(item.store_image_name)} size="small">Remove</Button>
+                                                                        </ListItemIcon>
+                                                                    </ListItem>
+                                                                ))}
+                                                            </List>
+                                                        </div>
+                                                    </div>
+                                                </Grid>
+
+                                                <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">
+                                                        รูปภาพประกอบ
+                                                    </Typography>
+                                                    <div className="container mt-5">
+                                                        <div className="col-lg-8 offset-lg-2">
+                                                            <Box >
+                                                                <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+                                                                    <Input
+                                                                        type="file"
+                                                                        placeholder="Select file to upload"
+                                                                        accept="image/png"
+                                                                        onChange={(files) => handleSelectedSubImage(files.target.files)}
+                                                                    />
+                                                                </Box>
+
+                                                                <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+                                                                    {subImageUpload && <Progress percent={subImageProgressUpload} />}
+                                                                </Box>
+                                                            </Box>
+
+                                                            <List>
+                                                                {subImageData.map((item, index) => (
+                                                                    <ListItem key={index}>
+                                                                        <ListItemAvatar>
+                                                                            <Image
+                                                                                key={index}
+                                                                                src={item.store_image_name}
+                                                                                alt={item.store_image_name}
+                                                                                style={{ width: 100, height: 100, objectFit: 'cover' }}
+                                                                            />
+                                                                        </ListItemAvatar>
+                                                                        <ListItemText primary={item.name} />
+                                                                        <ListItemIcon>
+                                                                            <Button onClick={() => removeSubImage(item.store_image_name)} size="small">Remove</Button>
+                                                                        </ListItemIcon>
+                                                                    </ListItem>
+                                                                ))}
+                                                            </List>
+
+                                                        </div>
+                                                    </div>
+
                                                 </Grid>
                                             </Grid>
                                             <Grid item xs={12} sx={{ marginTop: 3 }}>
@@ -462,6 +777,10 @@ export default function EditStore() {
                                         </AccordionDetails>
                                     </Accordion>
                                 </Grid>
+
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle1">{createError}</Typography>
+                                </Grid>
                             </Grid>
                             <Link href="/store">
                                 <Button
@@ -470,7 +789,7 @@ export default function EditStore() {
                                     fullWidth
                                     variant="contained"
                                 >
-                                    แก้ไขร้านค้า
+                                    สร้างร้านค้า
                                 </Button>
                             </Link>
                         </Box>
