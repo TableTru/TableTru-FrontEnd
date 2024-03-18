@@ -56,7 +56,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { Input, message, Image, Progress, } from 'antd'
 import { storage } from '@/services/firebaseConfig'
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
-import { getStoreById, editStore, editOpenTime, createStoreImage,checkStoreByName } from '@/services/store.service'
+import { getStoreById, editStore, editOpenTime, createStoreImage, checkStoreByName } from '@/services/store.service'
 
 const loader = new Loader({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -166,7 +166,11 @@ export default function EditStore() {
     const [mainProgressUpload, setMainProgressUpload] = useState(0)
 
     const [removeImage, setRemoveImage] = useState<number[]>([])
-
+    const [locationData, setLocationData] = useState<object>({
+        location: '',
+        latitude: null,
+        longitude: null,
+    })
     const [formData, setFormData] = useState<any>({
         store_id: null,
         category_id: null,
@@ -190,7 +194,7 @@ export default function EditStore() {
         }));
         console.log(name);
         console.log(value);
-        console.log(formData.OpenTimes);
+        console.log(formData);
     };
 
     const handleOpenTimeChange = (index: number, newValue: any) => {
@@ -244,7 +248,7 @@ export default function EditStore() {
                 await createStoreImage(menuImageWithStoreId)
             }
             // window.location.replace('/profile')
-        }else {
+        } else {
             setCreateError("มีร้านค้าชื่อนี้แล้ว")
             console.log("error");
         }
@@ -279,6 +283,8 @@ export default function EditStore() {
     };
 
     const fetchTempData = async () => {
+        console.log("fetchTempData active");
+
         const menuImageArray = []
         const subImageArray = []
         for (const menuImageObject of menuImageTemp) {
@@ -351,12 +357,19 @@ export default function EditStore() {
                     if (place && place.geometry && map) {
                         const location = place.geometry.location; //ตำแหน่งแบบ lat long
                         console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
-                        setFormData({
-                            ...formData,
+                        console.log(formData);
+
+                        // setFormData({
+                        //     ...formData,
+                        //     location: place.formatted_address,
+                        //     latitude: place.geometry.location.lat(),
+                        //     longitude: place.geometry.location.lng(),
+                        // });
+                        setLocationData({
                             location: place.formatted_address,
                             latitude: place.geometry.location.lat(),
                             longitude: place.geometry.location.lng(),
-                        });
+                        })
                         map.setCenter(location);
                         new google.maps.Marker({
                             position: location,
@@ -552,10 +565,26 @@ export default function EditStore() {
         }
     }
 
+    // useEffect(() => {
+    //     // fetchData();
+    //     fetchTempData()
+    // }, []);
+
     useEffect(() => {
-        // fetchData();
-        fetchTempData()
-    }, []);
+        if (formData.store_id === null) {
+            // fetchData();
+            fetchTempData()
+        } else{
+            setFormData({
+            ...formData,
+            location: locationData.location,
+            latitude: locationData.latitude,
+            longitude: locationData.longitude,
+        });
+        }
+
+        
+    }, [locationData]);
 
     return (
         <>

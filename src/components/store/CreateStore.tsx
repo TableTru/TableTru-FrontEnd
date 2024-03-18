@@ -118,6 +118,11 @@ export default function CreateStore() {
     const [mainProgressUpload, setMainProgressUpload] = useState(0)
 
     const [createError, setCreateError] = useState('')
+    const [locationData, setLocationData] = useState<object>({
+        location: '',
+        latitude: null,
+        longitude: null,
+    })
     const [formData, setFormData] = useState<any>({
         category_id: null,
         store_name: '',
@@ -274,12 +279,17 @@ export default function CreateStore() {
                     if (place && place.geometry && map) {
                         const location = place.geometry.location; //ตำแหน่งแบบ lat long
                         console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
-                        setFormData({
-                            ...formData,
+                        // setFormData({
+                        //     ...formData,
+                        //     location: place.formatted_address,
+                        //     latitude: place.geometry.location.lat(),
+                        //     longitude: place.geometry.location.lng(),
+                        // });
+                        setLocationData({
                             location: place.formatted_address,
                             latitude: place.geometry.location.lat(),
                             longitude: place.geometry.location.lng(),
-                        });
+                        })
                         map.setCenter(location);
                         new google.maps.Marker({
                             position: location,
@@ -462,7 +472,13 @@ export default function CreateStore() {
     }
 
     useEffect(() => {
-    }, []);
+            setFormData({
+            ...formData,
+            location: locationData.location,
+            latitude: locationData.latitude,
+            longitude: locationData.longitude,
+        });
+    }, [locationData]);
 
     return (
         <>
