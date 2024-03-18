@@ -268,18 +268,34 @@ export default function EditStore() {
             console.log(data);
         }
 
-        // const imageArray = [];
-        // const storeImages = await getStoreImageByType(data.store_id, "ภาพเมนู" );
-        // console.log(storeImages);
+        const menuImageArray = []
+        const subImageArray = []
+        for (const menuImageObject of menuImageTemp) {
+            const newMenuImage = {
+                store_id: menuImageObject.store_id,
+                store_image_name: menuImageObject.store_image_name,
+                store_image_type: menuImageObject.store_image_type,
+                data_type: "old"
+            }
+            menuImageArray.push(newMenuImage)
 
-        // if (storeImages) {
-        //     for (const storeImageObject of storeImages) {
-        //         imageArray.push(storeImageObject);
-        //     }
-        //     setStoreImageData(imageArray);
-        //     console.log(imageArray);
-        // }
-        // setStoreImageData(storeImageTemp);
+        }
+
+        for (const subImageObject of subImageTemp) {
+            const newSubImage = {
+                store_id: subImageObject.store_id,
+                store_image_name: subImageObject.store_image_name,
+                store_image_type: subImageObject.store_image_type,
+                data_type: "old"
+            }
+            subImageArray.push(newSubImage)
+
+        }
+        setMenuData(menuImageArray)
+        setSubImageData(subImageArray)
+        setMainImage(data.store_image_name)
+    
+
     };
 
     const fetchTempData = async () => {
@@ -564,11 +580,6 @@ export default function EditStore() {
             message.error('File size too large')
         }
     }
-
-    // useEffect(() => {
-    //     // fetchData();
-    //     fetchTempData()
-    // }, []);
 
     useEffect(() => {
         if (formData.store_id === null) {
