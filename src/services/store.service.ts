@@ -78,7 +78,7 @@ export const editOpenTime = async (id: number, data: any) => {
 
 export const checkStoreByName = async (storeName: string) => {
   return await axios.get(url + `/stores/checkStoreByName?storeName=${storeName}`).then((res: AxiosResponse) => {
-    return res.data.data;
+    return res.data.success;
   }).catch((err: any) => {
     catchError(err, null, "getUser");
     return [];
@@ -87,7 +87,7 @@ export const checkStoreByName = async (storeName: string) => {
 
 export const GetStoreImageByType = async (id: number, imageType: string) => {
   return await axios.get(url + `/storeImages/GetStoreImageByType?id=${id}&imageType=${imageType}`).then((res: AxiosResponse) => {
-    return res.data.data;
+    return res.data.data.rows;
   }).catch((err: any) => {
     catchError(err, null, "getUser");
     return [];

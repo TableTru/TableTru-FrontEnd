@@ -56,7 +56,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { Input, message, Image, Progress, } from 'antd'
 import { storage } from '@/services/firebaseConfig'
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
-import { getStoreById, editStore, editOpenTime, createStoreImage, checkStoreByName } from '@/services/store.service'
+import { getStoreById, editStore, editOpenTime, createStoreImage, checkStoreByName, GetStoreImageByType } from '@/services/store.service'
 
 const loader = new Loader({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -165,6 +165,7 @@ export default function EditStore() {
     const [isMainImageUpload, setIsMainImageUpload] = useState(false)
     const [mainProgressUpload, setMainProgressUpload] = useState(0)
 
+    const [defaultName, setDefaultName] = useState('')
     const [removeImage, setRemoveImage] = useState<number[]>([])
     const [locationData, setLocationData] = useState<object>({
         location: '',
@@ -176,8 +177,8 @@ export default function EditStore() {
         category_id: null,
         store_name: '',
         store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FFc71O5zaIAEsFzE.png?alt=media&token=781cb1e2-2044-4bf2-8038-b8b841413915",
-        table_booking: null,
-        max_people_booking: null,
+        table_booking: 0,
+        max_people_booking: 0,
         sum_rating: null,
         store_description: '',
         latitude: 13.8920878,
@@ -188,10 +189,19 @@ export default function EditStore() {
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
-        setFormData((prevData: any) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        if (name === "max_people_booking" || name === "table_booking") {
+            const intValue = parseInt(value, 10)
+            setFormData((prevData: any) => ({
+                ...prevData,
+                [name]: intValue,
+            }));
+        } else {
+            setFormData((prevData: any) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
+
         console.log(name);
         console.log(value);
         console.log(formData);
@@ -216,7 +226,47 @@ export default function EditStore() {
         e.preventDefault();
         console.log(formData);
         const checkStoreNameRes = await checkStoreByName(formData.store_name)
-        if (checkStoreNameRes) {
+        if (formData.store_name != defaultName) {
+            if (!checkStoreNameRes) {
+                const userData = localStorage.getItem("userData")
+                const userDataJson = JSON.parse(userData || "[]");
+
+                const editRes = await editStore(userDataJson.user_id, formData)
+                console.log(editRes);
+
+                for (const openTimeObject of formData.OpenTimes) {
+                    const editOpenTimeRes = await editOpenTime(openTimeObject.openTime_id, openTimeObject)
+                }
+
+                const newmenuImageData = menuData.filter(item => item.data_type !== "old");
+                const newSubImageData = subImageData.filter(item => item.data_type !== "old");
+
+                console.log(newmenuImageData);
+                console.log(newSubImageData);
+
+                for (const menuImageObject of newmenuImageData) {
+                    const menuImageWithStoreId = {
+                        store_id: menuImageObject.store_id,
+                        store_image_name: menuImageObject.store_image_name,
+                        store_image_type: menuImageObject.store_image_type
+                    }
+                    await createStoreImage(menuImageWithStoreId)
+                }
+
+                for (const subImageObject of newSubImageData) {
+                    const subImageWithStoreId = {
+                        store_id: subImageObject.store_id,
+                        store_image_name: subImageObject.store_image_name,
+                        store_image_type: subImageObject.store_image_type
+                    }
+                    await createStoreImage(subImageWithStoreId)
+                }
+                // window.location.replace('/profile')
+            } else {
+                // setCreateError("มีร้านค้าชื่อนี้แล้ว")
+                console.log("error");
+            }
+        } else{
             const userData = localStorage.getItem("userData")
             const userDataJson = JSON.parse(userData || "[]");
 
@@ -228,7 +278,10 @@ export default function EditStore() {
             }
 
             const newmenuImageData = menuData.filter(item => item.data_type !== "old");
-            const newSubImageData = menuData.filter(item => item.data_type !== "old");
+            const newSubImageData = subImageData.filter(item => item.data_type !== "old");
+
+            console.log(newmenuImageData);
+                console.log(newSubImageData);
 
             for (const menuImageObject of newmenuImageData) {
                 const menuImageWithStoreId = {
@@ -240,18 +293,16 @@ export default function EditStore() {
             }
 
             for (const subImageObject of newSubImageData) {
-                const menuImageWithStoreId = {
+                const subImageWithStoreId = {
                     store_id: subImageObject.store_id,
                     store_image_name: subImageObject.store_image_name,
                     store_image_type: subImageObject.store_image_type
                 }
-                await createStoreImage(menuImageWithStoreId)
+                await createStoreImage(subImageWithStoreId)
             }
             // window.location.replace('/profile')
-        } else {
-            setCreateError("มีร้านค้าชื่อนี้แล้ว")
-            console.log("error");
         }
+
 
     };
 
@@ -265,36 +316,50 @@ export default function EditStore() {
 
         if (data) {
             setFormData(data)
+            setDefaultName(data.store_name)
             console.log(data);
         }
+        const menuImage = await GetStoreImageByType(userDataJson.store_id, "ภาพเมนู")
+        const subImage = await GetStoreImageByType(userDataJson.store_id, "ภาพประกอบ")
+
+        console.log(menuImage);
+        console.log(subImage);
 
         const menuImageArray = []
         const subImageArray = []
-        for (const menuImageObject of menuImageTemp) {
-            const newMenuImage = {
-                store_id: menuImageObject.store_id,
-                store_image_name: menuImageObject.store_image_name,
-                store_image_type: menuImageObject.store_image_type,
-                data_type: "old"
-            }
-            menuImageArray.push(newMenuImage)
 
+        if (menuImage.lenght != 0) {
+
+            for (const menuImageObject of menuImage) {
+                const newMenuImage = {
+                    store_id: menuImageObject.store_id,
+                    store_image_name: menuImageObject.store_image_name,
+                    store_image_type: menuImageObject.store_image_type,
+                    data_type: "old"
+                }
+                menuImageArray.push(newMenuImage)
+
+            }
         }
 
-        for (const subImageObject of subImageTemp) {
-            const newSubImage = {
-                store_id: subImageObject.store_id,
-                store_image_name: subImageObject.store_image_name,
-                store_image_type: subImageObject.store_image_type,
-                data_type: "old"
-            }
-            subImageArray.push(newSubImage)
+        if (subImage.lenght != 0) {
+            for (const subImageObject of subImage) {
+                const newSubImage = {
+                    store_id: subImageObject.store_id,
+                    store_image_name: subImageObject.store_image_name,
+                    store_image_type: subImageObject.store_image_type,
+                    data_type: "old"
+                }
+                subImageArray.push(newSubImage)
 
+            }
         }
+
+
         setMenuData(menuImageArray)
         setSubImageData(subImageArray)
-        setMainImage(data.store_image_name)
-    
+        setMainImage(data.store_cover_image)
+
 
     };
 
@@ -572,7 +637,7 @@ export default function EditStore() {
                         setMainImage(url)
                         setIsMainImageUpload(false)
 
-                        setFormData({ ...formData, store_image_name: url });
+                        setFormData({ ...formData, store_cover_image: url });
                     })
                 },
             )
@@ -583,18 +648,18 @@ export default function EditStore() {
 
     useEffect(() => {
         if (formData.store_id === null) {
-            // fetchData();
-            fetchTempData()
-        } else{
+            fetchData();
+            // fetchTempData()
+        } else {
             setFormData({
-            ...formData,
-            location: locationData.location,
-            latitude: locationData.latitude,
-            longitude: locationData.longitude,
-        });
+                ...formData,
+                location: locationData.location,
+                latitude: locationData.latitude,
+                longitude: locationData.longitude,
+            });
         }
 
-        
+
     }, [locationData]);
 
     return (
@@ -690,7 +755,7 @@ export default function EditStore() {
                                                         <Select
                                                             labelId="demo-simple-select-label"
                                                             id="category_id"
-                                                            name="category_id   "
+                                                            name="category_id"
                                                             value={formData.category_id}
                                                             label="เลิอกโค้ตส่วนลด"
                                                             onChange={handleChange}
@@ -709,6 +774,7 @@ export default function EditStore() {
                                                     </Typography>
                                                     <TextField required
                                                         fullWidth
+                                                        type="number"
                                                         id="table_booking"
                                                         name="table_booking"
                                                         label="table_booking"
@@ -724,6 +790,7 @@ export default function EditStore() {
                                                     </Typography>
                                                     <TextField required
                                                         fullWidth
+                                                        type="number"
                                                         id="max_people_booking"
                                                         name="max_people_booking"
                                                         label="max_people_booking"

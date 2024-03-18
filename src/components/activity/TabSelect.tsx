@@ -266,7 +266,7 @@ export default function TabSelect() {
               <ListItem>
                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
                   <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
+                    <ListItemText primary={item.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
                     <Stack direction="row" spacing={1}>
                       <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
                     </Stack>
@@ -326,7 +326,7 @@ export default function TabSelect() {
               <ListItem>
                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
                   <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText primary={item.store.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
+                    <ListItemText primary={item.store_name} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
                     <Stack direction="row" spacing={1}>
                       <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
                     </Stack>
