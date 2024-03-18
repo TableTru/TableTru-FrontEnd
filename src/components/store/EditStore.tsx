@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { Image, Textarea } from "@nextui-org/react";
 import {
     Tabs,
     Tab,
@@ -34,6 +33,7 @@ import {
     MenuItem,
     Select,
     FormControl,
+    ListItemIcon,
 
 
 } from "@mui/material";
@@ -50,11 +50,13 @@ import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CreateStoreDetail from "@/components/store/CreateStoreDetail";
-import ImageUpload from "@/components/store/ImageUpload";
 import Map from "@/components/Map";
 import dayjs, { Dayjs } from 'dayjs';
 import { getStoreById, editStore, editOpenTime } from '@/services/store.service'
 import { Loader } from '@googlemaps/js-api-loader';
+import { Input, message, Image, Progress, } from 'antd'
+import { storage } from '@/services/firebaseConfig'
+import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 
 const loader = new Loader({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -121,26 +123,52 @@ const storeTemp: object =
     ]
 }
 
-const storeImageTemp: StoreImage[] = [
+const menuImageTemp: StoreImage[] = [
     {
         store_image_id: 1,
         store_id: 1,
-        store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
-        store_image_type: "ภาพปกร้าน"
+        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FScreenshot%202024-02-14%20001400.png?alt=media&token=add73e3c-5097-40a0-ae85-7f0168423ca6",
+        store_image_type: "ภาพเมนู"
     },
     {
         store_image_id: 1,
         store_id: 1,
-        store_image_name: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
-        store_image_type: "ภาพปกร้าน"
+        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FScreenshot%202024-02-14%20001400.png?alt=media&token=add73e3c-5097-40a0-ae85-7f0168423ca6",
+        store_image_type: "ภาพเมนู"
+    },
+]
+
+const subImageTemp: StoreImage[] = [
+    {
+        store_image_id: 1,
+        store_id: 1,
+        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FScreenshot%202024-02-14%20001400.png?alt=media&token=add73e3c-5097-40a0-ae85-7f0168423ca6",
+        store_image_type: "ภาพประกอบ"
+    },
+    {
+        store_image_id: 1,
+        store_id: 1,
+        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FScreenshot%202024-02-14%20001400.png?alt=media&token=add73e3c-5097-40a0-ae85-7f0168423ca6",
+        store_image_type: "ภาพประกอบ"
     },
 ]
 
 export default function EditStore() {
+    const [menuUploading, setMenuUploading] = useState(false)
+    const [subImageUpload, setSubImageUpload] = useState(false)
+    const [menuProgressUpload, setProgressUpload] = useState(0)
+    const [subImageProgressUpload, setSubImageProgressUpload] = useState(0)
+    const [menuData, setMenuData] = useState<StoreImage[]>([])
+    const [subImageData, setSubImageData] = useState<StoreImage[]>([])
+    const [mainImage, setMainImage] = useState('')
+    const [isMainImageUpload, setIsMainImageUpload] = useState(false)
+    const [mainProgressUpload, setMainProgressUpload] = useState(0)
+
     const [formData, setFormData] = useState<any>({
         store_id: null,
         category_id: null,
         store_name: '',
+        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FFc71O5zaIAEsFzE.png?alt=media&token=781cb1e2-2044-4bf2-8038-b8b841413915",
         table_booking: null,
         max_people_booking: null,
         sum_rating: null,
@@ -222,6 +250,9 @@ export default function EditStore() {
 
     const fetchTempData = async () => {
         setFormData(storeTemp)
+        setMenuData(menuImageTemp)
+        setSubImageData(subImageTemp)
+        setMainImage("https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FFc71O5zaIAEsFzE.png?alt=media&token=781cb1e2-2044-4bf2-8038-b8b841413915")
     };
 
     const mapRef = useRef<HTMLDivElement>(null);
@@ -305,9 +336,159 @@ export default function EditStore() {
 
     };
 
+    const handleSelectedMenuImage = (files: any) => {
+        if (files && files[0].size < 10000000) {
+            const imageFile = files[0]
+            const name = imageFile.name
+            const storageRef = ref(storage, `image/${name}`)
+            const uploadTask = uploadBytesResumable(storageRef, imageFile)
+
+            setMenuUploading(true)
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+                    setProgressUpload(progress) // to show progress upload
+
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused')
+                            break
+                        case 'running':
+                            console.log('Upload is running')
+                            break
+                    }
+                },
+                (error) => {
+                    message.error(error.message)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        const userData = localStorage.getItem("userData")
+                        const userDataJson = JSON.parse(userData || "[]");
+                        //url is download url of file
+                        const newUrl = { id: menuData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพเมนู" };
+                        console.log(newUrl);
+
+                        setMenuData([...menuData, newUrl])
+                        setMenuUploading(false)
+                    })
+                },
+            )
+        } else {
+            message.error('File size too large')
+        }
+    }
+
+    const removeMenuImage = (urlToDelete: string) => {
+        console.log(urlToDelete);
+        const newArray = menuData.filter(item => item.store_image_name !== urlToDelete);
+        setMenuData(newArray)
+    }
+
+    const handleSelectedSubImage = (files: any) => {
+        if (files && files[0].size < 10000000) {
+            const imageFile = files[0]
+            const name = imageFile.name
+            const storageRef = ref(storage, `image/${name}`)
+            const uploadTask = uploadBytesResumable(storageRef, imageFile)
+
+            setSubImageUpload(true)
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+                    setSubImageProgressUpload(progress) // to show progress upload
+
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused')
+                            break
+                        case 'running':
+                            console.log('Upload is running')
+                            break
+                    }
+                },
+                (error) => {
+                    message.error(error.message)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        const userData = localStorage.getItem("userData")
+                        const userDataJson = JSON.parse(userData || "[]");
+                        //url is download url of file
+                        const newUrl = { id: subImageData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพประกอบ" };
+                        console.log(newUrl);
+
+                        setSubImageData([...subImageData, newUrl])
+                        setSubImageUpload(false)
+                    })
+                },
+            )
+        } else {
+            message.error('File size too large')
+        }
+    }
+
+    const removeSubImage = (urlToDelete: string) => {
+        console.log(urlToDelete);
+        const newArray = subImageData.filter(item => item.store_image_name !== urlToDelete);
+        setSubImageData(newArray)
+    }
+
+    const handleSelectedMainImage = async (files: any) => {
+        if (files && files[0].size < 10000000) {
+            const name = files[0].name
+            const storageRef = ref(storage, `image/${name}`)
+            const uploadTask = uploadBytesResumable(storageRef, files[0])
+
+            setIsMainImageUpload(true)
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+                    setMainProgressUpload(progress) // to show progress upload
+
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused')
+                            break
+                        case 'running':
+                            console.log('Upload is running')
+                            break
+                    }
+                },
+                (error) => {
+                    message.error(error.message)
+                    setIsMainImageUpload(false)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        //url is download url of file
+                        setMainImage(url)
+                        setIsMainImageUpload(false)
+
+                        setFormData({ ...formData, store_image_name: url });
+                    })
+                },
+            )
+        } else {
+            message.error('File size too large')
+        }
+    }
+
     useEffect(() => {
-        fetchData();
-        // fetchTempData()
+        // fetchData();
+        fetchTempData()
     }, []);
 
     return (
@@ -385,12 +566,6 @@ export default function EditStore() {
                                 </Grid>
 
                                 <Grid item xs={12}>
-                                    <Typography variant="subtitle1">อัปโหลดเมนู</Typography>
-                                    {/* <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" /> */}
-                                    <ImageUpload />
-                                </Grid>
-
-                                <Grid item xs={12}>
                                     <Accordion>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
@@ -422,14 +597,6 @@ export default function EditStore() {
 
                                                 </Grid>
 
-                                                <Grid item xs={12}>
-                                                    <Typography variant="subtitle1">
-                                                        แก้ไขรูปภาพ
-                                                    </Typography>
-                                                    {/* <Image src="https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium" /> */}
-                                                    <ImageUpload />
-                                                </Grid>
-
                                                 <Grid item xs={6}>
                                                     <Typography variant="subtitle1">
                                                         จำนวนโต๊ะที่เปิดให้จอง
@@ -458,6 +625,117 @@ export default function EditStore() {
                                                         value={formData.max_people_booking}
                                                         onChange={handleChange}
                                                     />
+                                                </Grid>
+
+                                                <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">รูปภาพปกร้าน</Typography>
+                                                    <div className="container mt-5">
+                                                        <div className="col-lg-8 offset-lg-2">
+                                                            <Input
+                                                                type="file"
+                                                                placeholder="Select file to upload"
+                                                                accept="image/png"
+                                                                onChange={(files) => handleSelectedMainImage(files.target.files)}
+                                                            />
+                                                            {isMainImageUpload && <Progress percent={mainProgressUpload} />}
+
+                                                            {mainImage && (
+                                                                <>
+                                                                    <Image
+                                                                        src={mainImage}
+                                                                        alt={mainImage}
+                                                                        style={{ width: "100%", height: 200, objectFit: 'cover' }}
+                                                                    />
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </Grid>
+
+                                                <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">อัปโหลดเมนู</Typography>
+                                                    <div className="container mt-5">
+                                                        <div className="col-lg-8 offset-lg-2">
+                                                            <Box >
+                                                                <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+                                                                    <Input
+                                                                        type="file"
+                                                                        placeholder="Select file to upload"
+                                                                        accept="image/png"
+                                                                        onChange={(files) => handleSelectedMenuImage(files.target.files)}
+                                                                    />
+                                                                </Box>
+
+                                                                <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+                                                                    {menuUploading && <Progress percent={menuProgressUpload} />}
+                                                                </Box>
+                                                            </Box>
+
+                                                            <List>
+                                                                {menuData.map((item, index) => (
+                                                                    <ListItem key={index}>
+                                                                        <ListItemAvatar>
+                                                                            <Image
+                                                                                key={index}
+                                                                                src={item.store_image_name}
+                                                                                alt={item.store_image_name}
+                                                                                style={{ width: 100, height: 100, objectFit: 'cover' }}
+                                                                            />
+                                                                        </ListItemAvatar>
+                                                                        <ListItemText primary={item.store_image_name} />
+                                                                        <ListItemIcon>
+                                                                            <Button onClick={() => removeMenuImage(item.store_image_name)} size="small">Remove</Button>
+                                                                        </ListItemIcon>
+                                                                    </ListItem>
+                                                                ))}
+                                                            </List>
+                                                        </div>
+                                                    </div>
+                                                </Grid>
+
+                                                <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">
+                                                        รูปภาพประกอบ
+                                                    </Typography>
+                                                    <div className="container mt-5">
+                                                        <div className="col-lg-8 offset-lg-2">
+                                                            <Box >
+                                                                <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+                                                                    <Input
+                                                                        type="file"
+                                                                        placeholder="Select file to upload"
+                                                                        accept="image/png"
+                                                                        onChange={(files) => handleSelectedSubImage(files.target.files)}
+                                                                    />
+                                                                </Box>
+
+                                                                <Box sx={{ width: '50%', display: 'flex', flexDirection: 'row' }}>
+                                                                    {subImageUpload && <Progress percent={subImageProgressUpload} />}
+                                                                </Box>
+                                                            </Box>
+
+                                                            <List>
+                                                                {subImageData.map((item, index) => (
+                                                                    <ListItem key={index}>
+                                                                        <ListItemAvatar>
+                                                                            <Image
+                                                                                key={index}
+                                                                                src={item.store_image_name}
+                                                                                alt={item.store_image_name}
+                                                                                style={{ width: 100, height: 100, objectFit: 'cover' }}
+                                                                            />
+                                                                        </ListItemAvatar>
+                                                                        <ListItemText primary={item.store_image_name} />
+                                                                        <ListItemIcon>
+                                                                            <Button onClick={() => removeSubImage(item.store_image_name)} size="small">Remove</Button>
+                                                                        </ListItemIcon>
+                                                                    </ListItem>
+                                                                ))}
+                                                            </List>
+
+                                                        </div>
+                                                    </div>
+
                                                 </Grid>
                                             </Grid>
                                             <Grid item xs={12} sx={{ marginTop: 3 }}>
