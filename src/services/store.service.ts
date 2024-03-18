@@ -103,6 +103,16 @@ export const getStorePreview = async () => {
   });
 }
 
+export const createStoreImage = async (data: any) => {
+  console.log(data);
+  return await axios.post(url + '/storeImages/', data).then((res: AxiosResponse) => {
+    return res;
+  }).catch((err: { response: { data: any; }; }) => {
+    console.log("err: ", err.response);
+    return err?.response?.data ? err?.response?.data : {};
+  });
+}
+
 function catchError(error: any, path: any, func: any): void {
   try {
     return;

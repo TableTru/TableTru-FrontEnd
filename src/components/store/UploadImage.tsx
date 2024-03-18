@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
 import React, { useState } from 'react'
 import { storage } from '@/services/firebaseConfig'
+import { createStoreImage } from '@/services/store.service'
 
 interface StoreImage {
   id: number;
@@ -16,7 +17,7 @@ interface StoreImage {
 
 const UploadImageToStorage = () => {
   const [menuUploading, setMenuUploading] = useState(false)
-  const [subImageUpload, setSubImageUpload]  = useState(false)
+  const [subImageUpload, setSubImageUpload] = useState(false)
   const [menuProgressUpload, setProgressUpload] = useState(0)
   const [subImageProgressUpload, setSubImageProgressUpload] = useState(0)
   const [menuData, setMenuData] = useState<StoreImage[]>([])
@@ -54,11 +55,11 @@ const UploadImageToStorage = () => {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             const userData = localStorage.getItem("userData")
-        const userDataJson = JSON.parse(userData || "[]");
+            const userDataJson = JSON.parse(userData || "[]");
             //url is download url of file
             const newUrl = { id: menuData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพเมนู" };
             console.log(newUrl);
-            
+
             setMenuData([...menuData, newUrl])
             setMenuUploading(false)
           })
@@ -90,7 +91,7 @@ const UploadImageToStorage = () => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
 
-            setSubImageProgressUpload(progress) // to show progress upload
+          setSubImageProgressUpload(progress) // to show progress upload
 
           switch (snapshot.state) {
             case 'paused':
@@ -107,11 +108,11 @@ const UploadImageToStorage = () => {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             const userData = localStorage.getItem("userData")
-        const userDataJson = JSON.parse(userData || "[]");
+            const userDataJson = JSON.parse(userData || "[]");
             //url is download url of file
             const newUrl = { id: subImageData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพประกอบ" };
             console.log(newUrl);
-            
+
             setSubImageData([...subImageData, newUrl])
             setSubImageUpload(false)
           })
@@ -128,7 +129,27 @@ const UploadImageToStorage = () => {
     setSubImageData(newArray)
   }
 
-  
+  const handleSubmitImage = async (storeId:number) => {
+    for (const menuImageObject of menuData) {
+      const menuImageWithStoreId = {
+        store_id: storeId,
+        store_image_name: menuImageObject.store_image_name,
+        store_image_type: menuImageObject.store_image_type
+      }
+      await createStoreImage(menuImageWithStoreId)
+    }
+
+    for (const subImageObject of subImageData) {
+      const menuImageWithStoreId = {
+        store_id: storeId,
+        store_image_name: subImageObject.store_image_name,
+        store_image_type: subImageObject.store_image_type
+      }
+      await createStoreImage(menuImageWithStoreId)
+    }
+  }
+
+
 
   return (
     <div className="container mt-5">
