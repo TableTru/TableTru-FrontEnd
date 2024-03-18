@@ -126,8 +126,8 @@ export default function CreateStore() {
     const [formData, setFormData] = useState<any>({
         category_id: null,
         store_name: '',
-        table_booking: null,
-        max_people_booking: null,
+        table_booking: 0,
+        max_people_booking: 0,
         sum_rating: null,
         store_description: '',
         latitude: null,
@@ -139,10 +139,18 @@ export default function CreateStore() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        if (name === "max_people_booking" || name === "table_booking") {
+            const intValue = parseInt(value, 10)
+            setFormData((prevData: any) => ({
+                ...prevData,
+                [name]: intValue,
+            }));
+        } else {
+            setFormData((prevData: any) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
         console.log(name);
         console.log(value);
         // console.log(formData.OpenTimes);
@@ -179,12 +187,12 @@ export default function CreateStore() {
             formData.latitude !== null &&
             formData.longitude !== null &&
             formData.location !== "" &&
-            formData.store_image_name !== ""
+            formData.store_cover_image !== ""
         ) {
             const checkStoreNameRes = await checkStoreByName(formData.store_name)
             if (checkStoreNameRes) {
-                // const createStoreRes = await createStore(formData)
-                const createStoreRes = { store_id: 1 }
+                const createStoreRes = await createStore(formData)
+                // const createStoreRes = { store_id: 1 }
                 const userData = localStorage.getItem("userData")
                 const userDataJson = JSON.parse(userData || "[]");
                 const newUserData = {
@@ -194,22 +202,28 @@ export default function CreateStore() {
                 }
                 await editUser(userDataJson.user_id, newUserData)
 
-                for (const menuImageObject of menuData) {
+                const newmenuImageData = menuData.filter(item => item.data_type !== "old");
+                const newSubImageData = subImageData.filter(item => item.data_type !== "old");
+
+                console.log(newmenuImageData);
+                console.log(newSubImageData);
+
+                for (const menuImageObject of newmenuImageData) {
                     const menuImageWithStoreId = {
-                        store_id: createStoreRes.store_id,
+                        store_id: menuImageObject.store_id,
                         store_image_name: menuImageObject.store_image_name,
                         store_image_type: menuImageObject.store_image_type
                     }
                     await createStoreImage(menuImageWithStoreId)
                 }
 
-                for (const subImageObject of subImageData) {
-                    const menuImageWithStoreId = {
-                        store_id: createStoreRes.store_id,
+                for (const subImageObject of newSubImageData) {
+                    const subImageWithStoreId = {
+                        store_id: subImageObject.store_id,
                         store_image_name: subImageObject.store_image_name,
                         store_image_type: subImageObject.store_image_type
                     }
-                    await createStoreImage(menuImageWithStoreId)
+                    await createStoreImage(subImageWithStoreId)
                 }
 
                 // window.location.replace('/profile')
@@ -462,7 +476,7 @@ export default function CreateStore() {
                         setMainImage(url)
                         setIsMainImageUpload(false)
 
-                        setFormData({ ...formData, store_image_name: url });
+                        setFormData({ ...formData, store_cover_image: url });
                     })
                 },
             )
@@ -472,7 +486,7 @@ export default function CreateStore() {
     }
 
     useEffect(() => {
-            setFormData({
+        setFormData({
             ...formData,
             location: locationData.location,
             latitude: locationData.latitude,
@@ -602,6 +616,7 @@ export default function CreateStore() {
                                                     </Typography>
                                                     <TextField required
                                                         fullWidth
+                                                        type="number"
                                                         id="table_booking"
                                                         name="table_booking"
                                                         label="table_booking"
@@ -617,6 +632,7 @@ export default function CreateStore() {
                                                     </Typography>
                                                     <TextField required
                                                         fullWidth
+                                                        type="number"
                                                         id="max_people_booking"
                                                         name="max_people_booking"
                                                         label="max_people_booking"

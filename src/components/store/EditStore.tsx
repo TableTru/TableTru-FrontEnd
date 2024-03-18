@@ -184,7 +184,11 @@ export default function EditStore() {
         latitude: 13.8920878,
         longitude: 100.5267991,
         location: '50 ถนน งามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900 ประเทศไทย',
-        OpenTimes: [],
+        OpenTimes: [{
+            day: 'วันจันทร์',
+            open_time: '2024-02-23 15:44:29',
+            close_time: '2022-04-17T15:30',
+        }],
     })
 
     const handleChange = (e: any) => {
