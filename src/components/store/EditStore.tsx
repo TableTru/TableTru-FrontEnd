@@ -77,6 +77,7 @@ const storeTemp: object =
     category_id: 1,
     location_id: 1,
     store_name: "ร้านค้าของฉัน",
+    store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FFc71O5zaIAEsFzE.png?alt=media&token=781cb1e2-2044-4bf2-8038-b8b841413915",
     store_description: 'hahahahahahahahahaha',
     table_booking: 4,
     max_people_booking: 10,
@@ -131,9 +132,9 @@ const menuImageTemp: StoreImage[] = [
         store_image_type: "ภาพเมนู"
     },
     {
-        store_image_id: 1,
+        store_image_id: 2,
         store_id: 1,
-        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FScreenshot%202024-02-14%20001400.png?alt=media&token=add73e3c-5097-40a0-ae85-7f0168423ca6",
+        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FFc71O5zaIAEsFzE.png?alt=media&token=781cb1e2-2044-4bf2-8038-b8b841413915",
         store_image_type: "ภาพเมนู"
     },
 ]
@@ -146,9 +147,9 @@ const subImageTemp: StoreImage[] = [
         store_image_type: "ภาพประกอบ"
     },
     {
-        store_image_id: 1,
+        store_image_id: 2,
         store_id: 1,
-        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FScreenshot%202024-02-14%20001400.png?alt=media&token=add73e3c-5097-40a0-ae85-7f0168423ca6",
+        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FFc71O5zaIAEsFzE.png?alt=media&token=781cb1e2-2044-4bf2-8038-b8b841413915",
         store_image_type: "ภาพประกอบ"
     },
 ]
@@ -158,11 +159,13 @@ export default function EditStore() {
     const [subImageUpload, setSubImageUpload] = useState(false)
     const [menuProgressUpload, setProgressUpload] = useState(0)
     const [subImageProgressUpload, setSubImageProgressUpload] = useState(0)
-    const [menuData, setMenuData] = useState<StoreImage[]>([])
-    const [subImageData, setSubImageData] = useState<StoreImage[]>([])
+    const [menuData, setMenuData] = useState<object[]>([])
+    const [subImageData, setSubImageData] = useState<object[]>([])
     const [mainImage, setMainImage] = useState('')
     const [isMainImageUpload, setIsMainImageUpload] = useState(false)
     const [mainProgressUpload, setMainProgressUpload] = useState(0)
+
+    const [removeImage, setRemoveImage] = useState<number[]>([])
 
     const [formData, setFormData] = useState<any>({
         store_id: null,
@@ -218,6 +221,13 @@ export default function EditStore() {
             const editOpenTimeRes = await editOpenTime(openTimeObject.openTime_id, openTimeObject)
         }
 
+        const newmenuData = menuData.filter(item => item.data_type !== "old");
+
+
+        console.log(removeImage);
+        console.log(menuData);
+        console.log(newmenuData);
+
         // window.location.replace('/profile')
     };
 
@@ -249,9 +259,32 @@ export default function EditStore() {
     };
 
     const fetchTempData = async () => {
+        const menuImageArray = []
+        const subImageArray = []
+        for (const menuImageObject of menuImageTemp) {
+            const newMenuImage = {
+                store_id: menuImageObject.store_id,
+                store_image_name: menuImageObject.store_image_name,
+                store_image_type: menuImageObject.store_image_type,
+                data_type: "old"
+            }
+            menuImageArray.push(newMenuImage)
+
+        }
+
+        for (const subImageObject of subImageTemp) {
+            const newSubImage = {
+                store_id: subImageObject.store_id,
+                store_image_name: subImageObject.store_image_name,
+                store_image_type: subImageObject.store_image_type,
+                data_type: "old"
+            }
+            subImageArray.push(newSubImage)
+
+        }
+        setMenuData(menuImageArray)
         setFormData(storeTemp)
-        setMenuData(menuImageTemp)
-        setSubImageData(subImageTemp)
+        setSubImageData(subImageArray)
         setMainImage("https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FFc71O5zaIAEsFzE.png?alt=media&token=781cb1e2-2044-4bf2-8038-b8b841413915")
     };
 
@@ -269,7 +302,7 @@ export default function EditStore() {
                     center: { lat: formData.latitude, lng: formData.longitude }, // ตำแหน่งเริ่มต้นที่กรุงเทพมหานคร,
                     zoom: 12,
                 });
-            
+
                 const geocoder = new google.maps.Geocoder();
                 const latLng = new google.maps.LatLng(formData.latitude, formData.longitude);
                 geocoder.geocode({ 'location': latLng }, (results, status) => {
@@ -370,7 +403,7 @@ export default function EditStore() {
                         const userData = localStorage.getItem("userData")
                         const userDataJson = JSON.parse(userData || "[]");
                         //url is download url of file
-                        const newUrl = { id: menuData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพเมนู" };
+                        const newUrl = { id: menuData.length + 1, store_id: formData.store_id ,name: name, store_image_name: `${url}`, store_image_type: "ภาพเมนู", data_type: "new" };
                         console.log(newUrl);
 
                         setMenuData([...menuData, newUrl])
@@ -383,10 +416,17 @@ export default function EditStore() {
         }
     }
 
-    const removeMenuImage = (urlToDelete: string) => {
-        console.log(urlToDelete);
-        const newArray = menuData.filter(item => item.store_image_name !== urlToDelete);
-        setMenuData(newArray)
+    const removeMenuImage = (image: object) => {
+        console.log(image);
+        if (image.data_type == "old") {
+            const newArray = menuData.filter(item => item.store_image_name !== image.store_image_name);
+            setRemoveImage([...removeImage, image.store_id])
+            setMenuData(newArray)
+        } else {
+            const newArray = menuData.filter(item => item.store_image_name !== image.store_image_name);
+            setMenuData(newArray)
+        }
+
     }
 
     const handleSelectedSubImage = (files: any) => {
@@ -423,7 +463,7 @@ export default function EditStore() {
                         const userData = localStorage.getItem("userData")
                         const userDataJson = JSON.parse(userData || "[]");
                         //url is download url of file
-                        const newUrl = { id: subImageData.length + 1, name: name, store_image_name: `${url}`, store_image_type: "ภาพประกอบ" };
+                        const newUrl = { id: subImageData.length + 1, store_id: formData.store_id, name: name, store_image_name: `${url}`, store_image_type: "ภาพประกอบ", data_type: "new" };
                         console.log(newUrl);
 
                         setSubImageData([...subImageData, newUrl])
@@ -436,10 +476,16 @@ export default function EditStore() {
         }
     }
 
-    const removeSubImage = (urlToDelete: string) => {
-        console.log(urlToDelete);
-        const newArray = subImageData.filter(item => item.store_image_name !== urlToDelete);
-        setSubImageData(newArray)
+    const removeSubImage = (image: object) => {
+        
+        if (image.data_type == "old") {
+            const newArray = subImageData.filter(item => item.store_image_name !== image.store_image_name);
+            setSubImageData(newArray)
+            setRemoveImage([...removeImage, image.store_id])
+        } else {
+            const newArray = subImageData.filter(item => item.store_image_name !== image.store_image_name);
+            setSubImageData(newArray)
+        }
     }
 
     const handleSelectedMainImage = async (files: any) => {
@@ -684,7 +730,7 @@ export default function EditStore() {
                                                                         </ListItemAvatar>
                                                                         <ListItemText primary={item.store_image_name} />
                                                                         <ListItemIcon>
-                                                                            <Button onClick={() => removeMenuImage(item.store_image_name)} size="small">Remove</Button>
+                                                                            <Button onClick={() => removeMenuImage(item)} size="small">Remove</Button>
                                                                         </ListItemIcon>
                                                                     </ListItem>
                                                                 ))}
@@ -727,7 +773,7 @@ export default function EditStore() {
                                                                         </ListItemAvatar>
                                                                         <ListItemText primary={item.store_image_name} />
                                                                         <ListItemIcon>
-                                                                            <Button onClick={() => removeSubImage(item.store_image_name)} size="small">Remove</Button>
+                                                                            <Button onClick={() => removeSubImage(item)} size="small">Remove</Button>
                                                                         </ListItemIcon>
                                                                     </ListItem>
                                                                 ))}
