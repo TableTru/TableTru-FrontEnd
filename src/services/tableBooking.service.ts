@@ -30,8 +30,8 @@ export const createTableBooking = async (data: any) => {
   });
 }
 
-export const editTableBooking = async (data: any) => {
-  return await axios.put(url + '/tableBookings/', data).then((res: AxiosResponse) => {
+export const editTableBooking = async (id: number, data: any) => {
+  return await axios.put(url + `/tableBookings/${id}`, data).then((res: AxiosResponse) => {
     return res.data;
   }).catch((err: { response: { data: any; }; }) => {
     console.log("err: ", err.response);

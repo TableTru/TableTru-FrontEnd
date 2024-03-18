@@ -39,6 +39,8 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
+import { getStoreBookingByStatus, getStoreBookingById, editTableBooking } from '@/services/tableBooking.service'
+
 interface StoreTableBooking {
     table_booking_id: number;
     store_id: number;
@@ -53,7 +55,7 @@ interface StoreTableBooking {
 const storeBookingTemp: StoreTableBooking[] = [
     {
         table_booking_id: 1,
-        store_id:1,
+        store_id: 1,
         user_id: 1,
         table_booking_status: 'ยังไม่ถึงกำหนด',
         table_booking_count: 4,
@@ -63,7 +65,7 @@ const storeBookingTemp: StoreTableBooking[] = [
     },
     {
         table_booking_id: 2,
-        store_id:1,
+        store_id: 1,
         user_id: 1,
         table_booking_status: 'อยู่ระหว่างดำเนินการ',
         table_booking_count: 2,
@@ -73,7 +75,7 @@ const storeBookingTemp: StoreTableBooking[] = [
     },
     {
         table_booking_id: 3,
-        store_id:1,
+        store_id: 1,
         user_id: 1,
         table_booking_status: 'เสร็จสิ้น',
         table_booking_count: 3,
@@ -83,7 +85,7 @@ const storeBookingTemp: StoreTableBooking[] = [
     },
     {
         table_booking_id: 4,
-        store_id:1,
+        store_id: 1,
         user_id: 1,
         table_booking_status: 'ยกเลิก',
         table_booking_count: 3,
@@ -96,49 +98,99 @@ const storeBookingTemp: StoreTableBooking[] = [
 
 export default function TableBooking() {
     const [value, setValue] = useState('1');
-    const [storeBookingData, setStoreBookingData] = useState<object[]>([])
-
     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     const timeOptions = { hour: 'numeric', minute: 'numeric' };
+
+    const [onGoingData, setOnGoingData] = useState<object[]>([])
+    const [historicalData, setHistoricalData] = useState<object[]>([])
+    const [bookingModalData, setBookingModalData] = useState<object>({
+        store_name: "",
+        table_booking_count: null,
+        table_booking_time: "",
+        latitude: null,
+        longitude: null,
+        promotion: "ส่วนลด 10%"
+
+    })
 
     const fetchData = async () => {
         const userData = localStorage.getItem("userData")
         const userDataJson = JSON.parse(userData || "[]");
 
-        // if (userData) {
-        //     const store_id = userDataJson.store_id
+        if (userData) {
+            const storeId = userDataJson.store_id
 
-        //     const tableBookingArray = [];
-        //     const data = await getTableBookingByStoreId(store_id);
+            const tableBookingArray = [];
+            const data = await getStoreBookingByStatus(storeId, "ยังไม่ถึงกำหนด");
 
-        //     if (data) {
-        //         for (const tableBookingObject of data) {
-        //             tableBookingArray.push(tableBookingObject);
-        //         }
-        //         setStoreBookingData(tableBookingArray);
-        //         console.log(tableBookingArray);
-        //     }
-        // }
+            if (data) {
+                for (const tableBookingObject of data) {
+                    const tableBookingTempWithDate = {
+                        ...tableBookingObject,
+                        table_booking_time: new Date(tableBookingObject.table_booking_time)
+                    };
+                    tableBookingArray.push(tableBookingTempWithDate);
+                }
+                setOnGoingData(tableBookingArray);
+                console.log(tableBookingArray);
+            }
 
-        const storeBookingTempWithDate = storeBookingTemp.map(booking => ({
-            ...booking,
-            table_booking_time: new Date(booking.table_booking_time),
-        }));
-        console.log(storeBookingTempWithDate);
-        //เอาไปใส่ใน loop ข้างบนทีหลัง
+            const historicalDataArray = [];
+            const historicalData = await getStoreBookingById(storeId);
 
+            if (historicalData) {
+                for (const tableBookingObject of historicalData) {
+                    const tableBookingTempWithDate = {
+                        ...tableBookingObject,
+                        table_booking_time: new Date(tableBookingObject.table_booking_time)
+                    };
+                    historicalDataArray.push(tableBookingTempWithDate);
+                }
 
-        for (const tableBookingObject of storeBookingTempWithDate) {
-            const diff = Math.abs(tableBookingObject.table_booking_time.getTime() - new Date().getTime());
-            const diffInHours = diff / (1000 * 60 * 60);
-
-            if (diffInHours >= 1) {
-                console.log("auto set booking status active");
+                setHistoricalData(historicalDataArray);
+                console.log(historicalDataArray);
             }
         }
+    };
 
+    const fetchTempData = async () => {
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
 
-        setStoreBookingData(storeBookingTempWithDate)
+        if (userData) {
+            const storeId = userDataJson.store_id
+
+            const tableBookingArray = [];
+            const data = storeBookingTemp
+
+            if (data) {
+                for (const tableBookingObject of data) {
+                    const tableBookingTempWithDate = {
+                        ...tableBookingObject,
+                        table_booking_time: new Date(tableBookingObject.table_booking_time)
+                    };
+                    tableBookingArray.push(tableBookingTempWithDate);
+                }
+                setOnGoingData(tableBookingArray);
+                console.log(tableBookingArray);
+            }
+
+            const historicalDataArray = [];
+            const historicalData = storeBookingTemp
+
+            if (historicalData) {
+                for (const tableBookingObject of historicalData) {
+                    const tableBookingTempWithDate = {
+                        ...tableBookingObject,
+                        table_booking_time: new Date(tableBookingObject.table_booking_time)
+                    };
+                    historicalDataArray.push(tableBookingTempWithDate);
+                }
+
+                setHistoricalData(historicalDataArray);
+                console.log(historicalDataArray);
+            }
+        }
     };
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -150,11 +202,11 @@ export default function TableBooking() {
             table_booking_id: tablebookingId,
             table_booking_status: 'เสร็จสิ้น'
         }
-        const updatedStoreBookingTemp = storeBookingData.filter(booking => booking.table_booking_id !== tablebookingId);
-        setStoreBookingData(updatedStoreBookingTemp);
+        const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebookingId);
+        setOnGoingData(updatedStoreBookingTemp);
 
-        // const updateBookingRes = tableBookingUpdateById(updateData)
-        // console.log(updateBookingRes);
+        const updateBookingRes = editTableBooking(tablebookingId, updateData)
+        console.log(updateBookingRes);
     }
 
     const cancleButton = (tablebookingId: number) => {
@@ -162,11 +214,11 @@ export default function TableBooking() {
             table_booking_id: tablebookingId,
             table_booking_status: 'ยกเลิก'
         }
-        const updatedStoreBookingTemp = storeBookingData.filter(booking => booking.table_booking_id !== tablebookingId);
-        setStoreBookingData(updatedStoreBookingTemp);
+        const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebookingId);
+        setOnGoingData(updatedStoreBookingTemp);
 
-        // const updateBookingRes = tableBookingUpdateById(updateData)
-        // console.log(updateBookingRes);
+        const updateBookingRes = editTableBooking(tablebookingId, updateData)
+        console.log(updateBookingRes);
     }
 
     const getStatusColor = (status: string) => {
@@ -184,108 +236,109 @@ export default function TableBooking() {
 
 
     useEffect(() => {
-        fetchData();
+        // fetchData();
+        fetchTempData()
     }, []);
 
     return (
         <>
-           
-                <Container component="main" maxWidth="md">
-                    <CssBaseline />
 
-                    <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
-                        <Typography component="h1" variant="h4">
-                            รายการจองโต๊ะ
-                        </Typography>
-                    </Box>
+            <Container component="main" maxWidth="md">
+                <CssBaseline />
 
-                    <Box sx={{ width: '100%', typography: 'body1' }}>
-                        <TabContext value={value}>
-                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                <TabList onChange={handleTabChange} textColor="primary" indicatorColor="primary" centered aria-label="lab API tabs example">
-                                    <Tab label="Ongoing" value="1" />
-                                    <Tab label="Historical" value="2" />
-                                </TabList>
+                <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                    <Typography component="h1" variant="h4">
+                        รายการจองโต๊ะ
+                    </Typography>
+                </Box>
 
-                            </Box>
+                <Box sx={{ width: '100%', typography: 'body1' }}>
+                    <TabContext value={value}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <TabList onChange={handleTabChange} textColor="primary" indicatorColor="primary" centered aria-label="lab API tabs example">
+                                <Tab label="Ongoing" value="1" />
+                                <Tab label="Historical" value="2" />
+                            </TabList>
 
-                            <Box sx={{ marginBottom: 8 }}>
-                                <TabPanel value="1">
-                                    <List>
-                                        {storeBookingData.map((item, index) => (
-                                            <Accordion key={index} >
-                                                <AccordionSummary
-                                                    expandIcon={<ExpandMoreIcon />}
-                                                    aria-controls={`panel${index}-content`}
-                                                    id={`panel${index}-header`}
-                                                >
-                                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                        <Typography>{item.username}</Typography>
-                                                        <Typography variant="subtitle1">เบอร์โทรศัพท์: {item.phone_num}</Typography>
-                                                        <Typography variant="subtitle1">จำนวนคน: {item.table_booking_count}</Typography>
-                                                        <Typography variant="subtitle1">เวลาจอง: {item.table_booking_time.toLocaleDateString(undefined, timeOptions)}</Typography>
-                                                    </Box>
-                                                </AccordionSummary>
-                                                {/* <AccordionDetails>
+                        </Box>
+
+                        <Box sx={{ marginBottom: 8 }}>
+                            <TabPanel value="1">
+                                <List>
+                                    {onGoingData.map((item, index) => (
+                                        <Accordion key={index} >
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls={`panel${index}-content`}
+                                                id={`panel${index}-header`}
+                                            >
+                                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <Typography>{item.username}</Typography>
+                                                    <Typography variant="subtitle1">เบอร์โทรศัพท์: {item.phone_num}</Typography>
+                                                    <Typography variant="subtitle1">จำนวนคน: {item.table_booking_count}</Typography>
+                                                    <Typography variant="subtitle1">เวลาจอง: {item.table_booking_time.toLocaleDateString(undefined, timeOptions)}</Typography>
+                                                </Box>
+                                            </AccordionSummary>
+                                            {/* <AccordionDetails>
                                                 <Typography>{item.time}</Typography>
                                             </AccordionDetails> */}
-                                                <AccordionActions>
-                                                    <Button
-                                                        fullWidth
-                                                        variant="outlined"
-                                                        sx={{ mt: 3, mb: 2 }}
-                                                        onClick={() => cancleButton(item.table_booking_id)}
-                                                    >
-                                                        ยกเลิก
-                                                    </Button>
-                                                    <Button
-                                                        fullWidth
-                                                        variant="contained"
-                                                        sx={{ mt: 3, mb: 2 }}
-                                                        onClick={() => finishButton(item.table_booking_id)}
-                                                    >
-                                                        เสร็จสิ้น
-                                                    </Button>
-                                                </AccordionActions>
-                                            </Accordion>
-                                        ))}
-                                    </List>
-                                </TabPanel>
+                                            <AccordionActions>
+                                                <Button
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    sx={{ mt: 3, mb: 2 }}
+                                                    onClick={() => cancleButton(item.table_booking_id)}
+                                                >
+                                                    ยกเลิก
+                                                </Button>
+                                                <Button
+                                                    fullWidth
+                                                    variant="contained"
+                                                    sx={{ mt: 3, mb: 2 }}
+                                                    onClick={() => finishButton(item.table_booking_id)}
+                                                >
+                                                    เสร็จสิ้น
+                                                </Button>
+                                            </AccordionActions>
+                                        </Accordion>
+                                    ))}
+                                </List>
+                            </TabPanel>
 
-                                <TabPanel value="2">
+                            <TabPanel value="2">
 
-                                    {storeBookingData.map((item, index) => (
-                                        <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                                            <ListItem>
-                                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
-                                                    <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
-                                                        <ListItemText primary={`${item.username} | ${item.phone_num}`} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
-                                                        <Stack direction="row" spacing={1}>
-                                                            <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
-                                                        </Stack>
-                                                    </Box>
+                                {historicalData.map((item, index) => (
+                                    <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                                        <ListItem>
+                                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+                                                <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
+                                                    <ListItemText primary={`${item.username} | ${item.phone_num}`} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
+                                                    <Stack direction="row" spacing={1}>
+                                                        <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
+                                                    </Stack>
+                                                </Box>
 
-                                                    {/* <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
+                                                {/* <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
                                                         <Button onClick={handleOpen}>
                                                             <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
                                                         </Button>
 
                                                     </Box> */}
-                                                </Box>
+                                            </Box>
 
-                                            </ListItem>
-                                        </List>
-                                    ))}
-                                </TabPanel>
-                            </Box>
-
-
-                        </TabContext>
-                    </Box>
+                                        </ListItem>
+                                    </List>
+                                ))}
+                            </TabPanel>
+                        </Box>
 
 
-                </Container>
-           
+                    </TabContext>
+                </Box>
+
+
+            </Container>
+
         </>
     );
 }
