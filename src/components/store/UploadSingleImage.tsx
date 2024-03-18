@@ -9,7 +9,7 @@ export default function UploadSingleImage() {
   const [isMainImageUpload, setIsMainImageUpload] = useState(false)
   const [mainProgressUpload, setMainProgressUpload] = useState(0)
 
-  const handleSelectedFile = async (files: any) => {
+  const handleSelectedMainImage = async (files: any) => {
     if (files && files[0].size < 10000000) {
       const name = files[0].name
       const storageRef = ref(storage, `image/${name}`)
@@ -58,7 +58,7 @@ export default function UploadSingleImage() {
           type="file"
           placeholder="Select file to upload"
           accept="image/png"
-          onChange={(files) => handleSelectedFile(files.target.files)}
+          onChange={(files) => handleSelectedMainImage(files.target.files)}
         />
         {isMainImageUpload && <Progress percent={mainProgressUpload} />}
 

@@ -113,6 +113,9 @@ export default function CreateStore() {
     const [subImageProgressUpload, setSubImageProgressUpload] = useState(0)
     const [menuData, setMenuData] = useState<StoreImage[]>([])
     const [subImageData, setSubImageData] = useState<StoreImage[]>([])
+    const [mainImage, setMainImage] = useState('')
+    const [isMainImageUpload, setIsMainImageUpload] = useState(false)
+    const [mainProgressUpload, setMainProgressUpload] = useState(0)
     const [formData, setFormData] = useState<any>({
         category_id: null,
         store_name: '',
@@ -123,6 +126,7 @@ export default function CreateStore() {
         latitude: null,
         longitude: null,
         location: '',
+        store_image_name: '',
         OpenTimes: OpenTimes,
     })
 
@@ -372,7 +376,52 @@ export default function CreateStore() {
         setSubImageData(newArray)
     }
 
+    const handleSelectedMainImage = async (files: any) => {
+        if (files && files[0].size < 10000000) {
+            const name = files[0].name
+            const storageRef = ref(storage, `image/${name}`)
+            const uploadTask = uploadBytesResumable(storageRef, files[0])
+
+            setIsMainImageUpload(true)
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+                    setMainProgressUpload(progress) // to show progress upload
+
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused')
+                            break
+                        case 'running':
+                            console.log('Upload is running')
+                            break
+                    }
+                },
+                (error) => {
+                    message.error(error.message)
+                    setIsMainImageUpload(false)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        //url is download url of file
+                        setMainImage(url)
+                        setIsMainImageUpload(false)
+
+                        setFormData({ ...formData, store_image_name: url });
+                    })
+                },
+            )
+        } else {
+            message.error('File size too large')
+        }
+    }
+
     const handleSubmitImage = async (storeId: number) => {
+
         for (const menuImageObject of menuData) {
             const menuImageWithStoreId = {
                 store_id: storeId,
@@ -542,6 +591,31 @@ export default function CreateStore() {
                                                 </Grid>
 
                                                 <Grid item xs={12}>
+                                                    <Typography variant="subtitle1">รูปภาพปกร้าน</Typography>
+                                                    <div className="container mt-5">
+                                                        <div className="col-lg-8 offset-lg-2">
+                                                            <Input
+                                                                type="file"
+                                                                placeholder="Select file to upload"
+                                                                accept="image/png"
+                                                                onChange={(files) => handleSelectedMainImage(files.target.files)}
+                                                            />
+                                                            {isMainImageUpload && <Progress percent={mainProgressUpload} />}
+
+                                                            {mainImage && (
+                                                                <>
+                                                                    <Image
+                                                                        src={mainImage}
+                                                                        alt={mainImage}
+                                                                        style={{ width: "100%", height: 200, objectFit: 'cover' }}
+                                                                    />
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </Grid>
+
+                                                <Grid item xs={12}>
                                                     <Typography variant="subtitle1">อัปโหลดเมนู</Typography>
                                                     <div className="container mt-5">
                                                         <div className="col-lg-8 offset-lg-2">
@@ -584,7 +658,7 @@ export default function CreateStore() {
 
                                                 <Grid item xs={12}>
                                                     <Typography variant="subtitle1">
-                                                        แก้ไขรูปภาพ
+                                                        รูปภาพประกอบ
                                                     </Typography>
                                                     <div className="container mt-5">
                                                         <div className="col-lg-8 offset-lg-2">
