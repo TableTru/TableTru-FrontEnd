@@ -116,6 +116,8 @@ export default function CreateStore() {
     const [mainImage, setMainImage] = useState('')
     const [isMainImageUpload, setIsMainImageUpload] = useState(false)
     const [mainProgressUpload, setMainProgressUpload] = useState(0)
+
+    const [createError, setCreateError] = useState('')
     const [formData, setFormData] = useState<any>({
         category_id: null,
         store_name: '',
@@ -161,23 +163,62 @@ export default function CreateStore() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         console.log(formData);
-        const checkStoreNameRes = await checkStoreByName(formData.store_name)
-        if (checkStoreNameRes) {
-            const createStoreRes = await createStore(formData)
-            const userData = localStorage.getItem("userData")
-            const userDataJson = JSON.parse(userData || "[]");
-            const newUserData = {
-                user_id: userDataJson.user_id,
-                user_status: "merchant"
+
+        if (
+            formData.category_id !== null &&
+            formData.store_name !== "" &&
+            formData.table_booking !== null &&
+            formData.max_people_booking !== null &&
+            formData.sum_rating !== null &&
+            formData.store_description !== "" &&
+            formData.latitude !== null &&
+            formData.longitude !== null &&
+            formData.location !== "" &&
+            formData.store_image_name !== ""
+        ) {
+            const checkStoreNameRes = await checkStoreByName(formData.store_name)
+            if (checkStoreNameRes) {
+                // const createStoreRes = await createStore(formData)
+                const createStoreRes = { store_id: 1 }
+                const userData = localStorage.getItem("userData")
+                const userDataJson = JSON.parse(userData || "[]");
+                const newUserData = {
+                    user_id: userDataJson.user_id,
+                    store_id: createStoreRes.store_id,
+                    user_status: "merchant"
+                }
+                await editUser(userDataJson.user_id, newUserData)
+
+                for (const menuImageObject of menuData) {
+                    const menuImageWithStoreId = {
+                        store_id: createStoreRes.store_id,
+                        store_image_name: menuImageObject.store_image_name,
+                        store_image_type: menuImageObject.store_image_type
+                    }
+                    await createStoreImage(menuImageWithStoreId)
+                }
+
+                for (const subImageObject of subImageData) {
+                    const menuImageWithStoreId = {
+                        store_id: createStoreRes.store_id,
+                        store_image_name: subImageObject.store_image_name,
+                        store_image_type: subImageObject.store_image_type
+                    }
+                    await createStoreImage(menuImageWithStoreId)
+                }
+
+                // window.location.replace('/profile')
             }
-            await editUser(newUserData)
+            else {
+                setCreateError("มีร้านค้าชื่อนี้แล้ว")
+                console.log("error");
 
-            // window.location.replace('/profile')
+            }
+        } else {
+            setCreateError("โปรดใสข้อมูลให้ครบ")
         }
-        else {
-            console.log("error");
 
-        }
+
     };
 
     const mapRef = useRef<HTMLDivElement>(null);
@@ -417,27 +458,6 @@ export default function CreateStore() {
             )
         } else {
             message.error('File size too large')
-        }
-    }
-
-    const handleSubmitImage = async (storeId: number) => {
-
-        for (const menuImageObject of menuData) {
-            const menuImageWithStoreId = {
-                store_id: storeId,
-                store_image_name: menuImageObject.store_image_name,
-                store_image_type: menuImageObject.store_image_type
-            }
-            await createStoreImage(menuImageWithStoreId)
-        }
-
-        for (const subImageObject of subImageData) {
-            const menuImageWithStoreId = {
-                store_id: storeId,
-                store_image_name: subImageObject.store_image_name,
-                store_image_type: subImageObject.store_image_type
-            }
-            await createStoreImage(menuImageWithStoreId)
         }
     }
 
@@ -741,6 +761,10 @@ export default function CreateStore() {
                                         </AccordionDetails>
                                     </Accordion>
                                 </Grid>
+
+                                <Grid item xs={12}>
+                                                <Typography variant="subtitle1">{createError}</Typography>
+                                            </Grid>
                             </Grid>
                             <Link href="/store">
                                 <Button
