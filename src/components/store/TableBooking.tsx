@@ -236,8 +236,8 @@ export default function TableBooking() {
 
 
     useEffect(() => {
-        // fetchData();
-        fetchTempData()
+        fetchData();
+        // fetchTempData()
     }, []);
 
     return (
