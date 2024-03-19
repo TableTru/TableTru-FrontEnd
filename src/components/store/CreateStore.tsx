@@ -52,7 +52,7 @@ import { storage } from '@/services/firebaseConfig'
 import { Input, message, Image, Progress, } from 'antd'
 import CloseIcon from '@mui/icons-material/Close';
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
-import { createStore, checkStoreByName, getStoreById, createStoreImage } from '@/services/store.service'
+import { createStore, checkStoreByName, getStoreById, createStoreImage, createOpenTime } from '@/services/store.service'
 import { editUser } from "@/services/user.service";
 
 const loader = new Loader({
@@ -118,6 +118,8 @@ export default function CreateStore() {
     const [mainProgressUpload, setMainProgressUpload] = useState(0)
 
     const [createError, setCreateError] = useState('')
+
+    const [openTimeData, setOpenTimeData] = useState<Object[]>(OpenTimes)
     const [locationData, setLocationData] = useState<object>({
         location: '',
         latitude: null,
@@ -133,7 +135,7 @@ export default function CreateStore() {
         latitude: null,
         longitude: null,
         location: '',
-        OpenTimes: OpenTimes,
+        store_image_name: ''
     })
 
     const handleChange = (e) => {
@@ -156,18 +158,16 @@ export default function CreateStore() {
     };
 
     const handleOpenTimeChange = (index: number, newValue: any) => {
-        const newOpenTimes = [...formData.OpenTimes];
-        console.log(newOpenTimes);
-
+        const newOpenTimes = openTimeData
         newOpenTimes[index].open_time = newValue.format('YYYY-MM-DD HH:mm:ss');
-        setFormData({ ...formData, OpenTimes: newOpenTimes });
+        setOpenTimeData(newOpenTimes);
         console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
     };
 
     const handleCloseTimeChange = (index: number, newValue: any) => {
-        const newCloseTimes = [...formData.OpenTimes];
+        const newCloseTimes = openTimeData
         newCloseTimes[index].close_time = newValue.format('YYYY-MM-DD HH:mm:ss');
-        setFormData({ ...formData, OpenTimes: newCloseTimes });
+        setOpenTimeData(newCloseTimes);
         console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
     };
 
@@ -216,6 +216,14 @@ export default function CreateStore() {
                         store_image_type: subImageObject.store_image_type
                     }
                     await createStoreImage(subImageWithStoreId)
+                }
+
+                for (const openTimeObject of openTimeData) {
+                    const openTimeStoreId = {
+                        ...openTimeObject,
+                        store_id: createStoreRes.store_id,
+                    }
+                    await createOpenTime(openTimeStoreId)
                 }
 
                 // window.location.replace('/profile')
@@ -754,7 +762,7 @@ export default function CreateStore() {
 
                                                 <div >
 
-                                                    {OpenTimes.map((item, index) => (
+                                                    {openTimeData.map((item, index) => (
                                                         <Box key={index} className="grid grid-cols-1 gap-4 md:grid-cols-3 gap-4">
                                                             <p>{item.day}</p>
                                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
