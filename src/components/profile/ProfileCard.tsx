@@ -54,7 +54,7 @@ interface Review {
     updateAt: Date;
 }
   
-  const userTemp: User =
+  const userTemp =
   {
     user_id: 1,
     username: "Aungpor",
@@ -108,7 +108,7 @@ const reviewList = [
 ];
 
 export default function ProfileCard() {
-    const [userData, setUserData] = useState<User>();
+    const [userData, setUserData] = useState<object>(userTemp);
     const [reviewData, setReviewData] = useState<Review[]>([])
 
     const fetchData = async () => {
@@ -254,7 +254,7 @@ export default function ProfileCard() {
                             </List>
                         ))}
 
-                        {userTemp.user_status === "user" ? (
+                        {userData.user_status === "user" ? (
                             <Link href="/store/create" sx={{
                                 marginBottom: 2,
                                 display: 'flex',

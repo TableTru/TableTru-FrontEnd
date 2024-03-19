@@ -181,12 +181,15 @@ export default function CreateStore() {
         ) {
             const checkStoreNameRes = await checkStoreByName(formData.store_name)
             if (!checkStoreNameRes) {
-                const createStoreRes = await createStore(formData)
-                console.log(createStoreRes);
-                
-                // const createStoreRes = { store_id: 1 }
                 const userData = localStorage.getItem("userData")
                 const userDataJson = JSON.parse(userData || "[]");
+                const createStoreRes = await createStore(formData)
+                console.log(createStoreRes);
+                userDataJson.store_id = createStoreRes.store_id
+                localStorage.setItem('userData', JSON.stringify(userDataJson));
+
+                // const createStoreRes = { store_id: 1 }
+                
                 const newUserData = {
                     user_id: userDataJson.user_id,
                     store_id: createStoreRes.store_id,
