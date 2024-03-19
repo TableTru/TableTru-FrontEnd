@@ -159,16 +159,16 @@ export default function CreateStore() {
 
     const handleOpenTimeChange = (index: number, newValue: any) => {
         const newOpenTimes = openTimeData
-        newOpenTimes[index].start_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        newOpenTimes[index].start_time = newValue.format('YYYY-MM-DDTHH:mm:ssZ');
         setOpenTimeData(newOpenTimes);
-        console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
+        console.log(newValue.format('YYYY-MM-DDTHH:mm:ssZ'))
     };
 
     const handleCloseTimeChange = (index: number, newValue: any) => {
         const newCloseTimes = openTimeData
-        newCloseTimes[index].end_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        newCloseTimes[index].end_time = newValue.format('YYYY-MM-DDTHH:mm:ssZ');
         setOpenTimeData(newCloseTimes);
-        console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
+        console.log(newValue.format('YYYY-MM-DDTHH:mm:ssZ'))
     };
 
 
@@ -186,6 +186,7 @@ export default function CreateStore() {
                 const createStoreRes = await createStore(formData)
                 console.log(createStoreRes);
                 userDataJson.store_id = createStoreRes.store_id
+                userDataJson.user_status = "merchant"
                 localStorage.setItem('userData', JSON.stringify(userDataJson));
 
                 // const createStoreRes = { store_id: 1 }
@@ -205,7 +206,7 @@ export default function CreateStore() {
 
                 for (const menuImageObject of newmenuImageData) {
                     const menuImageWithStoreId = {
-                        store_id: menuImageObject.store_id,
+                        store_id: createStoreRes.store_id,
                         store_image_name: menuImageObject.store_image_name,
                         store_image_type: menuImageObject.store_image_type
                     }
@@ -214,7 +215,7 @@ export default function CreateStore() {
 
                 for (const subImageObject of newSubImageData) {
                     const subImageWithStoreId = {
-                        store_id: subImageObject.store_id,
+                        store_id: createStoreRes.store_id,
                         store_image_name: subImageObject.store_image_name,
                         store_image_type: subImageObject.store_image_type
                     }

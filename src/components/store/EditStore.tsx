@@ -209,18 +209,18 @@ export default function EditStore() {
 
     const handleOpenTimeChange = (index: number, newValue: any) => {
         const newOpenTimes = [...formData.OpenTimes];
-        newOpenTimes[index].start_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        newOpenTimes[index].start_time = newValue.format('YYYY-MM-DDTHH:mm:ssZ');
         setFormData({ ...formData, OpenTimes: newOpenTimes });
-        console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
+        console.log(newValue.format('YYYY-MM-DDTHH:mm:ssZ'))
         console.log(formData);
         
     };
 
     const handleCloseTimeChange = (index: number, newValue: any) => {
         const newCloseTimes = [...formData.OpenTimes];
-        newCloseTimes[index].end_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        newCloseTimes[index].end_time = newValue.format('YYYY-MM-DDTHH:mm:ssZ');
         setFormData({ ...formData, OpenTimes: newCloseTimes });
-        console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
+        console.log(newValue.format('YYYY-MM-DDTHH:mm:ssZ'))
     };
 
 
@@ -233,7 +233,7 @@ export default function EditStore() {
                 const userData = localStorage.getItem("userData")
                 const userDataJson = JSON.parse(userData || "[]");
 
-                const editRes = await editStore(userDataJson.user_id, formData)
+                const editRes = await editStore(userDataJson.store_id, formData)
                 console.log(editRes);
 
                 for (const openTimeObject of formData.OpenTimes) {
@@ -278,7 +278,7 @@ export default function EditStore() {
             const userData = localStorage.getItem("userData")
             const userDataJson = JSON.parse(userData || "[]");
 
-            const editRes = await editStore(userDataJson.user_id, formData)
+            const editRes = await editStore(userDataJson.store_id, formData)
             console.log(editRes);
 
             for (const openTimeObject of formData.OpenTimes) {
@@ -656,8 +656,8 @@ export default function EditStore() {
 
     useEffect(() => {
         if (formData.store_id === null) {
-            // fetchData();
-            fetchTempData()
+            fetchData();
+            // fetchTempData()
         } else {
             setFormData({
                 ...formData,

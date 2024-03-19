@@ -57,18 +57,15 @@ interface Review {
   const userTemp =
   {
     user_id: 1,
-    username: "Aungpor",
-    password: "por1234",
-    user_status: "merchant",
+    username: "",
+    password: "",
+    user_status: "",
     store_id: 1,
-    profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
-    email: "aungpor.napat@gmail.com",
-    phone_num: "0813111234",
+    profile_image: "",
+    email: "",
+    phone_num: "",
     latitude: 0,
     longitude: 0,
-    createAt: new Date(),
-    updateAt: new Date(),
-  
   }
 
 const reviewTemp: Review[] = [
@@ -122,17 +119,17 @@ export default function ProfileCard() {
             console.log(data);
         }
 
-        const reviewArray = [];
-        const userReviews = await getUserReview(userDataJson.user_id);
-        console.log(userReviews);
+        // const reviewArray = [];
+        // const userReviews = await getUserReview(userDataJson.user_id);
+        // console.log(userReviews);
 
-        if (userReviews) {
-            for (const reviewObject of userReviews) {
-                reviewArray.push(reviewObject);
-            }
-            setReviewData(reviewArray);
-            console.log(reviewArray);
-        }
+        // if (userReviews) {
+        //     for (const reviewObject of userReviews) {
+        //         reviewArray.push(reviewObject);
+        //     }
+        //     setReviewData(reviewArray);
+        //     console.log(reviewArray);
+        // }
 
         // setUserData(userTemp);
         // setReviewData(reviewTemp)
@@ -141,6 +138,7 @@ export default function ProfileCard() {
 
     const logout = () => {
         localStorage.removeItem('userData');
+        window.location.replace('/')
     }
 
     const storeCreateClick = () => {

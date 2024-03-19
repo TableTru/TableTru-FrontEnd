@@ -197,27 +197,29 @@ export default function TableBooking() {
         setValue(newValue);
     };
 
-    const finishButton = (tablebookingId: number) => {
+    const finishButton = (tablebooking: object) => {
         const updateData = {
-            table_booking_id: tablebookingId,
+            table_booking_id: tablebooking.table_booking_id,
+            promotion_id: tablebooking.promotion_id,
             table_booking_status: 'เสร็จสิ้น'
         }
-        const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebookingId);
+        const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebooking.table_booking_id);
         setOnGoingData(updatedStoreBookingTemp);
 
-        const updateBookingRes = editTableBooking(tablebookingId, updateData)
+        const updateBookingRes = editTableBooking(tablebooking.table_booking_id, updateData)
         console.log(updateBookingRes);
     }
 
-    const cancleButton = (tablebookingId: number) => {
+    const cancleButton = (tablebooking: object) => {
         const updateData = {
-            table_booking_id: tablebookingId,
+            table_booking_id: tablebooking.table_booking_id,
+            promotion_id: tablebooking.promotion_id,
             table_booking_status: 'ยกเลิก'
         }
-        const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebookingId);
+        const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebooking.table_booking_id);
         setOnGoingData(updatedStoreBookingTemp);
 
-        const updateBookingRes = editTableBooking(tablebookingId, updateData)
+        const updateBookingRes = editTableBooking(tablebooking.table_booking_id, updateData)
         console.log(updateBookingRes);
     }
 
@@ -225,7 +227,7 @@ export default function TableBooking() {
         switch (status) {
             case 'ยกเลิก':
                 return 'error'; // สีแดง
-            case 'อยู่ระหว่างดำเนินการ':
+            case 'ยังไม่ถึงกำหนด':
                 return 'warning'; // สีเหลือง
             case 'เสร็จสิ้น':
                 return 'success'; // สีเขียว
@@ -287,7 +289,7 @@ export default function TableBooking() {
                                                     fullWidth
                                                     variant="outlined"
                                                     sx={{ mt: 3, mb: 2 }}
-                                                    onClick={() => cancleButton(item.table_booking_id)}
+                                                    onClick={() => cancleButton(item)}
                                                 >
                                                     ยกเลิก
                                                 </Button>
@@ -295,7 +297,7 @@ export default function TableBooking() {
                                                     fullWidth
                                                     variant="contained"
                                                     sx={{ mt: 3, mb: 2 }}
-                                                    onClick={() => finishButton(item.table_booking_id)}
+                                                    onClick={() => finishButton(item)}
                                                 >
                                                     เสร็จสิ้น
                                                 </Button>

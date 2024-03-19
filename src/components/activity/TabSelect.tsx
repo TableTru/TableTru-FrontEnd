@@ -135,10 +135,10 @@ export default function TabSelect() {
     const userDataJson = JSON.parse(userData || "[]");
 
     if (userData) {
-      const store_id = userDataJson.store_id
+      const user_id = userDataJson.user_id
 
       const onGoingDataArray = [];
-      const onGoingData = await getUserBookingByStatus(store_id, "ยังไม่ถึงกำหนด");
+      const onGoingData = await getUserBookingByStatus(user_id, "ยังไม่ถึงกำหนด");
 
       if (onGoingData) {
         for (const tableBookingObject of onGoingData) {
@@ -154,7 +154,7 @@ export default function TabSelect() {
       }
 
       const historicalDataArray = [];
-      const historicalData = await getBokingByUserId(store_id);
+      const historicalData = await getBokingByUserId(user_id);
 
       if (historicalData) {
         for (const tableBookingObject of historicalData) {

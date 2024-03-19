@@ -66,7 +66,8 @@ export default function SignUp() {
     password: "",
     email: "",
     phone_num: "",
-    profile_image: ""
+    profile_image: "",
+    user_status: "user"
   });
 
   // const fetchData = async () => {
@@ -94,9 +95,10 @@ export default function SignUp() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(userData);
+    
     const checkRegisterRes = await getRegisterCheck(userData.email)
-    if(checkRegisterRes) {
+    console.log(!checkRegisterRes);
+    if(!checkRegisterRes) {
       await createUser(userData)
       window.location.replace('/')
     } else{

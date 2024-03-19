@@ -31,8 +31,8 @@ export const editUser = async (id: number, data: any) => {
 }
 
 export const getRegisterCheck = async (email: string) => {
-  return await axios.get(url + `/users/getRegisterCheck/${email}`).then((res: AxiosResponse) => {
-    return res.data.data;
+  return await axios.get(url + `/users/checkRegisterUser?email=${email}`).then((res: AxiosResponse) => {
+    return res.data.success;
   }).catch((err: any) => {
     catchError(err, null, "getUser");
     return [];
