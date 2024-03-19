@@ -184,11 +184,7 @@ export default function EditStore() {
         latitude: 13.8920878,
         longitude: 100.5267991,
         location: '50 ถนน งามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900 ประเทศไทย',
-        OpenTimes: [{
-            day: 'วันจันทร์',
-            open_time: '2024-02-23 15:44:29',
-            close_time: '2022-04-17T15:30',
-        }],
+        OpenTimes: [],
     })
 
     const handleChange = (e: any) => {
@@ -240,6 +236,8 @@ export default function EditStore() {
 
                 for (const openTimeObject of formData.OpenTimes) {
                     const editOpenTimeRes = await editOpenTime(openTimeObject.openTime_id, openTimeObject)
+                    console.log(editOpenTimeRes);
+                    
                 }
 
                 const newmenuImageData = menuData.filter(item => item.data_type !== "old");
@@ -264,6 +262,10 @@ export default function EditStore() {
                         store_image_type: subImageObject.store_image_type
                     }
                     await createStoreImage(subImageWithStoreId)
+                }
+
+                for (const openTimeObject of formData.OpenTimes) {
+                    await editOpenTime(openTimeObject.openTime_id, openTimeObject)
                 }
                 // window.location.replace('/profile')
             } else {
