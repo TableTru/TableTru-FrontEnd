@@ -64,39 +64,39 @@ const loader = new Loader({
 const OpenTimes = [
     {
         day: 'วันจันทร์',
-        open_time: '',
-        close_time: '',
+        open_time: '2024-02-23T15:44:29',
+        close_time: '2022-04-17T15:30',
     },
     {
         day: 'วันอังคาร',
-        open_time: '',
-        close_time: '',
+        open_time: '2022-04-17T15:30',
+        close_time: '2022-04-17T15:30',
     },
     {
         day: 'วันพุธ',
-        open_time: '',
-        close_time: '',
+        open_time: '2022-04-17T15:30',
+        close_time: '2022-04-17T15:30',
     },
     {
         day: 'วันพฤหัส',
-        open_time: '',
-        close_time: '',
+        open_time: '2022-04-17T15:30',
+        close_time: '2022-04-17T15:30',
     },
     {
         day: 'วันศุกร์',
-        open_time: '',
-        close_time: '',
+        open_time: '2022-04-17T15:30',
+        close_time: '2022-04-17T15:30',
     },
     {
         day: 'วันเสาร์',
-        open_time: '',
-        close_time: '',
+        open_time: '2022-04-17T15:30',
+        close_time: '2022-04-17T15:30',
     },
     {
         day: 'วันอาทิตย์',
-        open_time: '',
-        close_time: '',
-    }
+        open_time: '2022-04-17T15:30',
+        close_time: '2022-04-17T15:30',
+    },
 ]
 
 interface StoreImage {
@@ -133,7 +133,6 @@ export default function CreateStore() {
         latitude: null,
         longitude: null,
         location: '',
-        store_image_name: '',
         OpenTimes: OpenTimes,
     })
 
@@ -178,20 +177,13 @@ export default function CreateStore() {
         console.log(formData);
 
         if (
-            formData.category_id !== null &&
-            formData.store_name !== "" &&
-            formData.table_booking !== null &&
-            formData.max_people_booking !== null &&
-            formData.sum_rating !== null &&
-            formData.store_description !== "" &&
-            formData.latitude !== null &&
-            formData.longitude !== null &&
-            formData.location !== "" &&
-            formData.store_cover_image !== ""
+            formData.store_name !== ""
         ) {
             const checkStoreNameRes = await checkStoreByName(formData.store_name)
-            if (checkStoreNameRes) {
+            if (!checkStoreNameRes) {
                 const createStoreRes = await createStore(formData)
+                console.log(createStoreRes);
+                
                 // const createStoreRes = { store_id: 1 }
                 const userData = localStorage.getItem("userData")
                 const userDataJson = JSON.parse(userData || "[]");
