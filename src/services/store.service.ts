@@ -113,6 +113,15 @@ export const createStoreImage = async (data: any) => {
   });
 }
 
+export const deleteStoreImage = async (id: number) => {
+  return await axios.delete(url + `/storeImages/${id}`).then((res: AxiosResponse) => {
+    return res.data;
+  }).catch((err: { response: { data: any; }; }) => {
+    console.log("err: ", err.response);
+    return err?.response?.data ? err?.response?.data : {};
+  });
+}
+
 function catchError(error: any, path: any, func: any): void {
   try {
     return;
