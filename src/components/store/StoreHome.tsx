@@ -98,7 +98,7 @@ export default function StoreHome() {
     const fetchData = async () => {
         const userData = localStorage.getItem("userData")
         const userDataJson = JSON.parse(userData || "[]");
-        const data = await getStoreById(userDataJson.user_id);
+        const data = await getStoreById(userDataJson.store_id);
         console.log(data);
 
         if (data) {

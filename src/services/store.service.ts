@@ -32,7 +32,7 @@ export const getStoreById = async (id: number) => {
 export const createStore = async (data: any) => {
   console.log(data);
   return await axios.post(url + '/stores/', data).then((res: AxiosResponse) => {
-    return res;
+    return res.data.data;
   }).catch((err: { response: { data: any; }; }) => {
     console.log("err: ", err.response);
     return err?.response?.data ? err?.response?.data : {};

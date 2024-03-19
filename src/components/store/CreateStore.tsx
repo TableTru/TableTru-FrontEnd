@@ -64,38 +64,38 @@ const loader = new Loader({
 const OpenTimes = [
     {
         day: 'วันจันทร์',
-        open_time: '2024-02-23 15:44:29',
-        close_time: '2022-04-17T15:30',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T17:00:00Z',
     },
     {
         day: 'วันอังคาร',
-        open_time: '2022-04-17T15:30',
-        close_time: '2022-04-17T15:30',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T17:00:00Z',
     },
     {
         day: 'วันพุธ',
-        open_time: '2022-04-17T15:30',
-        close_time: '2022-04-17T15:30',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T17:00:00Z',
     },
     {
         day: 'วันพฤหัส',
-        open_time: '2022-04-17T15:30',
-        close_time: '2022-04-17T15:30',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T17:00:00Z',
     },
     {
         day: 'วันศุกร์',
-        open_time: '2022-04-17T15:30',
-        close_time: '2022-04-17T15:30',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T17:00:00Z',
     },
     {
         day: 'วันเสาร์',
-        open_time: '2022-04-17T15:30',
-        close_time: '2022-04-17T15:30',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T17:00:00Z',
     },
     {
         day: 'วันอาทิตย์',
-        open_time: '2022-04-17T15:30',
-        close_time: '2022-04-17T15:30',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T17:00:00Z',
     },
 ]
 
@@ -135,7 +135,7 @@ export default function CreateStore() {
         latitude: null,
         longitude: null,
         location: '',
-        store_image_name: ''
+        store_cover_image: ''
     })
 
     const handleChange = (e) => {
@@ -159,14 +159,14 @@ export default function CreateStore() {
 
     const handleOpenTimeChange = (index: number, newValue: any) => {
         const newOpenTimes = openTimeData
-        newOpenTimes[index].open_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        newOpenTimes[index].start_time = newValue.format('YYYY-MM-DD HH:mm:ss');
         setOpenTimeData(newOpenTimes);
         console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
     };
 
     const handleCloseTimeChange = (index: number, newValue: any) => {
         const newCloseTimes = openTimeData
-        newCloseTimes[index].close_time = newValue.format('YYYY-MM-DD HH:mm:ss');
+        newCloseTimes[index].end_time = newValue.format('YYYY-MM-DD HH:mm:ss');
         setOpenTimeData(newCloseTimes);
         console.log(newValue.format('YYYY-MM-DD HH:mm:ss'))
     };
@@ -180,8 +180,10 @@ export default function CreateStore() {
             formData.store_name !== ""
         ) {
             const checkStoreNameRes = await checkStoreByName(formData.store_name)
-            if (checkStoreNameRes) {
+            if (!checkStoreNameRes) {
                 const createStoreRes = await createStore(formData)
+                console.log(createStoreRes);
+                
                 // const createStoreRes = { store_id: 1 }
                 const userData = localStorage.getItem("userData")
                 const userDataJson = JSON.parse(userData || "[]");
@@ -768,7 +770,7 @@ export default function CreateStore() {
                                                                     <TimePicker
                                                                         label="เวลาเปิด"
                                                                         className={"w-full"}
-                                                                        value={dayjs(item.open_time)}
+                                                                        value={dayjs(item.start_time)}
                                                                         onChange={(newValue) => handleOpenTimeChange(index, newValue)}
                                                                     />
                                                                 </DemoContainer>
@@ -778,7 +780,7 @@ export default function CreateStore() {
                                                                     <TimePicker
                                                                         label="เวลาปิด"
                                                                         className={"w-full"}
-                                                                        value={dayjs(item.close_time)}
+                                                                        value={dayjs(item.end_time)}
                                                                         onChange={(newValue) => handleCloseTimeChange(index, newValue)}
                                                                     />
                                                                 </DemoContainer>
