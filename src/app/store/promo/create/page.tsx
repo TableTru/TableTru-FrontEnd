@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React from "react";
-import { FormControl,FormHelperText,Input,InputLabel,TextField } from '@mui/material';
+import React, {useEffect, useState} from "react";
+import { FormControl, FormHelperText, Input, InputLabel, TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,67 +12,50 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import CreatePromo from "@/components/store/CreatePromo";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import dayjs from "dayjs";
 
 
-export default function StoreCreate(){
+export default function StoreCreate() {
+
+    const [isLogin, setIsLogin] = useState(false);
+    const [userData, setUserData] = useState()
+
+    const checkLoginStatus = () => {
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+        if (userData) {
+            console.log(userDataJson);
+            setIsLogin(true)
+            setUserData(userDataJson)
+            console.log(userDataJson.user_status);
 
 
-     
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('name'),
-      password: data.get('description'),
-    });
-  };
+        } else {
+            console.log("not login");
+            window.location.replace('/login')
+        }
+    }
 
-  return(
-    <>
-      <Container component="main" maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            สร้างโปรโมชั่น
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Promotion Name"
-              name="promo"
-              autoComplete="promo"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="description"
-              label="Description"
-              id="description"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              บันทึก
-            </Button>
-          </Box>
-        </Box>
-      </Container>
-    </>
+    useEffect((() => {
+        checkLoginStatus()
+    }), [])
+
+  return (
+      <>
+        {isLogin ? (
+        <div className="min-h-screen w-fit mx-auto  mt-24 mb-5">
+            <CreatePromo/>
+        </div>
+          ) : (
+              <p>Please Login</p>
+          )}
+        </>
   );
 }
