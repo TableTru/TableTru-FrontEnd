@@ -33,24 +33,22 @@ import { Item } from "@/interfaces/Promo"
 
 const ProductDetail = () => {
     const params = useParams();
-    const [storeData, setStoreData] = useState<object>({
-        store_name: '',
-        table_booking: '',
-        store_description:'',
-        OpenTimes: [
-            {
-                start_time:'',
-                end_time:'',
-                day:''
-            },
-            {
-                start_time:'',
-                end_time:'',
-                day:''
-            }
-        ]
+    const [storeData, setStoreData] = useState({
+        OpenTimes: [],
+        category_id: 1,
+        category_name: "",
+        latitude: 0,
+        location: "",
+        longitude: 0,
+        max_people_booking: 1,
+        store_cover_image: "",
+        store_description: "",
+        store_id: 1,
+        store_name: "",
+        sum_rating: 0,
+        table_booking: 1,
+        updated_at: ""
     });
-    // const [storeData,setStoreData] = useState<Store[]>([])
     const [reviewData, setReviewData] = useState<Review[]>([])
 
     const fetchData = async () => {
@@ -181,11 +179,7 @@ const ProductDetail = () => {
                                 <Stack direction="row" spacing={1}>
                                     <Chip
                                         icon={<RestaurantIcon />}
-                                        label={`1`}
-                                    />
-                                    <Chip
-                                        icon={<LocationOnIcon />}
-                                        label={`1`}
+                                        label={storeData.category_name}
                                     />
                                 </Stack>
 

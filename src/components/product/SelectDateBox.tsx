@@ -23,14 +23,9 @@ type TimeTemp = {
 }
 
 export default function SelectDateBox({seats,openTime} : { seats : number , openTime: Array<TimeTemp>} ) {
-
-
   const now = dayjs();
-
   const [times, setTimes] = React.useState< Dayjs| null >(null);
-
   console.log(openTime)
-
   const handleChangeTime = (time:any) => {
     setTimes(time);
   };

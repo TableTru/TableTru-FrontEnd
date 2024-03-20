@@ -15,6 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const pages = [
   {
@@ -49,6 +50,8 @@ export default function HeaderAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState()
+
+  const router = useRouter()
 
   const checkLoginStatus = () => {
     const userData = localStorage.getItem("userData")
@@ -142,13 +145,9 @@ export default function HeaderAppBar() {
                 }}
               >
                 {pages.filter((page) => page.name !== "ร้านของฉัน" || isLogin).map((page) => (
-                  <Link key={page.name} href={`${page.path}`}>
-                    <MenuItem >
+                    <MenuItem key={page.name} onClick={() => router.push(page.path)}>
                       <Typography textAlign="center">{page.name}</Typography>
                     </MenuItem>
-                  </Link>
-
-
                 ))}
 
               </Menu>
