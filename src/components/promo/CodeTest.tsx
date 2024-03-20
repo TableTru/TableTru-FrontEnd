@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from "react";
 import {
   Card,
@@ -8,9 +10,10 @@ import {
 } from "@nextui-org/react";
 
 import { Button } from "flowbite-react";
-import { useRouter } from "next/navigation";
+import { useRouter,usePathname } from 'next/navigation'
 
-import { initialItems } from "@/data/promotion"
+import { withRouter } from 'next/router'
+
 import { Item } from "@/interfaces/Promo"
 import { PromotionCodePivot } from "@/data/promotionPivot";
 
@@ -20,12 +23,52 @@ type PromotionCode = {
   promotion_id: number;
 };
 
+const initialItems: Item[] = [
+  {
+    id: 1,
+    name: "ส่วนลด 10 %",
+    set: true,
+    limit: 1,
+    created_at:new Date(),
+    store_id: 1,
+    expiration_date: new Date("2024-12-31"),
+  },
+  {
+    id: 2,
+    name: "ส่วนลด 20%",
+    set: true,
+    limit: 30,
+    store_id: 1,
+    created_at:new Date(),
+    expiration_date: new Date("2024-12-31"),
+  },
+  {
+    id: 3,
+    name: "ส่วนลด 30%",
+    set: true,
+    limit:1,
+    store_id: 2,
+    created_at:new Date(),
+    expiration_date: new Date("2024-12-31"),
+  },
+  {
+    id: 4,
+    name: "ส่วนลด 10% แถม 20%",
+    set: true,
+    limit:20,
+    store_id: 2,
+    created_at: new Date(),
+    expiration_date: new Date("2024-12-31"),
+  },
+];
 
 
 export default function MyComponent() {
   const [items, setItems] = useState<Item[]>(initialItems);
   const [isLogin, setIsLogin] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+
 
   const checkLoginStatus = () => {
     const userData = localStorage.getItem("userData");
@@ -42,11 +85,14 @@ export default function MyComponent() {
     checkLoginStatus();
   }, []);
 
+
   const handleButtonClick = (id: number) => {
     setItems((prevItems) =>
       prevItems.map((item) => (item.id === id ? { ...item, set: false } : item))
     );
   };
+
+
   return items.map((item) => (
     <div key={item.id} className="flex flex-col items-center justify-center">
       <Card className="max-w-[340px]">
@@ -66,19 +112,21 @@ export default function MyComponent() {
         </CardHeader>
         <CardBody className="px-3 py-0 text-small text-default-400">
           <p>{item.name}</p>
-          <p className="mt-8">วันหมดอายุ: {`${item.expiration_date.toLocaleDateString('en-GB')}`}</p>
+          <p className="mt-8">วันหมดอายุ: {`${item.expiration_date.toLocaleDateString('en-CA')}`}</p>
         </CardBody>
         <CardFooter className="gap-3">
-          {isLogin ? (
-            <Button
+          {pathname ==='/store/promo'? null:
+          <>
+            {isLogin ? (
+              <Button
               color="failure"
               pill
               onClick={() => handleButtonClick(item.id)}
               disabled={!item.set}
-            >
-              เก็บโค้ด
-            </Button>
-          ) : (
+              >
+                เก็บโค้ด
+              </Button>
+            ) : (
             <Button
               color="failure"
               pill
@@ -87,7 +135,8 @@ export default function MyComponent() {
             >
               เข้าสู่ระบบ
             </Button>
-          )}
+          
+          ) } </> }
         </CardFooter>
       </Card>
     </div>
