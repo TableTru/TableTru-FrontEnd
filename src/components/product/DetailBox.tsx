@@ -33,6 +33,7 @@ import ReplyBox from "@/components/product/detailBox/comments/ReplyBox"
 import { styled } from "@mui/material/styles";
 import "./TableResponsive.css"
 import dayjs, { Dayjs } from "dayjs";
+import { Review } from "@/interfaces/Review";
 
 
 const Root = styled("div")(({ theme }) => ({
@@ -48,16 +49,6 @@ dayjs.extend(customParseFormat);
 
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
-
-interface Review {
-    store_id: number;
-    store_name: string;
-    user_id: number;
-    user_name: string;
-    review_comment: string;
-    createAt: Date;
-    updateAt: Date;
-}
 
 
 const userTemp: User =
@@ -212,10 +203,10 @@ export default function DetailBox({ description, openTime, review, store_id }: {
                                                                 </ListItemAvatar>
 
                                                                 <ListItemText
-                                                                    primary={`${item?.user_id}`}
+                                                                    primary={`${item?.username}`}
                                                                     secondary={
                                                                         <>
-                                                                            <Rating name="read-only" value={rating} readOnly />
+                                                                            <Rating name="read-only" value={item.rating_score} readOnly />
                                                                             {`${item?.review_comment}`}
                                                                         </>}
                                                                 />

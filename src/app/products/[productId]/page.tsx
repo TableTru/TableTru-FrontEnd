@@ -40,7 +40,15 @@ const ProductDetail = () => {
         table_booking: 4,
         updated_at: ""
     });
-    const [reviewData, setReviewData] = useState<Review[]>([])
+    const [reviewData, setReviewData] = useState<Review[]>([{
+        rating_score: 3,
+        rating_status: false,
+        review_comment: "ทดสอบ",
+        review_id: 1,
+        store_id: 1,
+        user_id: 38,
+        username: "อังปอ"
+    }])
 
     const fetchData = async () => {
         const storeId = Number(params.productId)

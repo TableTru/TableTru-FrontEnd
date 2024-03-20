@@ -4,11 +4,12 @@ export interface ReviewInterface<T> {
 
 export interface Review {
   store_id: number;
-  store_name: string;
+  // store_name: string;
   user_id: number;
-  user_name: string;
+  username: string;
   review_comment: string;
-  createAt: Date;
-  updateAt: Date;
+  rating_score: number;
+  rating_status: boolean;
+  review_id: number
 }
 
