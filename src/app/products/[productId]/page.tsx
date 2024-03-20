@@ -31,6 +31,7 @@ import {GetAllReviewByStoreId} from '@/services/review.service'
 import { initialItems } from "@/data/promotion"
 import { Item } from "@/interfaces/Promo"
 
+
 const ProductDetail = () => {
     const params = useParams();
     const [storeData, setStoreData] = useState<object>({
@@ -50,7 +51,6 @@ const ProductDetail = () => {
             }
         ]
     });
-    // const [storeData,setStoreData] = useState<Store[]>([])
     const [reviewData, setReviewData] = useState<Review[]>([])
 
     const fetchData = async () => {
@@ -95,7 +95,7 @@ const ProductDetail = () => {
                                         New Arrival
                                     </span> */}
                                     <h2 className="max-w-xl mt-6 mb-6 text-xl font-semibold leading-loose tracking-wide text-gray-700 md:text-2xl dark:text-gray-300">
-                                        {storeData.store_name}
+                                        {storeData?.store_name}
                                     </h2>
                                     <div className="flex flex-wrap items-center mb-6">
                                         <ul className="flex mb-4 mr-2 lg:mb-0">
@@ -189,7 +189,7 @@ const ProductDetail = () => {
                                     />
                                 </Stack>
 
-                                <SelectDateBox seats={storeData.table_booking} openTime={storeData.OpenTimes} />
+                                <SelectDateBox seats={storeData.table_booking}  openTime={storeData.OpenTimes} />
 
                                 <div className="mb-6">
                                     <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">
@@ -214,7 +214,7 @@ const ProductDetail = () => {
                             </div>
                         </div>
                     </div>
-                    <DetailBox description={storeData.store_description} openTime={storeData.OpenTimes} review={reviewData} />
+                    <DetailBox description={storeData.store_description} openTime={storeData.OpenTimes} review={reviewData} store_id={Number(params.productId)}/>
                 </div>
             </section>
         </>

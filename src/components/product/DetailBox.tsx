@@ -25,14 +25,14 @@ import {
     TabPanel,
 } from "@mui/lab";
 
+import { createReview, GetAllReviewByStoreId } from '@/services/review.service'
 import { StoreInterface, Store } from "@/interfaces/StoreInterface";
-import { Review } from "@/interfaces/Review";
 import { User } from "@/interfaces/User";
 import { useParams } from "next/navigation";
 import ReplyBox from "@/components/product/detailBox/comments/ReplyBox"
 import { styled } from "@mui/material/styles";
 import "./TableResponsive.css"
-import {Dayjs} from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 
 const Root = styled("div")(({ theme }) => ({
@@ -41,6 +41,23 @@ const Root = styled("div")(({ theme }) => ({
     },
 }));
 
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+
+dayjs.extend(customParseFormat);
+
+var utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
+
+interface Review {
+    store_id: number;
+    store_name: string;
+    user_id: number;
+    user_name: string;
+    review_comment: string;
+    createAt: Date;
+    updateAt: Date;
+}
 
 
 const userTemp: User =
@@ -62,38 +79,47 @@ const userTemp: User =
 type TimeTemp = {
 
     day: string
-    start_time: Dayjs
-    end_time: Dayjs
+    start_time: string
+    end_time: string
 
 }
 
-export default function DetailBox({ description, openTime, review }: { description: string, openTime: Array<object>, review: Array<Review> }) {
+
+export default function DetailBox({ description, openTime, review, store_id }: { description: string, openTime: Array<TimeTemp>, review: Array<Review>, store_id:number }) {
 
     const [value, setValue] = React.useState("Review");
-    const [countStar, setcountStar] = React.useState<number | null>(2);
-    const [comment, setComment] = React.useState<Review>()
-    const [totalReview, setTotalReview] = React.useState<number | null>(0);
+    const [comment, setComment] = React.useState<string | null>(null);
+    const [rating, setRating] = React.useState<number | null>(0);
+
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
-    };
-    let show: Review;
-    const params = useParams<{ reviewId: string }>();
 
-    function callBackend(id: string){
-        const temp: Array<Review> = review.filter(function (item: Review) {
-            if (item.store_id == parseInt(id)) {
-                //จะถูก save ใน show ทันที
-                return item
-            }})
-            show = temp[1]
-            setComment(show)
-            console.log(review)
+    };
+
+    const handleCommentChange = (event: any) => {
+        setComment(event.target.value as string)
+        console.log(event.target.value as string)
     }
-    React.useEffect(() => {
-        callBackend(params.reviewId);
-        console.log(openTime);
-        
-    }, [])
+
+    const handleSubmit = async (event: any) => {
+        event.preventDefault();
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+        const formData = {
+            review_comment: comment,
+            rating: rating,
+            user_id: userDataJson.user_id,
+            store_id: store_id 
+        }
+        console.log(formData)
+        try {
+            const createReviewRes = await createReview(formData)
+        } catch (error) {
+            console.log("error");
+        }
+        setComment('');
+        setRating(0);
+    }
 
     const [showReply, setShowReply] = React.useState(false)
     return (
@@ -141,7 +167,7 @@ export default function DetailBox({ description, openTime, review }: { descripti
                                     </div>
                                     <Divider>การตอบกลับ</Divider>
                                     <div>
-                                        <form>
+                                        <form onSubmit={handleSubmit}>
                                             <div className={"my-4 flex flex-warp "}>
                                                 <Avatar alt="Leonic" src="/static/images/avatar/1.jpg" />
                                                 <div className={"mx-4 flex-cols"}>
@@ -149,9 +175,10 @@ export default function DetailBox({ description, openTime, review }: { descripti
 
                                                     <Rating
                                                         name="simple-controlled"
-                                                        value={totalReview}
+                                                        value={rating}
                                                         onChange={(event, newValue) => {
-                                                            setTotalReview(newValue);
+                                                            setRating(newValue);
+                                                            console.log(newValue)
                                                         }}
                                                     />
                                                 </div>
@@ -159,35 +186,20 @@ export default function DetailBox({ description, openTime, review }: { descripti
                                             <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                                                 <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                                                     <label className="sr-only">Your comment</label>
-                                                    <textarea id="comment" className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write a comment..." required />
+                                                    <textarea id="comment"
+                                                        value={comment}
+                                                        onChange={handleCommentChange}
+                                                        className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                                                        placeholder="Write a comment..." required />
                                                 </div>
                                                 <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
                                                     <button type="submit" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-900 hover:bg-red-800">
                                                         Post comment
                                                     </button>
-                                                    <div className="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
-                                                        <button type="button" className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                                                            <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 20">
-                                                                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M1 6v8a5 5 0 1 0 10 0V4.5a3.5 3.5 0 1 0-7 0V13a2 2 0 0 0 4 0V6" />
-                                                            </svg>
-                                                            <span className="sr-only">Attach file</span>
-                                                        </button>
-                                                        <button type="button" className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                                                            <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
-                                                                <path d="M8 0a7.992 7.992 0 0 0-6.583 12.535 1 1 0 0 0 .12.183l.12.146c.112.145.227.285.326.4l5.245 6.374a1 1 0 0 0 1.545-.003l5.092-6.205c.206-.222.4-.455.578-.7l.127-.155a.934.934 0 0 0 .122-.192A8.001 8.001 0 0 0 8 0Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
-                                                            </svg>
-                                                            <span className="sr-only">Set location</span>
-                                                        </button>
-                                                        <button type="button" className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                                                            <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                                                                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-                                                            </svg>
-                                                            <span className="sr-only">Upload image</span>
-                                                        </button>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </form>
+
                                         {/* Review card Component */}
                                         {
                                             review.map((item, index) => {
@@ -200,18 +212,12 @@ export default function DetailBox({ description, openTime, review }: { descripti
                                                                 </ListItemAvatar>
 
                                                                 <ListItemText
-                                                                    primary="Brunch this weekend?"
-                                                                    secondary={<React.Fragment>
-                                                                        {/*React Data Props here*/}
-                                                                        <Rating name="read-only" value={countStar} readOnly />
-                                                                        {`${item?.review_comment}`}
-                                                                        <Button className="btn" startIcon={<ReplyIcon />} onClick={() => setShowReply(!showReply)}>
-                                                                            Reply
-                                                                        </Button>
-                                                                        {showReply && (
-                                                                            <ReplyBox />
-                                                                        )}
-                                                                    </React.Fragment>}
+                                                                    primary={`${item?.user_id}`}
+                                                                    secondary={
+                                                                        <>
+                                                                            <Rating name="read-only" value={rating} readOnly />
+                                                                            {`${item?.review_comment}`}
+                                                                        </>}
                                                                 />
                                                             </ListItem>
                                                         </List>
@@ -275,13 +281,17 @@ export default function DetailBox({ description, openTime, review }: { descripti
                                                     <tbody className="flex-1 sm:flex-none">
                                                         {
                                                             openTime.map((time) => {
+
+                                                                var openTimes = dayjs.utc(time.start_time).format("hh:mm")
+                                                                var closeTime = dayjs.utc(time.end_time).format("HH:mm")
+
                                                                 return (
                                                                     <>
 
                                                                         <tr className="flex flex-col flex-no wrap  sm:table-row mb-2 sm:mb-0">
                                                                             <td className="ิborder-grey-light border bg-gray-100  p-3">{time.day}</td>
-                                                                            <td className="border-grey-light border  p-3">{time.start_time}</td>
-                                                                            <td className="border-grey-light border  p-3">{time.end_time}</td>
+                                                                            <td className="border-grey-light border  p-3">{openTimes}</td>
+                                                                            <td className="border-grey-light border  p-3">{closeTime}</td>
                                                                         </tr>
 
                                                                     </>
@@ -294,15 +304,10 @@ export default function DetailBox({ description, openTime, review }: { descripti
                                             </div>
                                         </div>
                                     </Root>
-
-
-
-
                                 </TabPanel>
                                 <TabPanel value="Menu">
                                     <Skeleton variant="rectangular" width={210} height={118} />
                                 </TabPanel>
-
                             </TabContext>
                         </div>
                     </div>

@@ -11,7 +11,6 @@ import BackgroundCard from "@/components/BackgroundImage";
 import CategoryCard from "@/components/cards/active/CategoryCard";
 import LocationCard from "@/components/cards/active/LocationCard"
 import {storeTemp} from "@/data/store"
- 
 
 const CategorytempData = [
   {
