@@ -1,30 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
-
 import { NextPage, NextPageContext } from "next";
 import DetailBox from "@/components/product/DetailBox";
-import PromotionList from "@/components/product/ContactBox";
-import SelectDateBox from "@/components/product/SelectDateBox";
+import UserBooking from "@/components/product/UserBooking";
 import Galleries from "@/components/product/Galleries";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Rating from "@mui/material/Rating";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Map from "@/components/Map";
-import ConfirmButton from "@/components/botton/ConfirmButton";
-import dayjs from "dayjs";
-
 import { useParams } from "next/navigation";
-
-import { StoreInterface, Store } from "@/interfaces/StoreInterface";
-import { storeTemp } from "@/data/store";
 import { Review } from "@/interfaces/Review";
-
 import { getStoreById } from "@/services/store.service";
 import {GetAllReviewByStoreId} from '@/services/review.service'
 
@@ -38,7 +27,7 @@ const ProductDetail = () => {
     const [storeData, setStoreData] = useState({
         OpenTimes: [],
         category_id: 1,
-        category_name: "",
+        category_name: "temp",
         latitude: 0,
         location: "",
         longitude: 0,
@@ -46,9 +35,9 @@ const ProductDetail = () => {
         store_cover_image: "",
         store_description: "",
         store_id: 1,
-        store_name: "",
-        sum_rating: 0,
-        table_booking: 1,
+        store_name: "temp",
+        sum_rating: 2.1,
+        table_booking: 4,
         updated_at: ""
     });
     const [reviewData, setReviewData] = useState<Review[]>([])
@@ -98,11 +87,11 @@ const ProductDetail = () => {
                                         {storeData?.store_name}
                                     </h2>
                                     <div className="flex flex-wrap items-center mb-6">
-                                    <Rating name="read-only" value={3.5} readOnly />
+                                    <Rating name="read-only" value={storeData.sum_rating} readOnly />
                                         <a
                                             className="mb-4 text-xs dark:text-gray-400 dark:hover:text-gray-300 lg:mb-0"
                                         >
-                                            3.5 reviews
+                                            {storeData.sum_rating} reviews
                                         </a>
                                     </div>
                                 </div>
@@ -113,28 +102,8 @@ const ProductDetail = () => {
                                     />
                                 </Stack>
 
-                                <SelectDateBox seats={storeData.table_booking}  openTime={storeData.OpenTimes} />
-
-                                <div className="mb-6">
-                                    <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">
-                                        <div className="p-3 lg:p-5 ">
-                                            {/* Map */}
-                                            <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
-                                            <div className="p-2 rounded-xl lg:p-6 dark:bg-gray-800 bg-gray-50">
-                                                123/xyz Location
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <PromotionList />
-
-                                <div className="flex flex-cols gap-4 mb-6">
-                                    {/*<button href="@/app/products/category/[category-slug]/[productId]/page#" className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent dark:border-gray-700 hover:border-red-500 hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl" onClick="handleButtonConfirm()">*/}
-                                    {/*    ยืนยันการจอง</button>*/}
-
-                                    <ConfirmButton />
-                                </div>
+                                <UserBooking seats={storeData.table_booking}  openTime={storeData.OpenTimes} />
+                                
                             </div>
                         </div>
                     </div>

@@ -88,7 +88,7 @@ type TimeTemp = {
 export default function DetailBox({ description, openTime, review, store_id }: { description: string, openTime: Array<TimeTemp>, review: Array<Review>, store_id:number }) {
 
     const [value, setValue] = React.useState("Review");
-    const [comment, setComment] = React.useState<string | null>(null);
+    const [comment, setComment] = React.useState<string | null>('');
     const [rating, setRating] = React.useState<number | null>(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
