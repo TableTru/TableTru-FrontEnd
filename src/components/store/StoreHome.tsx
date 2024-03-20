@@ -32,6 +32,7 @@ import {
 } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
@@ -152,6 +153,14 @@ export default function StoreHome() {
                                             <EditIcon />
                                         </ListItemIcon>
                                         <ListItemText primary="แก้ไขรายละเอียด" secondary="กดเพื่อดูหน้าร้านค้า" />
+                                    </ListItemButton>
+                                </ListItem>
+                                <ListItem disablePadding>
+                                    <ListItemButton component="a" href="/store/promo">
+                                        <ListItemIcon>
+                                            <LoyaltyIcon/>
+                                        </ListItemIcon>
+                                        <ListItemText primary="เพิ่มโปรโมชั่น" secondary="กดเพื่อดูรายการโปรโมชั่น" />
                                     </ListItemButton>
                                 </ListItem>
 
