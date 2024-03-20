@@ -94,6 +94,15 @@ export const GetStoreImageByType = async (id: number, imageType: string) => {
   });
 }
 
+export const GetStoreImage = async (id: number) => {
+  return await axios.get(url + `/storeImages/GetStoreImageByType?id=${id}`).then((res: AxiosResponse) => {
+    return res.data.data.rows;
+  }).catch((err: any) => {
+    catchError(err, null, "getUser");
+    return [];
+  });
+}
+
 export const getStorePreview = async () => {
   return await axios.get(url + '/stores/getStorePreview').then((res: AxiosResponse) => {
     return res.data;
