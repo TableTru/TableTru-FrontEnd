@@ -11,9 +11,16 @@ import ReplyIcon from "@mui/icons-material/Reply";
 import Rating from "@mui/material/Rating";
 
 import ReplyBox from "@/components/product/detailBox/comments/ReplyBox"
-import { Review } from "@/interfaces/Review";
 import { User } from "@/interfaces/User";
 import { useParams } from "next/navigation";
+
+interface Review {
+    store_id: number;
+    store_name: string;
+    review_comment: string;
+    createAt: Date;
+    updateAt: Date;
+}
 
 const userTemp: User =
 {
