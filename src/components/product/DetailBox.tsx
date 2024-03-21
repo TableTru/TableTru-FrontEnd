@@ -80,7 +80,7 @@ export default function DetailBox({ description, openTime, review, store_id }: {
 
     const [value, setValue] = React.useState("Review");
     const [comment, setComment] = React.useState<string>('');
-    const [rating, setRating] = React.useState(0);
+    const [rating, setRating] = React.useState<number | null>(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
