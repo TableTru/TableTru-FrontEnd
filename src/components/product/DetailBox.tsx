@@ -88,8 +88,8 @@ type TimeTemp = {
 export default function DetailBox({ description, openTime, review, store_id }: { description: string, openTime: Array<TimeTemp>, review: Array<Review>, store_id:number }) {
 
     const [value, setValue] = React.useState("Review");
-    const [comment, setComment] = React.useState<string | null>('');
-    const [rating, setRating] = React.useState<number | null>(0);
+    const [comment, setComment] = React.useState<string>('');
+    const [rating, setRating] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -282,8 +282,8 @@ export default function DetailBox({ description, openTime, review, store_id }: {
                                                         {
                                                             openTime.map((time) => {
 
-                                                                var openTimes = dayjs.utc(time.start_time).format("hh:mm")
-                                                                var closeTime = dayjs.utc(time.end_time).format("HH:mm")
+                                                                const openTimes = dayjs.utc(time.start_time).format("hh:mm")
+                                                                const closeTime = dayjs.utc(time.end_time).format("HH:mm")
 
                                                                 return (
                                                                     <>

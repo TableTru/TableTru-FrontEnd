@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import {
@@ -7,7 +7,7 @@ import {
   MenuItem,
   FormControl,
   Select,
-
+  TextField,
 } from "@mui/material";
 import { DemoItem, DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -15,46 +15,49 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker, DatePicker } from "@mui/x-date-pickers";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { Dayjs } from "dayjs";
-import { Item } from "@/interfaces/Promo"
-import { initialItems } from "@/data/promotion"
+import utc from "dayjs/plugin/utc";
+// import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
+import { Item } from "@/interfaces/Promo";
+import { initialItems } from "@/data/promotion";
 import Swal from "sweetalert2";
 import Map from "@/components/Map";
 
 type TimeTemp = {
+  day: string;
+  start_time: string;
+  end_time: string;
+};
 
-  day: string
-  start_time: string
-  end_time: string
-
-}
-
-var utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
 
-export default function UserBooking({ seats, openTime }: { seats: number, openTime: Array<TimeTemp> }) {
+export default function UserBooking({
+  seats,
+  openTime,
+}: {
+  seats: number;
+  openTime: Array<TimeTemp>;
+}) {
   const now = dayjs();
-  const [times, setTimes] = useState<Dayjs>();
+  const [times, setTimes] = useState<Dayjs | null>();
   const [seat, setSeat] = useState();
   const [promotionData, setPromotionData] = useState<Item[]>(initialItems);
-  const seatNumbers = Array.from({ length: seats }, (_, index) => index + 1)
+  const seatNumbers = Array.from({ length: seats }, (_, index) => index + 1);
 
   const handleChangeTime = (time: any) => {
     setTimes(time);
     console.log(time.format("YYYY-MM-DD HH:mm"));
   };
 
-
-
   const minTime = () => {
     openTime.map((time) => {
       dayjs(time.start_time);
-    })
+    });
   };
   const maxTime = () => {
     openTime.map((time) => {
       dayjs(time.end_time);
-      console.log(time.end_time)
-    })
+      console.log(time.end_time);
+    });
   };
 
   const handleChangeSeat = (event: any) => {
@@ -64,7 +67,6 @@ export default function UserBooking({ seats, openTime }: { seats: number, openTi
     // }));
     setSeat(event.target.value);
     console.log(event.target.value);
-
   };
 
   const handleButtonConfirm = () => {
@@ -88,19 +90,15 @@ export default function UserBooking({ seats, openTime }: { seats: number, openTi
         });
         const submitObject = {
           table_booking: seat,
-          booking_time: times.format('YYYY-MM-DDTHH:mm:ssZ')
-        }
+          booking_time: dayjs.utc(times).format("YYYY-MM-DDTHH:mm:ssZ"),
+        };
         console.log("active");
         console.log(submitObject);
-        
-
       }
+    });
+  };
 
-    })
-  }
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -112,20 +110,50 @@ export default function UserBooking({ seats, openTime }: { seats: number, openTi
           <div className="p-2 lg:p-5">
             <div className="flex flex-col justify-center gap-x-10 gap-y-4">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DateTimePicker
-                    className="w-full"
-                    label="วันที่และเวลา"
+                <DemoContainer components={["DatePicker, TimePicker"]}>
+                  <DatePicker
+                    label="วันที่"
                     disablePast
+                    format="YYYY/MM/DD HH:mm "
+                    minDate={now}
                     value={times}
                     onChange={(newValue) => setTimes(newValue)}
-                    minDateTime={now}
-                    shouldDisableTime={(timeValue, clockType) =>// เช็คปี
-                      clockType === 'hours' && (timeValue.hour() < 8 || timeValue.hour() > 21)  // เช็คชั่วโมงที่เป็น 12.00 เท่านั้น
-                    }
-                    timeSteps={{ minutes: 30 }}
-                    views={["year", "month", "day", "hours", "minutes"]}
                   />
+
+                  <TimePicker
+                    label="เวลา"
+                    value={times}
+                    minTime={now}
+                    disablePast
+                    shouldDisableTime={
+                      (
+                        timeValue,
+                        clockType // เช็คปี
+                      ) =>
+                        clockType === "hours" &&
+                        (timeValue.hour() < 8 || timeValue.hour() > 21) // เช็คชั่วโมงที่เป็น 12.00 เท่านั้น*
+                    }
+                     timeSteps={{ minutes: 30 }}
+                    onChange={(newValue) => setTimes(newValue)}
+                  />
+
+                  {/*<DateTimePicker*/}
+                  {/*  className="w-full"*/}
+                  {/*  label="วันที่และเวลา"*/}
+                  {/*  disablePast*/}
+                  {/*  defaultValue={null}*/}
+                  {/*  clearable*/}
+                  {/*  value={times}*/}
+                  {/*  format="YYYY/MM/DD HH:mm "*/}
+                  {/*  renderInput={(props) => <TextField {...props} />}*/}
+                  {/*  onChange={(newValue) => setTimes(newValue)}*/}
+                  {/*  minDateTime={now}*/}
+                  {/*  shouldDisableTime={(timeValue, clockType) =>// เช็คปี*/}
+                  {/*    clockType === 'hours' && (timeValue.hour() < 8 || timeValue.hour() > 21)  // เช็คชั่วโมงที่เป็น 12.00 เท่านั้น*/}
+                  {/*  }*/}
+                  {/*  timeSteps={{ minutes: 30 }}*/}
+                  {/*  views={["year", "month", "day", "hours", "minutes"]}*/}
+                  {/*/>*/}
                 </DemoContainer>
               </LocalizationProvider>
 
@@ -172,7 +200,9 @@ export default function UserBooking({ seats, openTime }: { seats: number, openTi
         <Box sx={{ minWidth: 120 }}>
           <p className={"mb-2"}>โปรโมชั่น</p>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">เลือกโค้ดส่วนลด</InputLabel>
+            <InputLabel id="demo-simple-select-label">
+              เลือกโค้ดส่วนลด
+            </InputLabel>
             <Select
               key={seat}
               labelId="demo-simple-select-label"
@@ -181,23 +211,26 @@ export default function UserBooking({ seats, openTime }: { seats: number, openTi
               label="เลิอกโค้ตส่วนลด"
               onChange={handleChangeSeat}
             >
-              {
-                promotionData.map((item, index) => (
-                  <MenuItem key={index} value={index}>{item.name}</MenuItem>
-                ))
-              }
+              {promotionData.map((item, index) => (
+                <MenuItem key={index} value={index}>
+                  {item.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
       </div>
       <div className="flex flex-cols gap-4 mb-6">
-        <button className="w-full px-4 py-3 text-center text-gray-100 bg-red-600
+        <button
+          className="w-full px-4 py-3 text-center text-gray-100 bg-red-600
             border border-transparent dark:border-gray-700 hover:border-red-500
             hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700
-            dark:hover:bg-gray-900 rounded-xl" onClick={handleButtonConfirm}>
+            dark:hover:bg-gray-900 rounded-xl"
+          onClick={handleButtonConfirm}
+        >
           ยืนยันการจอง
         </button>
       </div>
     </>
   );
-};
+}
