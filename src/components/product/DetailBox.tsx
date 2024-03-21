@@ -43,12 +43,20 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import Image from "next/image";
 
 
 dayjs.extend(customParseFormat);
 
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
+
+type Menu = {
+    menu_id: string,
+    menu_image: string,
+    created_date: Date,
+    updated_date: Date
+}
 
 
 const userTemp: User =
@@ -67,6 +75,27 @@ const userTemp: User =
 
 }
 
+const menuTemp: Menu[] = [
+    {
+        menu_id: "1",
+        menu_image: "https://images.unsplash.com/photo-1710780953043-4dc3f98d2d50?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        created_date: new Date(),
+        updated_date: new Date(),
+
+    }, {
+        menu_id: "2",
+        menu_image: "https://images.unsplash.com/photo-1710780953043-4dc3f98d2d50?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        created_date: new Date(),
+        updated_date: new Date(),
+    },
+    {
+        menu_id: "3",
+        menu_image: "https://images.unsplash.com/photo-1710780953043-4dc3f98d2d50?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        created_date: new Date(),
+        updated_date: new Date(),
+    },
+]
+
 type TimeTemp = {
 
     day: string
@@ -76,7 +105,7 @@ type TimeTemp = {
 }
 
 
-export default function DetailBox({ description, openTime, review, store_id }: { description: string, openTime: Array<TimeTemp>, review: Array<Review>, store_id:number }) {
+export default function DetailBox({ description, openTime, review, store_id }: { description: string, openTime: Array<TimeTemp>, review: Array<Review>, store_id: number }) {
 
     const [value, setValue] = React.useState("Review");
     const [comment, setComment] = React.useState<string>('');
@@ -100,7 +129,7 @@ export default function DetailBox({ description, openTime, review, store_id }: {
             review_comment: comment,
             rating: rating,
             user_id: userDataJson.user_id,
-            store_id: store_id 
+            store_id: store_id
         }
         console.log(formData)
         try {
@@ -278,13 +307,11 @@ export default function DetailBox({ description, openTime, review, store_id }: {
 
                                                                 return (
                                                                     <>
-
                                                                         <tr className="flex flex-col flex-no wrap  sm:table-row mb-2 sm:mb-0">
                                                                             <td className="ิborder-grey-light border bg-gray-100  p-3">{time.day}</td>
                                                                             <td className="border-grey-light border  p-3">{openTimes}</td>
                                                                             <td className="border-grey-light border  p-3">{closeTime}</td>
                                                                         </tr>
-
                                                                     </>
 
                                                                 );
@@ -297,7 +324,13 @@ export default function DetailBox({ description, openTime, review, store_id }: {
                                     </Root>
                                 </TabPanel>
                                 <TabPanel value="Menu">
-                                    <Skeleton variant="rectangular" width={210} height={118} />
+                                    {menuTemp.map((item, index) => (
+                                        <Image key={index} layout='fill'
+                                            objectFit='contain'
+                                            src={item.menu_image}
+                                            alt={item.menu_id} />
+                                    ))}
+                                    {/* <Skeleton variant="rectangular" width={210} height={118} /> */}
                                 </TabPanel>
                             </TabContext>
                         </div>
