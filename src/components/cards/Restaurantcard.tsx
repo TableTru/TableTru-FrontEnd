@@ -115,7 +115,7 @@ export default function Restaurantcard() {
   };
 
   useEffect(() => {
-    // fetchData();
+    fetchData();
   }, []);
 
   return (
@@ -127,7 +127,7 @@ export default function Restaurantcard() {
               <CardMedia
                 component="img"
                 height="194"
-                image="../images/Wineconnection.jpg"
+                image={item.store_cover_image}
                 alt="Paella dish"
               />
               <CardContent>
