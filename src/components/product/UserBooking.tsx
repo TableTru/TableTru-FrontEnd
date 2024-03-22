@@ -126,7 +126,7 @@ const roundToNearest30Minutes = (time:any) => {
           store_id: store_id,
           user_id: userDataJson.user_id,
           table_booking: seat,
-          table_booking_status: "ยังไม่ถึงกำหนด"
+          table_booking_status: "ยังไม่ถึงกำหนด",
           booking_time: dayjs(times).format("YYYY-MM-DDTHH:mm:ssZ"),
           promotion: selectPromotion
         };
