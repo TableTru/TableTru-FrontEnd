@@ -25,7 +25,7 @@ import {
     TabPanel,
 } from "@mui/lab";
 
-import { createReview, GetAllReviewByStoreId } from '@/services/review.service'
+
 import { StoreInterface, Store } from "@/interfaces/StoreInterface";
 import { User } from "@/interfaces/User";
 import { useParams } from "next/navigation";
@@ -34,7 +34,8 @@ import { styled } from "@mui/material/styles";
 import "./TableResponsive.css"
 import dayjs, { Dayjs } from "dayjs";
 import { Review } from "@/interfaces/Review";
-
+import { createReview, GetAllReviewByStoreId, GetStoreRatingCount } from '@/services/review.service'
+import {editStore} from '@/services/store.service'
 
 const Root = styled("div")(({ theme }) => ({
     width: "100%", ...theme.typography.body2, color: theme.palette.text.secondary, "& > :not(style) ~ :not(style)": {
@@ -105,7 +106,7 @@ type TimeTemp = {
 }
 
 
-export default function DetailBox({ description, openTime, review, store_id }: { description: string, openTime: Array<TimeTemp>, review: Array<Review>, store_id: number }) {
+export default function DetailBox({ description, openTime, review, store_id, sum_rating }: { description: string, openTime: Array<TimeTemp>, review: Array<Review>, store_id: number, sum_rating: number }) {
 
     const [value, setValue] = React.useState("Review");
     const [comment, setComment] = React.useState<string>('');
@@ -134,6 +135,14 @@ export default function DetailBox({ description, openTime, review, store_id }: {
         console.log(formData)
         try {
             const createReviewRes = await createReview(formData)
+            if(rating != 0){
+                const ratingCount = await GetStoreRatingCount(store_id, true)
+
+                const updateStore = {
+                    sum_rating: ((sum_rating * (ratingCount - 1)) + rating) / ratingCount
+                }
+                await editStore(store_id, updateStore)
+            }
         } catch (error) {
             console.log("error");
         }

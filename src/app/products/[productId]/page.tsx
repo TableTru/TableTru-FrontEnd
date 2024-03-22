@@ -15,7 +15,8 @@ import Map from "@/components/Map";
 import { useParams } from "next/navigation";
 import { Review } from "@/interfaces/Review";
 import { getStoreById } from "@/services/store.service";
-import {GetAllReviewByStoreId} from '@/services/review.service'
+import { GetAllReviewByStoreId } from '@/services/review.service'
+import {CheckBookingTime} from '@/services/tableBooking.service'
 
 // Import Promotion Code 
 import { initialItems } from "@/data/promotion"
@@ -50,6 +51,16 @@ const ProductDetail = () => {
         username: "อังปอ"
     }])
 
+    const [disableTimeData, setDisableTimeData] = useState<Review[]>([{
+        rating_score: 3,
+        rating_status: false,
+        review_comment: "ทดสอบ",
+        review_id: 1,
+        store_id: 1,
+        user_id: 38,
+        username: "อังปอ"
+    }])
+
     const fetchData = async () => {
         const storeId = Number(params.productId)
         console.log(storeId)
@@ -72,11 +83,23 @@ const ProductDetail = () => {
             setReviewData(reviewArray);
             console.log(reviewArray);
         }
-    };
 
-      useEffect(() => {
+        const disableBookingTimeArray = [];
+        const disableBookingTimes = await CheckBookingTime(storeId, data.table_booking);
+        console.log(disableBookingTimes);
+
+        if (disableBookingTimes) {
+            for (const disableBookingTimeObject of disableBookingTimes) {
+                disableBookingTimeArray.push(disableBookingTimeObject);
+            }
+            setDisableTimeData(disableBookingTimeArray);
+            console.log(disableBookingTimeArray);
+        }
+    }
+
+    useEffect(() => {
         // fetchData();
-      }, []);
+    }, []);
 
     return (
         <>
@@ -95,7 +118,7 @@ const ProductDetail = () => {
                                         {storeData?.store_name}
                                     </h2>
                                     <div className="flex flex-wrap items-center mb-6">
-                                    <Rating name="read-only" value={storeData.sum_rating} readOnly />
+                                        <Rating name="read-only" value={storeData.sum_rating} readOnly />
                                         <a
                                             className="mb-4 text-xs dark:text-gray-400 dark:hover:text-gray-300 lg:mb-0"
                                         >
@@ -110,12 +133,12 @@ const ProductDetail = () => {
                                     />
                                 </Stack>
 
-                                <UserBooking seats={storeData.table_booking}  openTime={storeData.OpenTimes} />
-                                
+                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.productId)}/>
+
                             </div>
                         </div>
                     </div>
-                    <DetailBox description={storeData.store_description} openTime={storeData.OpenTimes} review={reviewData} store_id={Number(params.productId)}/>
+                    <DetailBox description={storeData.store_description} openTime={storeData.OpenTimes} review={reviewData} store_id={Number(params.productId)} sum_rating={storeData.sum_rating} />
                 </div>
             </section>
         </>

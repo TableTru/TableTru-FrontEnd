@@ -57,6 +57,15 @@ export const GetAllReviewByStoreId = async (storeId: number) => {
     });
   }
 
+  export const GetStoreRatingCount = async (StoreId: number, ratingStatus: boolean) => {
+    return await axios.get(url + `/reviews/GetStoreRatingCount?StoreId=${StoreId}&status=${ratingStatus}`).then((res: AxiosResponse) => {
+      return res.data.data.total_rows;
+    }).catch((err: any) => {
+      catchError(err, null, "getReview");
+      return [];
+    });
+  }
+
 function catchError(error: any, path: any, func: any): void {
   try {
     return;

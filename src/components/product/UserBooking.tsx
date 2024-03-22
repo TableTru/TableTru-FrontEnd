@@ -21,6 +21,8 @@ import { Item } from "@/interfaces/Promo";
 import { initialItems } from "@/data/promotion";
 import Swal from "sweetalert2";
 import Map from "@/components/Map";
+import { createTableBooking } from '@/services/tableBooking.service'
+import {GetAllPromotionByStoreId} from '@/services/promotion.service'
 
 type TimeTemp = {
   day: string;
@@ -30,18 +32,28 @@ type TimeTemp = {
 
 dayjs.extend(utc);
 
-export default function UserBooking({
-  seats,
-  openTime,
-}: {
-  seats: number;
-  openTime: Array<TimeTemp>;
-}) {
+export default function UserBooking({ seats, openTime, store_id }: { seats: number; openTime: Array<TimeTemp>; store_id: number }) {
   const now = dayjs();
   const [times, setTimes] = useState<Dayjs | null>();
   const [seat, setSeat] = useState();
   const [promotionData, setPromotionData] = useState<Item[]>(initialItems);
   const seatNumbers = Array.from({ length: seats }, (_, index) => index + 1);
+  const userData = localStorage.getItem("userData")
+  const userDataJson = JSON.parse(userData || "[]");
+
+  const fetchData = async () => {
+    const promotionArray = [];
+    const promotions = await GetAllPromotionByStoreId(store_id);
+    console.log(promotions);
+
+    if (promotions) {
+      for (const promotionObject of promotions) {
+        promotionArray.push(promotionObject);
+      }
+      setPromotionData(promotionArray);
+      console.log(promotionArray);
+    }
+  }
 
   const handleChangeTime = (time: any) => {
     setTimes(time);
@@ -69,7 +81,7 @@ export default function UserBooking({
     console.log(event.target.value);
   };
 
-  const handleButtonConfirm = () => {
+  const handleButtonConfirm = async () => {
     Swal.fire({
       title: "แน่ใจหรือว่าจะยืนยัน",
       text: "โปรดตรวจสอบรายละเอียดการจอง",
@@ -79,7 +91,7 @@ export default function UserBooking({
       confirmButtonColor: "#0E9F6E",
       cancelButtonText: "ย้อนกลับ",
       reverseButtons: true,
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         Swal.fire({
           title: "ยืนยันสำเร็จ",
@@ -89,16 +101,21 @@ export default function UserBooking({
           confirmButtonColor: "#0E9F6E",
         });
         const submitObject = {
+          store_id: store_id,
+          user_id: userDataJson.user_id,
           table_booking: seat,
-          booking_time: dayjs.utc(times).format("YYYY-MM-DDTHH:mm:ssZ"),
+          table_booking_time: dayjs.utc(times).format("YYYY-MM-DDTHH:mm:ssZ"),
+          table_booking_status: "ยังไม่ถึงกำหนด"
         };
         console.log("active");
         console.log(submitObject);
+        await createTableBooking(submitObject);
       }
     });
   };
 
-  useEffect(() => {}, []);
+
+  useEffect(() => { }, []);
 
   return (
     <>
@@ -133,7 +150,7 @@ export default function UserBooking({
                         clockType === "hours" &&
                         (timeValue.hour() < 8 || timeValue.hour() > 21) // เช็คชั่วโมงที่เป็น 12.00 เท่านั้น*
                     }
-                     timeSteps={{ minutes: 30 }}
+                    timeSteps={{ minutes: 30 }}
                     onChange={(newValue) => setTimes(newValue)}
                   />
 
