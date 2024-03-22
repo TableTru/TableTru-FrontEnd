@@ -11,11 +11,19 @@ import {
 } from "@mui/material";
 import { DemoItem, DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+// with date-fns v3.x
+import { de } from 'date-fns/locale/de';
+
+
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker, DatePicker } from "@mui/x-date-pickers";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 // import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
 import { Item } from "@/interfaces/Promo";
 import { initialItems } from "@/data/promotion";
@@ -98,7 +106,7 @@ export default function UserBooking({
     });
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <>
@@ -114,7 +122,7 @@ export default function UserBooking({
                   <DatePicker
                     label="วันที่"
                     disablePast
-                    format="YYYY/MM/DD HH:mm "
+                    format="YYYY/MM/DD"
                     minDate={now}
                     value={times}
                     onChange={(newValue) => setTimes(newValue)}
@@ -133,7 +141,12 @@ export default function UserBooking({
                         clockType === "hours" &&
                         (timeValue.hour() < 8 || timeValue.hour() > 21) // เช็คชั่วโมงที่เป็น 12.00 เท่านั้น*
                     }
-                     timeSteps={{ minutes: 30 }}
+                    viewRenderers={{
+                      hours: renderTimeViewClock,
+                      minutes: renderTimeViewClock,
+                    }}
+
+                    timeSteps={{ minutes: 30 }}
                     onChange={(newValue) => setTimes(newValue)}
                   />
 
