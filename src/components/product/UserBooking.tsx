@@ -44,12 +44,16 @@ dayjs.extend(utc);
 export default function UserBooking({ seats, openTime, store_id }: { seats: number; openTime: Array<TimeTemp>; store_id: number }) {
   const now = dayjs();
   const [times, setTimes] = useState<Dayjs | null>();
+  const [tempTime, setTempTime] = useState<Dayjs | null>();
   const [seat, setSeat] = useState();
   const [selectPromotion, setSelectPromotion] = useState();
   const [promotionData, setPromotionData] = useState<Item[]>(initialItems);
   const seatNumbers = Array.from({ length: seats }, (_, index) => index + 1);
   const userData = localStorage.getItem("userData")
   const userDataJson = JSON.parse(userData || "[]");
+
+  const [dateString, setDateString] = useState('')
+  const [timeString, setTimeString] = useState('')
 
   const fetchData = async () => {
     const promotionArray = [];
@@ -68,6 +72,17 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
   const handleChangeTime = (time: any) => {
     setTimes(time);
     console.log(time.format("YYYY-MM-DD HH:mm"));
+    setDateString(time.format("YYYY-MM-DD"))
+  };
+
+  const handleOnlyTime = (time: any) => {
+    setTempTime(time);
+    console.log(time.format("YYYY-MM-DD HH:mm"));
+    setTimeString(time.format("HH:mm"))
+
+    const combineTime = `combineTime = ${dateString} ${time.format("HH:mm")}`
+    console.log(combineTime);
+    
   };
 
   const minTime = () => {
@@ -156,14 +171,14 @@ const roundToNearest30Minutes = (time:any) => {
                     format="YYYY/MM/DD"
                     minDate={now}
                     value={times}
-                    onChange={(newValue) => setTimes(newValue)}
+                    onChange={(newValue) => handleChangeTime(newValue)}
                   />
                   <TimePicker
                     label="เวลา"
-                    value={times}
+                    value={tempTime}
                     minTime={now}
                     disablePast
-                    defaultValue={now}
+                    // defaultValue={now}
                     shouldDisableTime={
                       (
                         timeValue,
@@ -178,7 +193,7 @@ const roundToNearest30Minutes = (time:any) => {
                     // }}
 
                     timeSteps={{ minutes: 30 }}
-                    onChange={handleChangeTime}
+                    onChange={(newValue) => handleOnlyTime(newValue)}
                   /> 
 
                   {/*<DateTimePicker*/}
