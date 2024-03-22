@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import {
   Box,
   InputLabel,
@@ -11,11 +11,20 @@ import {
 } from "@mui/material";
 import { DemoItem, DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+// with date-fns v3.x
+import { de } from 'date-fns/locale/de';
+
+
+import { MultiSectionDigitalClock } from '@mui/x-date-pickers/MultiSectionDigitalClock';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker, DatePicker } from "@mui/x-date-pickers";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 // import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
 import { Item } from "@/interfaces/Promo";
 import { initialItems } from "@/data/promotion";
@@ -36,6 +45,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
   const now = dayjs();
   const [times, setTimes] = useState<Dayjs | null>();
   const [seat, setSeat] = useState();
+  const [selectPromotion, setSelectPromotion] = useState();
   const [promotionData, setPromotionData] = useState<Item[]>(initialItems);
   const seatNumbers = Array.from({ length: seats }, (_, index) => index + 1);
   const userData = localStorage.getItem("userData")
@@ -81,6 +91,18 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
     console.log(event.target.value);
   };
 
+
+  const handleChangePromotion = (event:any) => {
+    setSelectPromotion(event.target.value)
+    console.log(event.target.value);
+  }
+
+
+const roundToNearest30Minutes = (time:any) => {
+    const roundedMinute = Math.round(time.minute() / 30) * 30;
+    return time.startOf("minute").add(roundedMinute, "minute");
+};
+
   const handleButtonConfirm = async () => {
     Swal.fire({
       title: "แน่ใจหรือว่าจะยืนยัน",
@@ -104,8 +126,9 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
           store_id: store_id,
           user_id: userDataJson.user_id,
           table_booking: seat,
-          table_booking_time: dayjs.utc(times).format("YYYY-MM-DDTHH:mm:ssZ"),
           table_booking_status: "ยังไม่ถึงกำหนด"
+          booking_time: dayjs(times).format("YYYY-MM-DDTHH:mm:ssZ"),
+          promotion: selectPromotion
         };
         console.log("active");
         console.log(submitObject);
@@ -113,7 +136,6 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
       }
     });
   };
-
 
   useEffect(() => { }, []);
 
@@ -127,21 +149,21 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
           <div className="p-2 lg:p-5">
             <div className="flex flex-col justify-center gap-x-10 gap-y-4">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker, TimePicker"]}>
+                <DemoContainer components={["DatePicker, TimePicker, MultiSectionDigitalClock"]}>
                   <DatePicker
                     label="วันที่"
                     disablePast
-                    format="YYYY/MM/DD HH:mm "
+                    format="YYYY/MM/DD"
                     minDate={now}
                     value={times}
                     onChange={(newValue) => setTimes(newValue)}
                   />
-
                   <TimePicker
                     label="เวลา"
                     value={times}
                     minTime={now}
                     disablePast
+                    defaultValue={now}
                     shouldDisableTime={
                       (
                         timeValue,
@@ -150,9 +172,14 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
                         clockType === "hours" &&
                         (timeValue.hour() < 8 || timeValue.hour() > 21) // เช็คชั่วโมงที่เป็น 12.00 เท่านั้น*
                     }
+                    // viewRenderers={{
+                    //   hours: renderTimeViewClock,
+                    //   minutes: renderTimeViewClock,
+                    // }}
+
                     timeSteps={{ minutes: 30 }}
-                    onChange={(newValue) => setTimes(newValue)}
-                  />
+                    onChange={handleChangeTime}
+                  /> 
 
                   {/*<DateTimePicker*/}
                   {/*  className="w-full"*/}
@@ -221,12 +248,12 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
               เลือกโค้ดส่วนลด
             </InputLabel>
             <Select
-              key={seat}
+              key={selectPromotion}
               labelId="demo-simple-select-label"
-              value={seat}
+              value={selectPromotion}
               id="demo-simple-select"
               label="เลิอกโค้ตส่วนลด"
-              onChange={handleChangeSeat}
+              onChange={handleChangePromotion}
             >
               {promotionData.map((item, index) => (
                 <MenuItem key={index} value={index}>
@@ -243,7 +270,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
             border border-transparent dark:border-gray-700 hover:border-red-500
             hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700
             dark:hover:bg-gray-900 rounded-xl"
-          onClick={handleButtonConfirm}
+            onClick={handleButtonConfirm}
         >
           ยืนยันการจอง
         </button>

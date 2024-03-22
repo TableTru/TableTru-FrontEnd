@@ -42,11 +42,11 @@ export default function Galleries() {
     }, []);
 
     const itemTemplate = (item: any) => {
-        return <Image src={item.store_image_name} alt={item.store_image_id} style={{ width: '100%', display: 'block', height:'75%' }} />
+        return <img src={item.store_image_name} alt={item.store_image_id} style={{ width: '100%', display: 'block'}} />
     }
 
     const thumbnailTemplate = (item: any) => {
-        return <Image src={item.store_image_name}  alt={item.store_image_id} />
+        return <img src={item.store_image_name}  alt={item.store_image_id} />
     }
 
     return (
