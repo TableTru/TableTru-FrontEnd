@@ -78,23 +78,18 @@ const userTemp: User =
 const menuTemp: Menu[] = [
     {
         menu_id: "1",
-        menu_image: "https://images.unsplash.com/photo-1710780953043-4dc3f98d2d50?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        menu_image: "https://images.unsplash.com/photo-1710780953043-4dc3f98d2d50?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         created_date: new Date(),
-        updated_date: new Date(),
-
-    }, {
-        menu_id: "2",
-        menu_image: "https://images.unsplash.com/photo-1710780953043-4dc3f98d2d50?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        created_date: new Date(),
-        updated_date: new Date(),
-    },
+        updated_date: new Date(),  },
     {
-        menu_id: "3",
-        menu_image: "https://images.unsplash.com/photo-1710780953043-4dc3f98d2d50?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        menu_id: "2",
+        menu_image: "https://images.unsplash.com/photo-1711052692809-7f72a69f2791?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         created_date: new Date(),
-        updated_date: new Date(),
-    },
+        updated_date: new Date()
+    }
+
 ]
+
 
 type TimeTemp = {
 
@@ -324,12 +319,17 @@ export default function DetailBox({ description, openTime, review, store_id }: {
                                     </Root>
                                 </TabPanel>
                                 <TabPanel value="Menu">
+                                    <>
+                                    <div  className={"flex-cols items-center"}>
                                     {menuTemp.map((item, index) => (
-                                        <Image key={index} layout='fill'
-                                            objectFit='contain'
+                                        <Image key={index} width={1028} height={2000}
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             src={item.menu_image}
                                             alt={item.menu_id} />
                                     ))}
+                                    </div>
+                                    </>
+                                    {/* <img src={menuTemp.menu_image} alt={menuTemp.menu_id}/> */}
                                     {/* <Skeleton variant="rectangular" width={210} height={118} /> */}
                                 </TabPanel>
                             </TabContext>
