@@ -7,14 +7,14 @@ import NextImage from "next/image";
 import { getLocation } from '@/services/location.service'
 
 
-const LocationCard = ({ location }: { location: Location }) => {
+const LocationCard = ({ location }: { location: any }) => {
     const router = useRouter()
     return (
         <>
             <div className="w-64 h-64 max-w-xs overflow-hidden rounded-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
                 <Card className="col-span-2 w-[200px] h-[200px] lg:col-span-4 lg:h-[300px] lg:w-[250px] "
                     isPressable isHoverable
-                    onPress={() => router.push(`/search/${location.location_name}`)}
+                    onPress={() => router.push(`/search?location=${location.location_path}`)}
                     key={location.location_id}>
                     <CardHeader className="absolute z-10 bottom-2 min-h-full flex-col !items-center bg-black/30" >
                         <div className="flex flex-grow gap-2 items-center">

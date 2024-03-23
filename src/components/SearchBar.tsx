@@ -19,9 +19,20 @@ import {
   Typography,
   TextField,
   Button,
+  Link,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  Stack,
+  CardActions,
+  Chip,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Loader } from '@googlemaps/js-api-loader';
+import Rating from "@mui/material/Rating";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import { getAllStore, getStorePreview } from "@/services/store.service";
 
 const loader = new Loader({
   apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -29,85 +40,126 @@ const loader = new Loader({
   libraries: ['places'], // เพิ่ม libraries places
 });
 
+
+const tempData = [
+  {
+    store_id: "1",
+    store_name: "ร้านค้า1",
+    sum_rating: "4",
+    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
+    category: {
+      category_name: "หมวดหมู่"
+    },
+    location_id: "2",
+  },
+  {
+    store_id: "2",
+    store_name: "ร้านค้า2",
+    sum_rating: "2",
+    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
+    category: {
+      category_name: "หมวดหมู่"
+    },
+    location_id: "2",
+  },
+  {
+    store_id: "3",
+    store_name: "ร้านค้า3",
+    sum_rating: "4",
+    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
+    category: {
+      category_name: "หมวดหมู่"
+    },
+    location_id: "สาทร",
+  },
+];
+
 export default function Search({ placeholder }: { placeholder: string }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
   const searchParams = useSearchParams()
-  const search = searchParams.get('search')
+  const locationQuery = searchParams.get('location')
+  const searchQuery = searchParams.get('search')
+  const categoryQuery = searchParams.get('category')
 
-  const onClick = () => {
-    console.log("active");
+  const [storeData, setStoreData] = useState<object[]>(tempData);
+  const [locationData, setLocationData] = useState<string | null>(locationQuery)
+  const [categoryId, setCategoryId] = useState<number | null>(Number(categoryQuery))
+  const [search, setSearch] = useState<string | null>(searchQuery)
+  const [filter, setFilter] = useState(1)
 
+  const filterClickHandle = () => {
+    console.log(search);
+    console.log(locationData);
+    console.log(categoryId);
+    console.log(filter);
   }
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case 'search':
+        setSearch(value);
+        console.log('search:', value);
+        break;
+      case 'location':
+        setLocationData(value)
+        console.log('location:', value);
+        break;
+      case 'category':
+        setCategoryId(value)
+        console.log('category:', value);
+        break;
+        case 'filter':
+          setFilter(value)
+        console.log('filter:', value);
+        break;
+      default:
+        break;
+    }
+  }
+
+  const fetchData = async () => {
+    const storeArray = [];
+    const data = await getAllStore();
+    console.log(data);
+
+    if (data) {
+      const stores = data;
+      for (const storeObj of stores) {
+        storeArray.push(storeObj);
+      }
+    }
+    setStoreData(storeArray);
+    console.log(storeArray);
+  };
+
+  useEffect(() => {
+    if(categoryId == 0){
+      setCategoryId(1)
+    }
+    // fetchData()
+  }, [locationData, categoryId, search]);
 
   useEffect(() => {
     loader.load().then(() => {
       const google = window.google;
-      if (mapRef.current && !map) {
-        const geolocation = navigator.geolocation;
-        if (geolocation) {
-          geolocation.getCurrentPosition(
-            (position) => {
-              const initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-              const newMap = new google.maps.Map(mapRef.current, {
-                center: initialLocation,
-                zoom: 12,
-              })
-              setMap(newMap);
-              // newMap.setCenter(initialLocation);
-              // new google.maps.Marker({
-              //     position: initialLocation,
-              //     map: newMap,
-              // });
-            },
-            (error) => {
-              if (error.code === error.PERMISSION_DENIED) {
-                const newMap = new google.maps.Map(mapRef.current, {
-                  center: { lat: 13.7563, lng: 100.5018 }, // ตำแหน่งเริ่มต้นที่กรุงเทพมหานคร,
-                  zoom: 12,
-                })
-                setMap(newMap);
-                // newMap.setCenter({ lat: 13.7563, lng: 100.5018 });
-                // new google.maps.Marker({
-                //     position: { lat: 13.7563, lng: 100.5018 },
-                //     map: newMap,
-                // });
-              }
-            }
-          );
-        }
-        else {
-          console.log("my location off");
-
-        }
-      }
-      if (inputRef.current && google) {
-        const autocomplete = new google.maps.places.Autocomplete(inputRef.current);
+      const autocomplete = new google.maps.places.Autocomplete(inputRef.current);
         autocomplete.addListener('place_changed', () => {
           const place = autocomplete.getPlace();
-          if (place && place.geometry && map) {
+          if (place && place.geometry) {
             const location = place.geometry.location; //ตำแหน่งแบบ lat long
             console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
-            // setFormData({
-            //     ...formData,
-            //     location: place.formatted_address,
-            //     latitude: place.geometry.location.lat(),
-            //     longitude: place.geometry.location.lng(),
-            // });
-            map.setCenter(location);
-            new google.maps.Marker({
-              position: location,
-              map: map,
-            });
+            setLocationData(place.formatted_address);
           }
         });
         autocomplete.addListener('predictions_changed', () => {
           setPredictions(autocomplete.getPlacePredictions());
         });
-      }
     });
+    console.log("location update2");
   }, [map]);
 
   const handleSelectPrediction = (prediction: google.maps.places.AutocompletePrediction) => {
@@ -121,9 +173,16 @@ export default function Search({ placeholder }: { placeholder: string }) {
     setPredictions([]);
   };
 
+  useEffect(() => {
+    setLocationData(locationData)
+    console.log("location update1");
+  }, [locationData]);
+
   return (
     <>
-      <h1>Query: {search}</h1>
+      <h1>location: {locationQuery}</h1>
+      <h1>search: {searchQuery}</h1>
+      <h1>category: {categoryQuery}</h1>
       <label htmlFor="simple-search" className="sr-only">Search</label>
       <div className="relative w-full">
         <div
@@ -134,7 +193,11 @@ export default function Search({ placeholder }: { placeholder: string }) {
         </div>
         <input type="text" id="simple-search"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder={placeholder} required />
+          required
+          placeholder={placeholder}
+          name="search"
+          value={search}
+          onChange={handleChange} />
       </div>
 
       <div className="py-4">
@@ -154,6 +217,9 @@ export default function Search({ placeholder }: { placeholder: string }) {
                 inputRef={inputRef}
                 required
                 fullWidth
+                name="location"
+                value={locationData}
+                onChange={handleChange}
               />
               {predictions.length > 0 && (
                 <ul>
@@ -176,7 +242,8 @@ export default function Search({ placeholder }: { placeholder: string }) {
                   id="filter"
                   name="filter"
                   label="filter"
-                  value={1}
+                  value={filter}
+                onChange={handleChange}
                 >
                   <MenuItem value={1}>คะแนนรีวิว</MenuItem>
                   <MenuItem value={2}>ใกล้ฉัน</MenuItem>
@@ -187,10 +254,11 @@ export default function Search({ placeholder }: { placeholder: string }) {
                 <Select
 
                   fullWidth
-                  id="order"
-                  name="order"
-                  label="order"
-                  value={1}
+                  id="category"
+                  name="category"
+                  label="category"
+                  value={categoryId}
+                  onChange={handleChange}
                 >
                   <MenuItem value={1}>ทั้งหมด</MenuItem>
                   <MenuItem value={2}>ไทย</MenuItem>
@@ -208,12 +276,42 @@ export default function Search({ placeholder }: { placeholder: string }) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={onClick}
+              onClick={filterClickHandle}
             >
               ยืนยัน
             </Button>
           </AccordionActions>
         </Accordion>
+      </div>
+
+      <div className="w-fit flex item-center justify-around center mx-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 justify-items-center gap-y-20 gap-x-14 mt-10 mb-5">
+        {storeData.map((item) => (
+          <Link href={`/products/${item.store_id}`} key={item.store_id}>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  height="194"
+                  image={item.store_cover_image}
+                  alt="Paella dish"
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5">
+                    {item.store_name}
+                  </Typography>
+                  <Stack direction="row" spacing={1}>
+                    <Rating name="read-only" value={item.sum_rating} readOnly />
+                    <Typography component="legend">{item.sum_rating} reviews</Typography>
+                  </Stack>
+                </CardContent>
+
+                <CardActions sx={{ my: 2 }}>
+                  <Chip icon={<RestaurantIcon />} label={item.category_id} />
+                </CardActions>
+              </CardActionArea>
+            </Card>
+          </Link>
+        ))}
       </div>
     </>
   );
