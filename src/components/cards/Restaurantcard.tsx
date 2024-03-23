@@ -115,7 +115,7 @@ export default function Restaurantcard() {
   };
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
   }, []);
 
   return (
