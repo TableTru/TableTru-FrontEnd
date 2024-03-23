@@ -90,7 +90,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const [search, setSearch] = useState<string | null>(searchQuery)
   const [filter, setFilter] = useState(1)
 
-  const filterClickHandle = () => {
+  const onClick = () => {
     console.log(search);
     console.log(locationData);
     console.log(categoryId);
@@ -112,8 +112,8 @@ export default function Search({ placeholder }: { placeholder: string }) {
         setCategoryId(value)
         console.log('category:', value);
         break;
-        case 'filter':
-          setFilter(value)
+      case 'filter':
+        setFilter(value)
         console.log('filter:', value);
         break;
       default:
@@ -137,7 +137,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   };
 
   useEffect(() => {
-    if(categoryId == 0){
+    if (categoryId == 0) {
       setCategoryId(1)
     }
     // fetchData()
@@ -147,17 +147,17 @@ export default function Search({ placeholder }: { placeholder: string }) {
     loader.load().then(() => {
       const google = window.google;
       const autocomplete = new google.maps.places.Autocomplete(inputRef.current);
-        autocomplete.addListener('place_changed', () => {
-          const place = autocomplete.getPlace();
-          if (place && place.geometry) {
-            const location = place.geometry.location; //ตำแหน่งแบบ lat long
-            console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
-            setLocationData(place.formatted_address);
-          }
-        });
-        autocomplete.addListener('predictions_changed', () => {
-          setPredictions(autocomplete.getPlacePredictions());
-        });
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (place && place.geometry) {
+          const location = place.geometry.location; //ตำแหน่งแบบ lat long
+          console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
+          setLocationData(place.formatted_address);
+        }
+      });
+      autocomplete.addListener('predictions_changed', () => {
+        setPredictions(autocomplete.getPlacePredictions());
+      });
     });
     console.log("location update2");
   }, [map]);
@@ -198,6 +198,13 @@ export default function Search({ placeholder }: { placeholder: string }) {
           name="search"
           value={search}
           onChange={handleChange} />
+        <Button
+          color="primary"
+          onClick={onClick}
+          className="search absolute inset-y-0 right-0 flex items-center px-3 
+                            text-white hover:text-red-700 bg-red-700">
+          Search
+        </Button>
       </div>
 
       <div className="py-4">
@@ -243,7 +250,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
                   name="filter"
                   label="filter"
                   value={filter}
-                onChange={handleChange}
+                  onChange={handleChange}
                 >
                   <MenuItem value={1}>คะแนนรีวิว</MenuItem>
                   <MenuItem value={2}>ใกล้ฉัน</MenuItem>
@@ -276,7 +283,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={filterClickHandle}
+              onClick={onClick}
             >
               ยืนยัน
             </Button>

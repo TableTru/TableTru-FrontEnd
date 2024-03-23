@@ -32,7 +32,7 @@ export default function SearchHome() {
                     onChange={handleChange}
                     onClick={onClick} />
                 <div >
-                    <a href="/search">
+                    <a href={`/search?search=${search}`}>
                         <Button
                             color="primary"
                             className="search absolute inset-y-0 right-0 flex items-center px-3 
