@@ -1,5 +1,5 @@
 import { Store } from "@/interfaces/StoreInterface";
-import Search from "./SearchBar";
+import SearchHome from "@/components/SearchHome";
 import { storeTemp } from "@/data/store";
 
 const productsTemp = [
@@ -68,7 +68,7 @@ export default function BackgroundCard (){
                                       data-aos="zoom-y-out" data-aos-delay="300">
                                      <div>
                                      </div>
-                                     <Search placeholder={"Search Keyword..."} store={ productsTemp }/>
+                                     <SearchHome/>
                                  </div>
                              </div>
                          </div>

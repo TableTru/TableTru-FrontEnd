@@ -9,9 +9,10 @@ import { CategoryInterface } from "@/interfaces/Category";
 
 
 
-export default function CategoryCard<T>({category}:{category:T}) {
+export default function CategoryCard({category}:{category:any}) {
 
     const router = useRouter();
+    const categoryPathId = Number(category.category_id)+1
 
     return (
         <>
@@ -20,7 +21,7 @@ export default function CategoryCard<T>({category}:{category:T}) {
                   className="col-span-2 w-[200px] h-[200px] lg:col-span-4 lg:h-[300px] lg:w-[250px] "
                   isPressable
                   isHoverable
-                  onPress={() => router.push(`/search/${category.category_name}`)}
+                  onPress={() => router.push(`/search?category=${categoryPathId}`)}
                 >
                   <CardHeader className="absolute z-10 bottom-2 min-h-full flex-col !items-center bg-black/30">
                     <div className="flex flex-grow gap-2 items-center">
