@@ -27,6 +27,7 @@ import {
   Stack,
   CardActions,
   Chip,
+  Box,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Loader } from '@googlemaps/js-api-loader';
@@ -103,7 +104,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     navigator.geolocation.getCurrentPosition((position) => {
       const geocoder = new google.maps.Geocoder();
       const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    
+
       geocoder.geocode({ 'location': latLng }, (results, status) => {
         if (status === 'OK') {
           if (results[0]) {
@@ -117,7 +118,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
         }
       });
     });
-    
+
   }
 
   const handleChange = (e: any) => {
@@ -137,6 +138,25 @@ export default function Search({ placeholder }: { placeholder: string }) {
         break;
       case 'filter':
         setFilter(value)
+        if(value == 3){
+          navigator.geolocation.getCurrentPosition((position) => {
+            const geocoder = new google.maps.Geocoder();
+            const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      
+            geocoder.geocode({ 'location': latLng }, (results, status) => {
+              if (status === 'OK') {
+                if (results[0]) {
+                  console.log(results[0].formatted_address); // แสดงชื่อสถานที่
+                  setLocationData(results[0].formatted_address)
+                } else {
+                  console.log('No results found');
+                }
+              } else {
+                console.error('Geocoder failed due to: ' + status);
+              }
+            });
+          });
+        }
         console.log('filter:', value);
         break;
       default:
@@ -203,31 +223,31 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
   return (
     <>
-      <h1>location: {locationQuery}</h1>
-      <h1>search: {searchQuery}</h1>
-      <h1>category: {categoryQuery}</h1>
       <label htmlFor="simple-search" className="sr-only">Search</label>
       <div className="relative w-full">
-        <div
-          className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-          </svg>
-        </div>
-        <input type="text" id="simple-search"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          required
-          placeholder={placeholder}
-          name="search"
-          value={search}
-          onChange={handleChange} />
-        <Button
-          color="primary"
-          onClick={onClick}
-          className="search absolute inset-y-0 right-0 flex items-center px-3 
-                            text-white hover:text-red-700 bg-red-700">
-          Search
-        </Button>
+        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+          <div
+            className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+          </div>
+          <input type="text" id="simple-search"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+            placeholder={placeholder}
+            name="search"
+            value={search}
+            onChange={handleChange} />
+          <Button
+            sx={{ borderRadius: '0 0.5rem 0.5rem 0' }}
+            variant="contained"
+            onClick={onClick}
+            className="search absolute inset-y-0 right-0 flex items-center px-3">
+            Search
+          </Button>
+        </Box>
+
       </div>
 
       <div className="py-4">
@@ -244,26 +264,22 @@ export default function Search({ placeholder }: { placeholder: string }) {
             <Grid item xs={6}>
               <Typography variant="subtitle1">ค้นหาพิกัดของร้าน</Typography>
               <TextField
-                inputRef={inputRef}
-                required
-                fullWidth
-                name="location"
-                value={locationData}
-                onChange={handleChange}
-              />
-              {predictions.length > 0 && (
-                <ul>
-                  {predictions.map((prediction, index) => (
-                    <li key={index} onClick={() => handleSelectPrediction(prediction)}>
-                      {prediction.description}
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-            </Grid>
-            <Grid item xs={6}>
-              <Button onClick={myLocation}>MyLocation</Button>
+                  inputRef={inputRef}
+                  required
+                  fullWidth
+                  name="location"
+                  value={locationData}
+                  onChange={handleChange}
+                />
+                {predictions.length > 0 && (
+                  <ul>
+                    {predictions.map((prediction, index) => (
+                      <li key={index} onClick={() => handleSelectPrediction(prediction)}>
+                        {prediction.description}
+                      </li>
+                    ))}
+                  </ul>
+                )}
             </Grid>
 
             <Grid container spacing={2} >
@@ -279,7 +295,8 @@ export default function Search({ placeholder }: { placeholder: string }) {
                   onChange={handleChange}
                 >
                   <MenuItem value={1}>คะแนนรีวิว</MenuItem>
-                  <MenuItem value={2}>ใกล้ฉัน</MenuItem>
+                  <MenuItem value={2}>ตำแหน่งสถานที่</MenuItem>
+                  <MenuItem value={3}>ร้านค้าใกล้ฉัน</MenuItem>
                 </Select>
               </Grid>
               <Grid item xs={6} sx={{ mt: 2, mb: 2 }}>
