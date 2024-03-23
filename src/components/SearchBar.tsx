@@ -33,6 +33,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import Rating from "@mui/material/Rating";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import { getAllStore, getStorePreview } from "@/services/store.service";
+import MyLocation from './botton/MyLocation';
 
 const loader = new Loader({
   apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -95,6 +96,28 @@ export default function Search({ placeholder }: { placeholder: string }) {
     console.log(locationData);
     console.log(categoryId);
     console.log(filter);
+  }
+
+
+  const myLocation = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const geocoder = new google.maps.Geocoder();
+      const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    
+      geocoder.geocode({ 'location': latLng }, (results, status) => {
+        if (status === 'OK') {
+          if (results[0]) {
+            console.log(results[0].formatted_address); // แสดงชื่อสถานที่
+            setLocationData(results[0].formatted_address)
+          } else {
+            console.log('No results found');
+          }
+        } else {
+          console.error('Geocoder failed due to: ' + status);
+        }
+      });
+    });
+    
   }
 
   const handleChange = (e: any) => {
@@ -218,7 +241,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
           </AccordionSummary>
           <AccordionDetails>
 
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <Typography variant="subtitle1">ค้นหาพิกัดของร้าน</Typography>
               <TextField
                 inputRef={inputRef}
@@ -238,6 +261,9 @@ export default function Search({ placeholder }: { placeholder: string }) {
                 </ul>
               )}
 
+            </Grid>
+            <Grid item xs={6}>
+              <Button onClick={myLocation}>MyLocation</Button>
             </Grid>
 
             <Grid container spacing={2} >
