@@ -36,7 +36,42 @@ const openTime = [
         openTime_id: 1,
         start_time: "2024-02-23T09:00:00Z",
         store_id: 1,
-    }
+    },
+    {
+        day: "Wednesday",
+        end_time: "2024-02-23T21:00:00Z",
+        openTime_id: 1,
+        start_time: "2024-02-23T09:00:00Z",
+        store_id: 1,
+    },
+    {
+        day: "Thursday",
+        end_time: "2024-02-23T21:00:00Z",
+        openTime_id: 1,
+        start_time: "2024-02-23T09:00:00Z",
+        store_id: 1,
+    },
+    {
+        day: "Friday",
+        end_time: "2024-02-23T21:00:00Z",
+        openTime_id: 1,
+        start_time: "2024-02-23T09:00:00Z",
+        store_id: 1,
+    },
+    {
+        day: "Saturday",
+        end_time: "2024-02-23T21:00:00Z",
+        openTime_id: 1,
+        start_time: "2024-02-23T09:00:00Z",
+        store_id: 1,
+    },
+    {
+        day: "Sunday",
+        end_time: "2024-02-23T21:00:00Z",
+        openTime_id: 1,
+        start_time: "2024-02-23T09:00:00Z",
+        store_id: 1,
+    },
 ]
 
 const ProductDetail = () => {
