@@ -45,8 +45,10 @@ export default function MyComponent() {
   const params = useParams();
   const [promoData, setPromoData] = useState<Promotion[]>(initialItems);
   const fetchData = async () => {
-    const store_id = Number(params.productId) // เอาจาก slug product ID
-    const storePromos = await GetAllPromotionByStoreId(store_id);
+
+    const storeData = localStorage.getItem("storeData");
+    const storeDataJson = JSON.parse(storeData || "[]");
+    const storePromos = await GetAllPromotionByStoreId(storeDataJson);
     const promoArray = [];
 
       if(storePromos){

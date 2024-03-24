@@ -22,7 +22,8 @@ export default function Component() {
   return (
     <div className="max-w-[900px] gap-4 grid grid-cols-12 px-8 ">
       {/*list โค๊ตส่วนลด*/}
-      <Card
+      
+      {/* <Card
         className="col-span-4 h-[200px] lg:h-[300px] "
         isPressable
         onPress={() => router.push("/promo")}
@@ -36,7 +37,7 @@ export default function Component() {
           className="z-0 w-full h-full object-cover "
           src="./images/Promo_code.png"
         />
-      </Card>
+      </Card> */}
 
       {/*ร้านอาหารแนะนำ*/}
 

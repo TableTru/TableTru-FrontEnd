@@ -130,15 +130,16 @@ export default function MyComponent() {
                 {`${new Date(item.expiration_date).toLocaleDateString("en-CA")}`}
               </p>
             </CardBody>
-            {/* <CardFooter className="gap-3">
+            <CardFooter className="gap-3">
               {pathname === "/store/promo" ? null : (
                 <>
                   {isLogin ? (
                     <Button
                       color="failure"
                       pill
-                      onClick={() => handleButtonClick(item.id)}
-                      disabled={!item..set}
+                      onClick={() => handleButtonClick(item.promotion_id)}
+                      //disabled status ถ้าเก็บแล้ว
+                      // disabled={!item.set}
                     >
                       เก็บโค้ด
                     </Button>
@@ -147,14 +148,13 @@ export default function MyComponent() {
                       color="failure"
                       pill
                       onClick={() => router.push("/login")}
-                      disabled={!item.set}
                     >
                       เข้าสู่ระบบ
                     </Button>
                   )}{" "}
                 </>
               )}
-            </CardFooter> */}
+            </CardFooter>
           </Card>
         </div>
       ))}

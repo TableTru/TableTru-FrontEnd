@@ -35,14 +35,11 @@ export default function StoreCreate() {
             setIsLogin(true)
             setUserData(userDataJson)
             console.log(userDataJson.user_status);
-
-
         } else {
             console.log("not login");
             window.location.replace('/login')
         }
     }
-
     useEffect((() => {
         checkLoginStatus()
     }), [])
