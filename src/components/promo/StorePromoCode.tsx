@@ -44,10 +44,8 @@ export default function MyComponent() {
   const pathname = usePathname();
   const params = useParams();
   const [promoData, setPromoData] = useState<Promotion[]>(initialItems);
-  
-  
   const fetchData = async () => {
-    const store_id = Number(params.productId)
+    const store_id = Number(params.productId) // เอาจาก slug product ID
     const storePromos = await GetAllPromotionByStoreId(store_id);
     const promoArray = [];
 
@@ -56,7 +54,6 @@ export default function MyComponent() {
           promoArray.push(promoObj);
         }
       }
-
     console.log(promoArray);
   };
 
