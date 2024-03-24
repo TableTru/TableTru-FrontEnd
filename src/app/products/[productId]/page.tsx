@@ -98,7 +98,7 @@ const ProductDetail = () => {
     }
 
     useEffect(() => {
-        // fetchData();
+        fetchData();
     }, []);
 
     return (

@@ -5,7 +5,6 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 
-
 export default function PromotionStore() {
     return (
         <>

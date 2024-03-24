@@ -2,7 +2,7 @@ export interface PromotionInterface<T> {
     [key: string]: T;
   }
 
-  export interface Item {
+  export interface Promotion {
     id: number;
     name: string;
     store_id:number;

@@ -15,7 +15,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 // with date-fns v3.x
-import { de } from 'date-fns/locale/de';
+
 
 
 import { MultiSectionDigitalClock } from '@mui/x-date-pickers/MultiSectionDigitalClock';
@@ -23,7 +23,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker, DatePicker } from "@mui/x-date-pickers";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { Dayjs } from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 // import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
 import { Item } from "@/interfaces/Promo";
@@ -31,7 +30,7 @@ import { initialItems } from "@/data/promotion";
 import Swal from "sweetalert2";
 import Map from "@/components/Map";
 import { createTableBooking } from '@/services/tableBooking.service'
-import {GetAllPromotionByStoreId} from '@/services/promotion.service'
+import { GetAllPromotionByStoreId } from '@/services/promotion.service'
 
 type TimeTemp = {
   day: string;
@@ -39,12 +38,13 @@ type TimeTemp = {
   end_time: string;
 };
 
-dayjs.extend(utc);
+var utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 export default function UserBooking({ seats, openTime, store_id }: { seats: number; openTime: Array<TimeTemp>; store_id: number }) {
   const now = dayjs();
-  const [times, setTimes] = useState<Dayjs | null>();
-  const [tempTime, setTempTime] = useState<Dayjs | null>();
+  const [date, setDate] = useState<Dayjs | null>();
+  const [tempTime, setTempTime] = useState();
   const [seat, setSeat] = useState();
   const [selectPromotion, setSelectPromotion] = useState();
   const [promotionData, setPromotionData] = useState<Item[]>(initialItems);
@@ -69,32 +69,21 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
     }
   }
 
+
   const handleChangeTime = (time: any) => {
-    setTimes(time);
+    setDate(time);
     console.log(time.format("YYYY-MM-DD HH:mm"));
     setDateString(time.format("YYYY-MM-DD"))
   };
 
   const handleOnlyTime = (time: any) => {
-    setTempTime(time);
+    setTempTime(time)
     console.log(time.format("YYYY-MM-DD HH:mm"));
     setTimeString(time.format("HH:mm"))
 
     const combineTime = `combineTime = ${dateString} ${time.format("HH:mm")}`
     console.log(combineTime);
-    
-  };
 
-  const minTime = () => {
-    openTime.map((time) => {
-      dayjs(time.start_time);
-    });
-  };
-  const maxTime = () => {
-    openTime.map((time) => {
-      dayjs(time.end_time);
-      console.log(time.end_time);
-    });
   };
 
   const handleChangeSeat = (event: any) => {
@@ -107,16 +96,20 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
   };
 
 
-  const handleChangePromotion = (event:any) => {
+  const handleChangePromotion = (event: any) => {
     setSelectPromotion(event.target.value)
     console.log(event.target.value);
   }
 
 
-const roundToNearest30Minutes = (time:any) => {
-    const roundedMinute = Math.round(time.minute() / 30) * 30;
-    return time.startOf("minute").add(roundedMinute, "minute");
-};
+  console.log(openTime)
+
+  const startTime = openTime.map((item) => dayjs.utc(item.start_time).hour())
+  const endTime = openTime.map((item) => dayjs.utc(item.end_time).hour())
+
+  console.log(startTime);
+  console.log(endTime);
+
 
   const handleButtonConfirm = async () => {
     Swal.fire({
@@ -142,7 +135,7 @@ const roundToNearest30Minutes = (time:any) => {
           user_id: userDataJson.user_id,
           table_booking: seat,
           table_booking_status: "ยังไม่ถึงกำหนด",
-          booking_time: dayjs(times).format("YYYY-MM-DDTHH:mm:ssZ"),
+          booking_time: dayjs(date).format("YYYY-MM-DDTHH:mm:ssZ"),
           promotion: selectPromotion
         };
         console.log("active");
@@ -165,54 +158,46 @@ const roundToNearest30Minutes = (time:any) => {
             <div className="flex flex-col justify-center gap-x-10 gap-y-4">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker, TimePicker, MultiSectionDigitalClock"]}>
+
+
                   <DatePicker
                     label="วันที่"
                     disablePast
                     format="YYYY/MM/DD"
                     minDate={now}
-                    value={times}
+                    value={date}
                     onChange={(newValue) => handleChangeTime(newValue)}
                   />
+
+
                   <TimePicker
                     label="เวลา"
                     value={tempTime}
-                    minTime={now}
-                    disablePast
-                    // defaultValue={now}
-                    shouldDisableTime={
-                      (
-                        timeValue,
-                        clockType // เช็คปี
-                      ) =>
-                        clockType === "hours" &&
-                        (timeValue.hour() < 8 || timeValue.hour() > 21) // เช็คชั่วโมงที่เป็น 12.00 เท่านั้น*
-                    }
-                    // viewRenderers={{
-                    //   hours: renderTimeViewClock,
-                    //   minutes: renderTimeViewClock,
-                    // }}
+                    shouldDisableTime={(timeValue, clockType) => {
+
+                      if (clockType === 'hours') {
+                        // Get the day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
+                        const currentDay = dayjs(timeValue).day();
+
+                        // Find the opening hours for the current day
+                        const openingHours = openTime.find(day => day.day === dayjs(timeValue).format('dddd'));
+
+                        // If no opening hours are defined for the current day, enable all times
+                        if (!openingHours) {
+                          return false;
+                        }
+                        // Get the start and end times for the current day
+                        const startTime = dayjs.utc(openingHours.start_time).hour();
+                        const endTime = dayjs.utc(openingHours.end_time).hour();
+                        // Check if the selected hour falls outside of opening hours
+                        return timeValue.hour() < startTime || timeValue.hour() >= endTime;
+                      }
+                      return false; // Enable minutes and seconds for all hours
+                    }}
 
                     timeSteps={{ minutes: 30 }}
                     onChange={(newValue) => handleOnlyTime(newValue)}
-                  /> 
-
-                  {/*<DateTimePicker*/}
-                  {/*  className="w-full"*/}
-                  {/*  label="วันที่และเวลา"*/}
-                  {/*  disablePast*/}
-                  {/*  defaultValue={null}*/}
-                  {/*  clearable*/}
-                  {/*  value={times}*/}
-                  {/*  format="YYYY/MM/DD HH:mm "*/}
-                  {/*  renderInput={(props) => <TextField {...props} />}*/}
-                  {/*  onChange={(newValue) => setTimes(newValue)}*/}
-                  {/*  minDateTime={now}*/}
-                  {/*  shouldDisableTime={(timeValue, clockType) =>// เช็คปี*/}
-                  {/*    clockType === 'hours' && (timeValue.hour() < 8 || timeValue.hour() > 21)  // เช็คชั่วโมงที่เป็น 12.00 เท่านั้น*/}
-                  {/*  }*/}
-                  {/*  timeSteps={{ minutes: 30 }}*/}
-                  {/*  views={["year", "month", "day", "hours", "minutes"]}*/}
-                  {/*/>*/}
+                  />
                 </DemoContainer>
               </LocalizationProvider>
 
@@ -285,7 +270,7 @@ const roundToNearest30Minutes = (time:any) => {
             border border-transparent dark:border-gray-700 hover:border-red-500
             hover:text-red-700 hover:bg-red-100 dark:text-gray-400 dark:bg-gray-700
             dark:hover:bg-gray-900 rounded-xl"
-            onClick={handleButtonConfirm}
+          onClick={handleButtonConfirm}
         >
           ยืนยันการจอง
         </button>

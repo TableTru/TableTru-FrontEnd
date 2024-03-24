@@ -109,7 +109,6 @@ export default function DetailBox({ description, openTime, review, store_id, sum
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
-
     };
 
     const handleCommentChange = (event: any) => {
@@ -307,14 +306,14 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                                             openTime.map((time) => {
 
                                                                 const openTimes = dayjs.utc(time.start_time).format("hh:mm")
-                                                                const closeTime = dayjs.utc(time.end_time).format("HH:mm")
+                                                                const closeTimes = dayjs.utc(time.end_time).format("HH:mm")
 
                                                                 return (
                                                                     <>
                                                                         <tr className="flex flex-col flex-no wrap  sm:table-row mb-2 sm:mb-0">
                                                                             <td className="ิborder-grey-light border bg-gray-100  p-3">{time.day}</td>
                                                                             <td className="border-grey-light border  p-3">{openTimes}</td>
-                                                                            <td className="border-grey-light border  p-3">{closeTime}</td>
+                                                                            <td className="border-grey-light border  p-3">{closeTimes}</td>
                                                                         </tr>
                                                                     </>
 

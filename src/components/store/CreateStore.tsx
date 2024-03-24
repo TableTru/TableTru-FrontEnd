@@ -63,37 +63,37 @@ const loader = new Loader({
 
 const OpenTimes = [
     {
-        day: 'วันจันทร์',
+        day: 'Monday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T17:00:00Z',
     },
     {
-        day: 'วันอังคาร',
+        day: 'Tuesday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T17:00:00Z',
     },
     {
-        day: 'วันพุธ',
+        day: 'Wednesday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T17:00:00Z',
     },
     {
-        day: 'วันพฤหัส',
+        day: 'Thursday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T17:00:00Z',
     },
     {
-        day: 'วันศุกร์',
+        day: 'Friday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T17:00:00Z',
     },
     {
-        day: 'วันเสาร์',
+        day: 'Saturday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T17:00:00Z',
     },
     {
-        day: 'วันอาทิตย์',
+        day: 'Sunday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T17:00:00Z',
     },

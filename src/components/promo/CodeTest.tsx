@@ -10,12 +10,11 @@ import {
 } from "@nextui-org/react";
 
 import { Button } from "flowbite-react";
-import { useRouter,usePathname } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 import { withRouter } from 'next/router'
 
-import { Item } from "@/interfaces/Promo"
-import { PromotionCodePivot } from "@/data/promotionPivot";
+import { Promotion } from "@/interfaces/Promo"
 
 type PromotionCode = {
   promotion_code: number;
@@ -23,13 +22,13 @@ type PromotionCode = {
   promotion_id: number;
 };
 
-const initialItems: Item[] = [
+const initialItems: Promotion[] = [
   {
     id: 1,
     name: "ส่วนลด 10 %",
     set: true,
     limit: 1,
-    created_at:new Date(),
+    created_at: new Date(),
     store_id: 1,
     expiration_date: new Date("2024-12-31"),
   },
@@ -39,23 +38,23 @@ const initialItems: Item[] = [
     set: true,
     limit: 30,
     store_id: 1,
-    created_at:new Date(),
+    created_at: new Date(),
     expiration_date: new Date("2024-12-31"),
   },
   {
     id: 3,
     name: "ส่วนลด 30%",
     set: true,
-    limit:1,
+    limit: 1,
     store_id: 2,
-    created_at:new Date(),
+    created_at: new Date(),
     expiration_date: new Date("2024-12-31"),
   },
   {
     id: 4,
     name: "ส่วนลด 10% แถม 20%",
     set: true,
-    limit:20,
+    limit: 20,
     store_id: 2,
     created_at: new Date(),
     expiration_date: new Date("2024-12-31"),
@@ -95,7 +94,7 @@ export default function MyComponent() {
 
   return items.map((item) => (
     <div key={item.id} className="flex flex-col items-center justify-center">
-      <Card className="max-w-[340px]">
+      <Card className="w-[300px]">
         <CardHeader className="justify-between">
           <div className="flex gap-5">
             <Avatar isBordered radius="full" size="md" />
@@ -112,31 +111,31 @@ export default function MyComponent() {
         </CardHeader>
         <CardBody className="px-3 py-0 text-small text-default-400">
           <p>{item.name}</p>
-          <p className="mt-8">วันหมดอายุ: {`${item.expiration_date.toLocaleDateString('en-CA')}`}</p>
+          <p className="mt-8 text-black">วันหมดอายุ: {`${item.expiration_date.toLocaleDateString('en-CA')}`}</p>
         </CardBody>
         <CardFooter className="gap-3">
-          {pathname ==='/store/promo'? null:
-          <>
-            {isLogin ? (
-              <Button
-              color="failure"
-              pill
-              onClick={() => handleButtonClick(item.id)}
-              disabled={!item.set}
-              >
-                เก็บโค้ด
-              </Button>
-            ) : (
-            <Button
-              color="failure"
-              pill
-              onClick={() => router.push("/login")}
-              disabled={!item.set}
-            >
-              เข้าสู่ระบบ
-            </Button>
-          
-          ) } </> }
+          {pathname === '/store/promo' ? null :
+            <>
+              {isLogin ? (
+                <Button
+                  color="failure"
+                  pill
+                  onClick={() => handleButtonClick(item.id)}
+                  disabled={!item.set}
+                >
+                  เก็บโค้ด
+                </Button>
+              ) : (
+                <Button
+                  color="failure"
+                  pill
+                  onClick={() => router.push("/login")}
+                  disabled={!item.set}
+                >
+                  เข้าสู่ระบบ
+                </Button>
+
+              )} </>}
         </CardFooter>
       </Card>
     </div>
