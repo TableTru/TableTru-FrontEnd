@@ -25,7 +25,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 // import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
-import { Item } from "@/interfaces/Promo";
+import { Promotion } from "@/interfaces/Promo";
 import { initialItems } from "@/data/promotion";
 import Swal from "sweetalert2";
 import Map from "@/components/Map";
@@ -47,7 +47,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
   const [tempTime, setTempTime] = useState();
   const [seat, setSeat] = useState();
   const [selectPromotion, setSelectPromotion] = useState();
-  const [promotionData, setPromotionData] = useState<Item[]>(initialItems);
+  const [promotionData, setPromotionData] = useState<Promotion[]>(initialItems);
   const seatNumbers = Array.from({ length: seats }, (_, index) => index + 1);
   const userData = localStorage.getItem("userData")
   const userDataJson = JSON.parse(userData || "[]");
@@ -68,7 +68,9 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
       console.log(promotionArray);
     }
   }
-
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleChangeTime = (time: any) => {
     setDate(time);
@@ -257,7 +259,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
             >
               {promotionData.map((item, index) => (
                 <MenuItem key={index} value={index}>
-                  {item.name}
+                  {item.promotion_name}
                 </MenuItem>
               ))}
             </Select>
