@@ -14,14 +14,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
-// with date-fns v3.x
-
-
 
 import { MultiSectionDigitalClock } from '@mui/x-date-pickers/MultiSectionDigitalClock';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker, DatePicker } from "@mui/x-date-pickers";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { TimePicker, TimePickerProps } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 // import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
@@ -31,6 +28,9 @@ import Swal from "sweetalert2";
 import Map from "@/components/Map";
 import { createTableBooking } from '@/services/tableBooking.service'
 import { GetAllPromotionByStoreId } from '@/services/promotion.service'
+import timezone from "dayjs/plugin/timezone";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from 'dayjs/plugin/utc'
 
 type TimeTemp = {
   day: string;
@@ -38,13 +38,14 @@ type TimeTemp = {
   end_time: string;
 };
 
-var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
+dayjs.extend(timezone);
+const localTimeZone = 'Asia/Bangkok';
 
 export default function UserBooking({ seats, openTime, store_id }: { seats: number; openTime: Array<TimeTemp>; store_id: number }) {
   const now = dayjs();
   const [date, setDate] = useState<Dayjs | null>();
-  const [tempTime, setTempTime] = useState();
+  const [time, setTime] = useState<Dayjs | null>();
   const [seat, setSeat] = useState();
   const [selectPromotion, setSelectPromotion] = useState();
   const [promotionData, setPromotionData] = useState<Promotion[]>(initialItems);
@@ -53,7 +54,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
   const userDataJson = JSON.parse(userData || "[]");
 
   const [dateString, setDateString] = useState('')
-  const [timeString, setTimeString] = useState('')
+  const [combineTime, setCombineTime] = useState<Dayjs | null>()
 
   const fetchData = async () => {
     const promotionArray = [];
@@ -68,25 +69,58 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
       console.log(promotionArray);
     }
   }
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  const handleChangeTime = (time: any) => {
-    setDate(time);
-    console.log(time.format("YYYY-MM-DD HH:mm"));
-    setDateString(time.format("YYYY-MM-DD"))
+  const fetchDateTime = async () => {
+    console.log(now.format('dddd'));
+    setDate(now)
+
+    const initDateData = now.format("YYYY-MM-DD")
+
+    const openingHours = openTime.find(item => item.day === dayjs(now).format('dddd'));
+    console.log(openingHours);
+    if (openingHours) {
+      const startTime = openingHours.start_time
+      console.log(startTime);
+      console.log(dayjs(startTime).utcOffset(7).format("HH:mm"));
+
+      const combineTime = `combineTime = ${initDateData} ${dayjs(startTime).utcOffset(7).format("HH:mm")}`
+      console.log(combineTime);
+      const combineTimeDayjs = dayjs(combineTime)
+      setCombineTime(combineTimeDayjs)
+      setTime(combineTimeDayjs)
+    }
+  }
+
+  const handleChangeTime = (timeValue: dayjs.Dayjs) => {
+    setDate(timeValue);
+    console.log(timeValue.format("YYYY-MM-DD HH:mm"));
+    setDateString(timeValue.format("YYYY-MM-DD"))
+    // setTime(timeValue)
   };
 
   const handleOnlyTime = (time: any) => {
-    setTempTime(time)
-    console.log(time.format("YYYY-MM-DD HH:mm"));
-    setTimeString(time.format("HH:mm"))
-
-    const combineTime = `combineTime = ${dateString} ${time.format("HH:mm")}`
-    console.log(combineTime);
-
+    if (dateString != '') {
+      const combineTime = `combineTime = ${dateString} ${time.format("HH:mm")}`
+      console.log(combineTime);
+      const combineTimeDayjs = dayjs(combineTime)
+      setCombineTime(combineTimeDayjs)
+      setTime(combineTimeDayjs)
+      console.log(combineTimeDayjs.format("YYYY-MM-DD HH:mm"));
+    }
+    else {
+      setCombineTime(time)
+      setTime(time)
+      setDate(time)
+      console.log(time.format("YYYY-MM-DD HH:mm"));
+    }
   };
+
+  useEffect(() => {
+    fetchData()});
+    
+  useEffect(()=> {
+    fetchDateTime()
+  })
 
   const handleChangeSeat = (event: any) => {
     // setSeat(prevState => ({
@@ -96,6 +130,26 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
     setSeat(event.target.value);
     console.log(event.target.value);
   };
+
+  const handelDisableTime = (timeValue: dayjs.Dayjs) => {
+    let timeData = timeValue
+
+    for (let i = 0; i < 23; i++) {
+      timeData = timeData.add(1, 'hour');
+      const openingHours = openTime.find(item => item.day === dayjs(timeData).format('dddd'));
+      if (openingHours) {
+        const startTime = dayjs.utc(openingHours.start_time).hour();
+        const endTime = dayjs.utc(openingHours.end_time).hour();
+
+        if (!openingHours) {
+          return false;
+        }
+        else {
+          return timeData.hour() < startTime || timeData.hour() >= endTime;
+        }
+      }
+    }
+  }
 
 
   const handleChangePromotion = (event: any) => {
@@ -137,7 +191,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
           user_id: userDataJson.user_id,
           table_booking: seat,
           table_booking_status: "ยังไม่ถึงกำหนด",
-          booking_time: dayjs(date).format("YYYY-MM-DDTHH:mm:ssZ"),
+          booking_time: dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ssZ"),
           promotion: selectPromotion
         };
         console.log("active");
@@ -147,7 +201,44 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
     });
   };
 
-  useEffect(() => { }, []);
+  const shouldDisableTime: TimePickerProps<Dayjs>['shouldDisableTime'] = (
+    value,
+    view,
+  ) => {
+    console.log(value);
+    
+
+    // Find the opening hours for the current day
+    const openingHours = openTime.find(item => item.day === dayjs(date).format('dddd'));
+    console.log(openingHours);
+
+
+    // If no opening hours are defined for the current day, enable all times
+    if (!openingHours) {
+      return false;
+    }
+    // Get the start and end times for the current day
+    const startTime = dayjs.utc(openingHours.start_time).hour();
+    const endTime = dayjs.utc(openingHours.end_time).hour();
+
+    console.log(startTime);
+    console.log(endTime);
+    console.log(value.hour());
+    console.log(value.hour() < startTime || value.hour() >= endTime)
+
+    // Check if the selected hour falls outside of opening hours
+    return value.hour() < startTime || value.hour() >= endTime;
+  }
+
+  useEffect(() => {
+    // fetchDateTime()
+    console.log(date);
+    
+    if (date) {
+      shouldDisableTime
+    }
+
+  }, []);
 
   return (
     <>
@@ -174,28 +265,8 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
 
                   <TimePicker
                     label="เวลา"
-                    value={tempTime}
-                    shouldDisableTime={(timeValue, clockType) => {
-
-                      if (clockType === 'hours') {
-                        // Get the day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
-                        const currentDay = dayjs(timeValue).day();
-
-                        // Find the opening hours for the current day
-                        const openingHours = openTime.find(day => day.day === dayjs(timeValue).format('dddd'));
-
-                        // If no opening hours are defined for the current day, enable all times
-                        if (!openingHours) {
-                          return false;
-                        }
-                        // Get the start and end times for the current day
-                        const startTime = dayjs.utc(openingHours.start_time).hour();
-                        const endTime = dayjs.utc(openingHours.end_time).hour();
-                        // Check if the selected hour falls outside of opening hours
-                        return timeValue.hour() < startTime || timeValue.hour() >= endTime;
-                      }
-                      return false; // Enable minutes and seconds for all hours
-                    }}
+                    value={time}
+                    shouldDisableTime={shouldDisableTime}
 
                     timeSteps={{ minutes: 30 }}
                     onChange={(newValue) => handleOnlyTime(newValue)}
