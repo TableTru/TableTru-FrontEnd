@@ -44,7 +44,7 @@ dayjs.extend(utc)
 export default function UserBooking({ seats, openTime, store_id }: { seats: number; openTime: Array<TimeTemp>; store_id: number }) {
   const now = dayjs();
   const [date, setDate] = useState<Dayjs | null>();
-  const [tempTime, setTempTime] = useState();
+  const [time, setTime] = useState<Dayjs | null>();
   const [seat, setSeat] = useState();
   const [selectPromotion, setSelectPromotion] = useState();
   const [promotionData, setPromotionData] = useState<Item[]>(initialItems);
@@ -53,7 +53,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
   const userDataJson = JSON.parse(userData || "[]");
 
   const [dateString, setDateString] = useState('')
-  const [timeString, setTimeString] = useState('')
+  const [combineTime, setCombineTime] = useState<Dayjs | null>()
 
   const fetchData = async () => {
     const promotionArray = [];
@@ -70,20 +70,22 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
   }
 
 
-  const handleChangeTime = (time: any) => {
-    setDate(time);
-    console.log(time.format("YYYY-MM-DD HH:mm"));
-    setDateString(time.format("YYYY-MM-DD"))
+  const handleChangeTime = (timeValue: dayjs.Dayjs) => {
+    setDate(timeValue);
+    console.log(timeValue.format("YYYY-MM-DD HH:mm"));
+    setDateString(timeValue.format("YYYY-MM-DD"))
+    // setTime(timeValue)
   };
 
   const handleOnlyTime = (time: any) => {
-    setTempTime(time)
     console.log(time.format("YYYY-MM-DD HH:mm"));
-    setTimeString(time.format("HH:mm"))
 
     const combineTime = `combineTime = ${dateString} ${time.format("HH:mm")}`
     console.log(combineTime);
-
+    const combineTimeDayjs = dayjs(combineTime)
+    setCombineTime(combineTimeDayjs)
+    setTime(combineTimeDayjs)
+    console.log(combineTimeDayjs.format("YYYY-MM-DD HH:mm"));
   };
 
   const handleChangeSeat = (event: any) => {
@@ -94,6 +96,30 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
     setSeat(event.target.value);
     console.log(event.target.value);
   };
+
+  const handelDisableTime = (timeValue: dayjs.Dayjs) => {
+    let timeData = timeValue
+
+    for (let i = 0; i < 23; i++) {
+      timeData = timeData.add(1, 'hour');
+      const openingHours = openTime.find(item => item.day === dayjs(timeData).format('dddd'));
+      if (openingHours) {
+        const startTime = dayjs.utc(openingHours.start_time).hour();
+        const endTime = dayjs.utc(openingHours.end_time).hour();
+
+        if (!openingHours) {
+          return false;
+        }
+        else {
+          return timeData.hour() < startTime || timeData.hour() >= endTime;
+        }
+      }
+    }
+
+
+
+
+  }
 
 
   const handleChangePromotion = (event: any) => {
@@ -172,15 +198,14 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
 
                   <TimePicker
                     label="เวลา"
-                    value={tempTime}
+                    value={time}
                     shouldDisableTime={(timeValue, clockType) => {
-
                       if (clockType === 'hours') {
                         // Get the day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
                         const currentDay = dayjs(timeValue).day();
 
                         // Find the opening hours for the current day
-                        const openingHours = openTime.find(day => day.day === dayjs(timeValue).format('dddd'));
+                        const openingHours = openTime.find(item => item.day === dayjs(timeValue).format('dddd'));
 
                         // If no opening hours are defined for the current day, enable all times
                         if (!openingHours) {

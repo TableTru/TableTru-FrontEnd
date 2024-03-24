@@ -22,11 +22,27 @@ import {CheckBookingTime} from '@/services/tableBooking.service'
 import { initialItems } from "@/data/promotion"
 import { Item } from "@/interfaces/Promo"
 
+const openTime = [
+    {
+        day: "Monday",
+        end_time: "2024-02-23T21:00:00Z",
+        openTime_id: 1,
+        start_time: "2024-02-23T08:00:00Z",
+        store_id: 1,
+    },
+    {
+        day: "Tuesday",
+        end_time: "2024-02-23T21:00:00Z",
+        openTime_id: 1,
+        start_time: "2024-02-23T09:00:00Z",
+        store_id: 1,
+    }
+]
 
 const ProductDetail = () => {
     const params = useParams();
     const [storeData, setStoreData] = useState({
-        OpenTimes: [],
+        OpenTimes: openTime,
         category_id: 1,
         category_name: "temp",
         latitude: 0,
@@ -98,7 +114,7 @@ const ProductDetail = () => {
     }
 
     useEffect(() => {
-        fetchData();
+        // fetchData();
     }, []);
 
     return (
