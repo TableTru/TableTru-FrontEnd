@@ -171,37 +171,53 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
 
 
   const handleButtonConfirm = async () => {
-    Swal.fire({
-      title: "แน่ใจหรือว่าจะยืนยัน",
-      text: "โปรดตรวจสอบรายละเอียดการจอง",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "ยืนยัน",
-      confirmButtonColor: "#0E9F6E",
-      cancelButtonText: "ย้อนกลับ",
-      reverseButtons: true,
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "ยืนยันสำเร็จ",
-          text: "",
-          icon: "success",
-          confirmButtonText: "ตกลง",
-          confirmButtonColor: "#0E9F6E",
-        });
-        const submitObject = {
-          store_id: store_id,
-          user_id: userDataJson.user_id,
-          table_booking: seat,
-          table_booking_status: "ยังไม่ถึงกำหนด",
-          booking_time: dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ssZ"),
-          promotion: selectPromotion
-        };
-        console.log("active");
-        console.log(submitObject);
-        await createTableBooking(submitObject);
-      }
-    });
+    if (date != null && time != null) {
+      Swal.fire({
+        title: "แน่ใจหรือว่าจะยืนยัน",
+        text: "โปรดตรวจสอบรายละเอียดการจอง",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "ยืนยัน",
+        confirmButtonColor: "#0E9F6E",
+        cancelButtonText: "ย้อนกลับ",
+        reverseButtons: true,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "ยืนยันสำเร็จ",
+            text: "",
+            icon: "success",
+            confirmButtonText: "ตกลง",
+            confirmButtonColor: "#0E9F6E",
+          });
+          const submitObject = {
+            store_id: store_id,
+            user_id: userDataJson.user_id,
+            table_booking: seat,
+            table_booking_status: "ยังไม่ถึงกำหนด",
+            booking_time: dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ssZ"),
+            promotion: selectPromotion
+          };
+          console.log("active");
+          console.log(submitObject);
+          await createTableBooking(submitObject);
+        }
+      });
+    }
+    else{
+      Swal.fire({
+        title: "โปรดตรวจสอบรายละเอียดการจอง",
+        text: "โปรดตรวจสอบรายละเอียดการจอง",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "ยืนยัน",
+        confirmButtonColor: "#0E9F6E",
+        cancelButtonText: "ย้อนกลับ",
+        reverseButtons: true,
+        showConfirmButton: false
+      })
+    }
+
   };
 
   const shouldDisableTime: TimePickerProps<Dayjs>['shouldDisableTime'] = (
@@ -209,7 +225,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
     view,
   ) => {
     console.log(value);
-    
+
 
     // Find the opening hours for the current day
     const openingHours = openTime.find(item => item.day === dayjs(date).format('dddd'));
@@ -236,7 +252,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
   useEffect(() => {
     // fetchDateTime()
     console.log(date);
-    
+
     if (date) {
       shouldDisableTime
     }
