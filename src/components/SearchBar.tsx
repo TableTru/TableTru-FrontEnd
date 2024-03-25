@@ -33,7 +33,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Loader } from '@googlemaps/js-api-loader';
 import Rating from "@mui/material/Rating";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
-import { getAllStore, getStorePreview } from "@/services/store.service";
+import { getAllStore, getStorePreview, searchSortRating, searchSortLocation } from "@/services/store.service";
 import MyLocation from './botton/MyLocation';
 
 const loader = new Loader({
@@ -92,11 +92,28 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const [search, setSearch] = useState<string | null>(searchQuery)
   const [filter, setFilter] = useState(1)
 
-  const onClick = () => {
+  const onClick = async () => {
     console.log(search);
     console.log(locationData);
     console.log(categoryId);
     console.log(filter);
+
+    const searchObject = {
+      search: search,
+      location: locationData,
+      category_id: categoryId
+    }
+
+    if(filter == 1){
+      //เรียงตาม rating
+      const searchRes = await searchSortRating(searchObject)
+      console.log(searchRes);
+      
+    }
+    else{
+      const searchRes = await searchSortLocation(searchObject)
+      console.log(searchRes);
+    }
   }
 
 
