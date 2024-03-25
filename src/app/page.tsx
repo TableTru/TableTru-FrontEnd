@@ -105,10 +105,10 @@ export default function Home() {
           </h1>
           <CategoriesScrollCards>
             {
-              CategorytempData.map((category) => {
+              CategorytempData.map((category, index) => {
                 return (
                   <>
-                    <div className="inline-block px-3">
+                    <div key={index} className="inline-block px-3">
                       <CategoryCard category={category} />
                     </div>
                   </>
@@ -123,10 +123,10 @@ export default function Home() {
           </h1>
           <CategoriesScrollCards>
             {
-              LocationtempData.map((location) => {
+              LocationtempData.map((location, index) => {
                 return (
                     <>
-                      <div className="inline-block px-3">
+                      <div key={index} className="inline-block px-3">
                         <LocationCard location={location} />
                       </div>
                     </>
