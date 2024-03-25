@@ -3,11 +3,11 @@ export interface PromotionInterface<T> {
   }
 
   export interface Promotion {
-    id: number;
-    name: string;
+    promotion_id: number;
+    promotion_name: string;
     store_id:number;
-    set: boolean;
-    limit: number;
+    // set: boolean;
+    // limit: number;
     created_at: Date;
     expiration_date: Date;
   };

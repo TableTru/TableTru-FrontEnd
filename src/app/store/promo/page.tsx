@@ -1,5 +1,5 @@
 import React from "react";
-import CodeTest from "@/components/promo/CodeTest";
+import StorePromoCard from "@/components/promo/StorePromoCode";
 import Appbar from "@/components/HeaderAppBar"
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from "@nextui-org/react";
@@ -8,7 +8,6 @@ import Link from "next/link";
 export default function PromotionStore() {
     return (
         <>
-
             <Appbar />
             <div className="min-h-screen w-fit mx-auto  mt-24 mb-5">
                 <div className="flex space-x-8 justify-between pt-10">
@@ -20,7 +19,7 @@ export default function PromotionStore() {
                     </Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
-                    <CodeTest />
+                    <StorePromoCard />
                 </div>
             </div>
         </>
