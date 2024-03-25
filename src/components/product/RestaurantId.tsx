@@ -112,7 +112,7 @@ export default function RestaurantId() {
     }])
 
     const fetchData = async () => {
-        const storeId = Number(params.productId)
+        const storeId = Number(params.restaurantId)
         console.log(storeId)
         const data = await getStoreById(storeId);
 
@@ -149,6 +149,8 @@ export default function RestaurantId() {
 
     useEffect(() => {
         // fetchData();
+        console.log(params);
+        
     }, []);
 
     return (
@@ -183,12 +185,12 @@ export default function RestaurantId() {
                                     />
                                 </Stack>
 
-                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.productId)}/>
+                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)}/>
 
                             </div>
                         </div>
                     </div>
-                    <DetailBox description={storeData.store_description} openTime={storeData.OpenTimes} review={reviewData} store_id={Number(params.productId)} sum_rating={storeData.sum_rating} />
+                    <DetailBox description={storeData.store_description} openTime={storeData.OpenTimes} review={reviewData} store_id={Number(params.restaurantId)} sum_rating={storeData.sum_rating} />
                 </div>
             </section>
         </>
