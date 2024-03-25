@@ -101,6 +101,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
     setDate(timeValue);
     console.log(timeValue.format("YYYY-MM-DD HH:mm"));
     setDateString(timeValue.format("YYYY-MM-DD"))
+    setCombineTime(timeValue)
     // setTime(timeValue)
   };
 
