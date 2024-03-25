@@ -1,331 +1,387 @@
 'use client';
-import Link from 'next/link';
-import * as React from 'react';
-import { storeTemp } from '@/data/store';
-import { Store } from '@/interfaces/StoreInterface';
 
 import "./SearchBar.css"
+import { useSearchParams } from 'next/navigation'
+import React, { useEffect, useState, useRef } from "react";
+import {
+  Accordion,
+  FormControl,
+  AccordionDetails,
+  AccordionActions,
+  AccordionSummary,
+  FormControlLabel,
+  FormLabel,
+  Divider,
+  Checkbox,
+  Grid,
+  MenuItem,
+  Select,
+  Typography,
+  TextField,
+  Button,
+  Link,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  Stack,
+  CardActions,
+  Chip,
+  Box,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Loader } from '@googlemaps/js-api-loader';
+import Rating from "@mui/material/Rating";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import { getAllStore, getStorePreview, searchSortRating, searchSortLocation } from "@/services/store.service";
+import MyLocation from './botton/MyLocation';
 
-// import PropTypes from "prop-types";
-// import TextField from '@mui/material/TextField';
-// import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-// import { IconButton } from '@mui/material';
-// import SearchIcon from '@mui/icons-material/Search'
-// import Button from '@mui/material/Button';;
-//
-// const filter = createFilterOptions<FilmOptionType>();
-//
-// const styles = {
-//     root: {
-//       background: "white"
-//     },
-//     input: {
-//       color: "black"
-//     }
-//   };
-//
-//  export default function Search(){
-//   const [value, setValue] = React.useState<FilmOptionType | null>(null);
-//
-//   return (
-//     <>
-//     <Autocomplete
-//       value={value}
-//       onChange={(event, newValue) => {
-//         if (typeof newValue === 'string') {
-//           setValue({
-//             title: newValue,
-//           });
-//         } else if (newValue && newValue.inputValue) {
-//           // Create a new value from the user input
-//           setValue({
-//             title: newValue.inputValue,
-//           });
-//         } else {
-//           setValue(newValue);
-//         }
-//       }}
-//       filterOptions={(options, params) => {
-//         const filtered = filter(options, params);
-//
-//         const { inputValue } = params;
-//         // Suggest the creation of a new value
-//         const isExisting = options.some((option) => inputValue === option.title);
-//         if (inputValue !== '' && !isExisting) {
-//           filtered.push({
-//             inputValue,
-//             title: `Add "${inputValue}"`,
-//           });
-//         }
-//
-//         return filtered;
-//       }}
-//       selectOnFocus
-//       clearOnBlur
-//       handleHomeEndKeys
-//       id="free-solo-with-text-demo"
-//       options={top100Films}
-//       getOptionLabel={(option) => {
-//         // Value selected with enter, right from the input
-//         if (typeof option === 'string') {
-//           return option;
-//         }
-//         // Add "xxx" option created dynamically
-//         if (option.inputValue) {
-//           return option.inputValue;
-//         }
-//         // Regular option
-//         return option.title;
-//       }}
-//       renderOption={(props, option) => <li {...props}>{option.title}</li>}
-//       sx={{ width: 500,
-//         backgroundColor: "#fff",
-//         borderRadius: 1 ,}}
-//       freeSolo
-//       renderInput={(params) => (
-//         <TextField {...params} label="Search Keyword" />
-//       )}
-//     />
-//     </>
-//   );
-// }
-//
-// interface FilmOptionType {
-//   inputValue?: string;
-//   title: string;
-//   year?: number;
-// }
-//
-// // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-// const top100Films: readonly FilmOptionType[] = [
-//   { title: 'The Shawshank Redemption', year: 1994 },
-//   { title: 'The Godfather', year: 1972 },
-//   { title: 'The Godfather: Part II', year: 1974 },
-//   { title: 'The Dark Knight', year: 2008 },
-//   { title: '12 Angry Men', year: 1957 },
-//   { title: "Schindler's List", year: 1993 },
-//   { title: 'Pulp Fiction', year: 1994 },
-//   {
-//     title: 'The Lord of the Rings: The Return of the King',
-//     year: 2003,
-//   },
-//   { title: 'The Good, the Bad and the Ugly', year: 1966 },
-//   { title: 'Fight Club', year: 1999 },
-//   {
-//     title: 'The Lord of the Rings: The Fellowship of the Ring',
-//     year: 2001,
-//   },
-//   {
-//     title: 'Star Wars: Episode V - The Empire Strikes Back',
-//     year: 1980,
-//   },
-//   { title: 'Forrest Gump', year: 1994 },
-//   { title: 'Inception', year: 2010 },
-//   {
-//     title: 'The Lord of the Rings: The Two Towers',
-//     year: 2002,
-//   },
-//   { title: "One Flew Over the Cuckoo's Nest", year: 1975 },
-//   { title: 'Goodfellas', year: 1990 },
-//   { title: 'The Matrix', year: 1999 },
-//   { title: 'Seven Samurai', year: 1954 },
-//   {
-//     title: 'Star Wars: Episode IV - A New Hope',
-//     year: 1977,
-//   },
-//   { title: 'City of God', year: 2002 },
-//   { title: 'Se7en', year: 1995 },
-//   { title: 'The Silence of the Lambs', year: 1991 },
-//   { title: "It's a Wonderful Life", year: 1946 },
-//   { title: 'Life Is Beautiful', year: 1997 },
-//   { title: 'The Usual Suspects', year: 1995 },
-//   { title: 'Léon: The Professional', year: 1994 },
-//   { title: 'Spirited Away', year: 2001 },
-//   { title: 'Saving Private Ryan', year: 1998 },
-//   { title: 'Once Upon a Time in the West', year: 1968 },
-//   { title: 'American History X', year: 1998 },
-//   { title: 'Interstellar', year: 2014 },
-//   { title: 'Casablanca', year: 1942 },
-//   { title: 'City Lights', year: 1931 },
-//   { title: 'Psycho', year: 1960 },
-//   { title: 'The Green Mile', year: 1999 },
-//   { title: 'The Intouchables', year: 2011 },
-//   { title: 'Modern Times', year: 1936 },
-//   { title: 'Raiders of the Lost Ark', year: 1981 },
-//   { title: 'Rear Window', year: 1954 },
-//   { title: 'The Pianist', year: 2002 },
-//   { title: 'The Departed', year: 2006 },
-//   { title: 'Terminator 2: Judgment Day', year: 1991 },
-//   { title: 'Back to the Future', year: 1985 },
-//   { title: 'Whiplash', year: 2014 },
-//   { title: 'Gladiator', year: 2000 },
-//   { title: 'Memento', year: 2000 },
-//   { title: 'The Prestige', year: 2006 },
-//   { title: 'The Lion King', year: 1994 },
-//   { title: 'Apocalypse Now', year: 1979 },
-//   { title: 'Alien', year: 1979 },
-//   { title: 'Sunset Boulevard', year: 1950 },
-//   {
-//     title: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
-//     year: 1964,
-//   },
-//   { title: 'The Great Dictator', year: 1940 },
-//   { title: 'Cinema Paradiso', year: 1988 },
-//   { title: 'The Lives of Others', year: 2006 },
-//   { title: 'Grave of the Fireflies', year: 1988 },
-//   { title: 'Paths of Glory', year: 1957 },
-//   { title: 'Django Unchained', year: 2012 },
-//   { title: 'The Shining', year: 1980 },
-//   { title: 'WALL·E', year: 2008 },
-//   { title: 'American Beauty', year: 1999 },
-//   { title: 'The Dark Knight Rises', year: 2012 },
-//   { title: 'Princess Mononoke', year: 1997 },
-//   { title: 'Aliens', year: 1986 },
-//   { title: 'Oldboy', year: 2003 },
-//   { title: 'Once Upon a Time in America', year: 1984 },
-//   { title: 'Witness for the Prosecution', year: 1957 },
-//   { title: 'Das Boot', year: 1981 },
-//   { title: 'Citizen Kane', year: 1941 },
-//   { title: 'North by Northwest', year: 1959 },
-//   { title: 'Vertigo', year: 1958 },
-//   {
-//     title: 'Star Wars: Episode VI - Return of the Jedi',
-//     year: 1983,
-//   },
-//   { title: 'Reservoir Dogs', year: 1992 },
-//   { title: 'Braveheart', year: 1995 },
-//   { title: 'M', year: 1931 },
-//   { title: 'Requiem for a Dream', year: 2000 },
-//   { title: 'Amélie', year: 2001 },
-//   { title: 'A Clockwork Orange', year: 1971 },
-//   { title: 'Like Stars on Earth', year: 2007 },
-//   { title: 'Taxi Driver', year: 1976 },
-//   { title: 'Lawrence of Arabia', year: 1962 },
-//   { title: 'Double Indemnity', year: 1944 },
-//   {
-//     title: 'Eternal Sunshine of the Spotless Mind',
-//     year: 2004,
-//   },
-//   { title: 'Amadeus', year: 1984 },
-//   { title: 'To Kill a Mockingbird', year: 1962 },
-//   { title: 'Toy Story 3', year: 2010 },
-//   { title: 'Logan', year: 2017 },
-//   { title: 'Full Metal Jacket', year: 1987 },
-//   { title: 'Dangal', year: 2016 },
-//   { title: 'The Sting', year: 1973 },
-//   { title: '2001: A Space Odyssey', year: 1968 },
-//   { title: "Singin' in the Rain", year: 1952 },
-//   { title: 'Toy Story', year: 1995 },
-//   { title: 'Bicycle Thieves', year: 1948 },
-//   { title: 'The Kid', year: 1921 },
-//   { title: 'Inglourious Basterds', year: 2009 },
-//   { title: 'Snatch', year: 2000 },
-//   { title: '3 Idiots', year: 2009 },
-//   { title: 'Monty Python and the Holy Grail', year: 1975 },
-// ];
+const loader = new Loader({
+  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+  version: 'weekly',
+  libraries: ['places'], // เพิ่ม libraries places
+});
 
-const productsTemp = [
+
+const tempData = [
   {
-    store_id: 1,
-    category_id: 1,
-    location_id: 1,
-    store_name: "ร้านค้าของฉัน",
-    store_description: "hahahahahahahahahaha",
-    table_booking: 8,
-    sum_rating: 3.25,
-    Latitude: "",
-    longitude: "",
-    OpenTimes: [
-      {
-        day: "วันจันทร์",
-        open_time: "11:00",
-        close_time: "21:00",
-      },
-      {
-        day: "วันอังคาร",
-        open_time: "12:00",
-        close_time: "23:00",
-      },
-    ],
+    store_id: "1",
+    store_name: "ร้านค้า1",
+    sum_rating: "4",
+    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
+    category: {
+      category_name: "หมวดหมู่"
+    },
+    location_id: "2",
   },
   {
-    store_id: 2,
-    category_id: 2,
-    location_id: 2,
-    store_name: "ร้านค้า 2",
-    store_description:
-      "Lorem ipsum dolor sit amet, ctum id et est. Nam est lacus, tempus at libero eu, laoreet dignissim lorem.",
-    table_booking: 8,
-    sum_rating: 40,
-    Latitude: "",
-    longitude: "",
-    OpenTimes: [
-      {
-        day: "วันจันทร์",
-        open_time: "",
-        close_time: "",
-      },
-      {
-        day: "วันอังคาร",
-        open_time: "",
-        close_time: "",
-      },
-    ],
+    store_id: "2",
+    store_name: "ร้านค้า2",
+    sum_rating: "2",
+    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
+    category: {
+      category_name: "หมวดหมู่"
+    },
+    location_id: "2",
+  },
+  {
+    store_id: "3",
+    store_name: "ร้านค้า3",
+    sum_rating: "4",
+    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
+    category: {
+      category_name: "หมวดหมู่"
+    },
+    location_id: "สาทร",
   },
 ];
 
-
 export default function Search({ placeholder }: { placeholder: string }) {
-  const [filteredData, setfilteredData] = React.useState([]);
-  const [wordEntered, setWordEntered] = React.useState("");
+  const mapRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+  const searchParams = useSearchParams()
+  const locationQuery = searchParams.get('location')
+  const searchQuery = searchParams.get('search')
+  const categoryQuery = searchParams.get('category')
 
-  //logic FilterSearch by keyword
-  function handleFilter(event) {
-    const searchWord = event.target.value;
-    const newFilter: Array<Store> = productsTemp.filter((item) => {
-      return item.store_name.toLowerCase().includes(searchWord.toLowerCase());
-    });
-    if (searchWord === "") {
-      setfilteredData([]);
-    } else {
-      setfilteredData(newFilter);
+  const [storeData, setStoreData] = useState<object[]>(tempData);
+  const [locationData, setLocationData] = useState<string | null>(locationQuery)
+  const [categoryId, setCategoryId] = useState<number>(Number(categoryQuery))
+  const [search, setSearch] = useState<string | null>(searchQuery)
+  const [filter, setFilter] = useState(1)
+
+  const onClick = async () => {
+    console.log(search);
+    console.log(locationData);
+    console.log(categoryId);
+    console.log(filter);
+
+    const searchObject = {
+      search: search,
+      location: locationData,
+      category_id: categoryId - 1
+    }
+
+    console.log(searchObject);
+    
+
+    if(filter == 1){
+      //เรียงตาม rating
+      const searchRes = await searchSortRating(searchObject)
+      console.log(searchRes);
+      
+    }
+    else{
+      const searchRes = await searchSortLocation(searchObject)
+      console.log(searchRes);
     }
   }
 
+
+  const myLocation = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const geocoder = new google.maps.Geocoder();
+      const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+      geocoder.geocode({ 'location': latLng }, (results, status) => {
+        if (status === 'OK') {
+          if (results[0]) {
+            console.log(results[0].formatted_address); // แสดงชื่อสถานที่
+            setLocationData(results[0].formatted_address)
+          } else {
+            console.log('No results found');
+          }
+        } else {
+          console.error('Geocoder failed due to: ' + status);
+        }
+      });
+    });
+
+  }
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case 'search':
+        setSearch(value);
+        console.log('search:', value);
+        break;
+      case 'location':
+        setLocationData(value)
+        console.log('location:', value);
+        break;
+      case 'category':
+        setCategoryId(value)
+        console.log('category:', value);
+        break;
+      case 'filter':
+        setFilter(value)
+        if(value == 3){
+          navigator.geolocation.getCurrentPosition((position) => {
+            const geocoder = new google.maps.Geocoder();
+            const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      
+            geocoder.geocode({ 'location': latLng }, (results, status) => {
+              if (status === 'OK') {
+                if (results[0]) {
+                  console.log(results[0].formatted_address); // แสดงชื่อสถานที่
+                  setLocationData(results[0].formatted_address)
+                } else {
+                  console.log('No results found');
+                }
+              } else {
+                console.error('Geocoder failed due to: ' + status);
+              }
+            });
+          });
+        }
+        console.log('filter:', value);
+        break;
+      default:
+        break;
+    }
+  }
+
+  const fetchData = async () => {
+    const storeArray = [];
+    const data = await getAllStore();
+    console.log(data);
+
+    if (data) {
+      const stores = data;
+      for (const storeObj of stores) {
+        storeArray.push(storeObj);
+      }
+    }
+    setStoreData(storeArray);
+    console.log(storeArray);
+  };
+
+  useEffect(() => {
+    if (categoryId == 0) {
+      setCategoryId(1)
+    }
+    // fetchData()
+  }, [locationData, categoryId, search]);
+
+  useEffect(() => {
+    loader.load().then(() => {
+      const google = window.google;
+      const autocomplete = new google.maps.places.Autocomplete(inputRef.current);
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (place && place.geometry) {
+          const location = place.geometry.location; //ตำแหน่งแบบ lat long
+          console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
+          setLocationData(place.formatted_address);
+        }
+      });
+      autocomplete.addListener('predictions_changed', () => {
+        setPredictions(autocomplete.getPlacePredictions());
+      });
+    });
+    console.log("location update2");
+  }, [map]);
+
+  const handleSelectPrediction = (prediction: google.maps.places.AutocompletePrediction) => {
+    console.log(prediction.description);
+
+    if (inputRef.current) {
+      inputRef.current.value = prediction.description;
+      console.log("active");
+
+    }
+    setPredictions([]);
+  };
+
+  useEffect(() => {
+    setLocationData(locationData)
+    console.log("location update1");
+  }, [locationData]);
 
   return (
     <>
       <label htmlFor="simple-search" className="sr-only">Search</label>
       <div className="relative w-full">
-        <div
-          className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-          </svg>
-        </div>
-        <input type="text" id="simple-search"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder={placeholder} required onChange={handleFilter} />
-        {
-          filteredData.length != 0 && (
-            <div className='dataResult'>
-              {
-                filteredData.map((item,index) => {
-                  return (
-                    <>
-                      <Link className={"dataItem"} href={`/search/${item.store_name}`} key={item.store_id} target="_blank">
-                        {
-                          <p>{item.store_name}</p>
-                        }
-                      </Link>
+        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
+          <div
+            className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+          </div>
+          <input type="text" id="simple-search"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+            placeholder={placeholder}
+            name="search"
+            value={search}
+            onChange={handleChange} />
+          <Button
+            sx={{ borderRadius: '0 0.5rem 0.5rem 0' }}
+            variant="contained"
+            onClick={onClick}
+            className="search absolute inset-y-0 right-0 flex items-center px-3">
+            Search
+          </Button>
+        </Box>
 
-                    </>
-                  );
-                })
-              }
-            </div>
-          )
-        }
+      </div>
+
+      <div className="py-4">
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2-content"
+            id="panel2-header"
+          >
+            Filter & Order
+          </AccordionSummary>
+          <AccordionDetails>
+
+            <Grid item xs={6}>
+              <Typography variant="subtitle1">ค้นหาพิกัดของร้าน</Typography>
+              <TextField
+                  inputRef={inputRef}
+                  required
+                  fullWidth
+                  name="location"
+                  value={locationData}
+                  onChange={handleChange}
+                />
+                {predictions.length > 0 && (
+                  <ul>
+                    {predictions.map((prediction, index) => (
+                      <li key={index} onClick={() => handleSelectPrediction(prediction)}>
+                        {prediction.description}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+            </Grid>
+
+            <Grid container spacing={2} >
+              <Grid item xs={6} sx={{ mt: 2, mb: 2 }}>
+                <Typography variant="subtitle1">เรียงตาม</Typography>
+                <Select
+
+                  fullWidth
+                  id="filter"
+                  name="filter"
+                  label="filter"
+                  value={filter}
+                  onChange={handleChange}
+                >
+                  <MenuItem value={1}>คะแนนรีวิว</MenuItem>
+                  <MenuItem value={2}>ตำแหน่งสถานที่</MenuItem>
+                  <MenuItem value={3}>ร้านค้าใกล้ฉัน</MenuItem>
+                </Select>
+              </Grid>
+              <Grid item xs={6} sx={{ mt: 2, mb: 2 }}>
+                <Typography variant="subtitle1">หมวดหมู่</Typography>
+                <Select
+
+                  fullWidth
+                  id="category"
+                  name="category"
+                  label="category"
+                  value={categoryId}
+                  onChange={handleChange}
+                >
+                  <MenuItem value={1}>ทั้งหมด</MenuItem>
+                  <MenuItem value={2}>ไทย</MenuItem>
+                  <MenuItem value={3}>นานาชาติ</MenuItem>
+                  <MenuItem value={4}>ญิ่ปุ่น</MenuItem>
+                  <MenuItem value={5}>จีน</MenuItem>
+                  <MenuItem value={6}>อิตาลี</MenuItem>
+                  <MenuItem value={7}>ฟิวชั่น</MenuItem>
+                </Select>
+              </Grid>
+            </Grid>
+          </AccordionDetails>
+          {/* <AccordionActions>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={onClick}
+            >
+              ยืนยัน
+            </Button>
+          </AccordionActions> */}
+        </Accordion>
+      </div>
+
+      <div className="w-fit flex item-center justify-around center mx-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 justify-items-center gap-y-20 gap-x-14 mt-10 mb-5">
+        {storeData.map((item) => (
+          <Link href={`/products/${item.store_id}`} key={item.store_id}>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  height="194"
+                  image={item.store_cover_image}
+                  alt="Paella dish"
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5">
+                    {item.store_name}
+                  </Typography>
+                  <Stack direction="row" spacing={1}>
+                    <Rating name="read-only" value={item.sum_rating} readOnly />
+                    <Typography component="legend">{item.sum_rating} reviews</Typography>
+                  </Stack>
+                </CardContent>
+
+                <CardActions sx={{ my: 2 }}>
+                  <Chip icon={<RestaurantIcon />} label={item.category_id} />
+                </CardActions>
+              </CardActionArea>
+            </Card>
+          </Link>
+        ))}
       </div>
     </>
   );

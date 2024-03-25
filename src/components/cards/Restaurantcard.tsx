@@ -61,6 +61,7 @@ const tempData = [
     store_id: "1",
     store_name: "ร้านค้า1",
     sum_rating: "4",
+    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
     category: {
       category_name: "หมวดหมู่"
     },
@@ -70,6 +71,7 @@ const tempData = [
     store_id: "2",
     store_name: "ร้านค้า2",
     sum_rating: "2",
+    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
     category: {
       category_name: "หมวดหมู่"
     },
@@ -79,6 +81,7 @@ const tempData = [
     store_id: "3",
     store_name: "ร้านค้า3",
     sum_rating: "4",
+    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
     category: {
       category_name: "หมวดหมู่"
     },
@@ -115,7 +118,7 @@ export default function Restaurantcard() {
   };
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
   }, []);
 
   return (
