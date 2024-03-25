@@ -20,7 +20,6 @@ import {CheckBookingTime} from '@/services/tableBooking.service'
 
 // Import Promotion Code 
 import { initialItems } from "@/data/promotion"
-import { Item } from "@/interfaces/Promo"
 
 const openTime = [
     {
@@ -74,7 +73,7 @@ const openTime = [
     },
 ]
 
-const ProductDetail = () => {
+export default function RestaurantId() {
     const params = useParams();
     const [storeData, setStoreData] = useState({
         OpenTimes: openTime,
@@ -195,4 +194,3 @@ const ProductDetail = () => {
         </>
     );
 };
-export default ProductDetail;

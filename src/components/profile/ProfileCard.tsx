@@ -242,7 +242,7 @@ export default function ProfileCard() {
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                         <ListItemText primary={`${item.review_comment}`} secondary={`${item.store_name}`} />
                                         <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
-                                            <a href={`/products/${item.store_id}`}>
+                                            <a href={`/restaurant/${item.store_id}`}>
                                                 <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
                                             </a>
                                         </Box>

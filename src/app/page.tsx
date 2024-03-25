@@ -151,7 +151,7 @@ export default function Home() {
 
           </section>
           <div className="flex item-center justify-center gap-4 py-8">
-            <a href="/products">
+            <a href="/restaurant">
               <Button
                 color="primary"
                 className={"bg-red-700 w-72 lg:w-96"}

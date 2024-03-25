@@ -356,7 +356,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
       <div className="w-fit flex item-center justify-around center mx-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 justify-items-center gap-y-20 gap-x-14 mt-10 mb-5">
         {storeData.map((item) => (
-          <Link href={`/products/${item.store_id}`} key={item.store_id}>
+          <Link href={`/restaurant/${item.store_id}`} key={item.store_id}>
             <Card sx={{ maxWidth: 345 }}>
               <CardActionArea>
                 <CardMedia

@@ -1,9 +1,6 @@
 import RestaurantCard from "@/components/cards/Restaurantcard";
-import Appbar from "@/components/HeaderAppBar";
-import SearchBar from "@/components/SearchBar";
-import FilterBar from "@/components/FilterBar";
 
-export default function FoodDetail() {
+export default function RestaurantPage() {
 
     return (<>
         <div className="py-20 px-2">

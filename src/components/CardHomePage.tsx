@@ -40,7 +40,7 @@ export default function Component() {
       <Card
         className="col-span-10 sm:col-span-4 h-[300px]"
         isPressable
-        onPress={() => router.push("/products")}
+        onPress={() => router.push("/restaurant")}
       >
         <CardHeader className="absolute z-10 top-1 flex-col !items-start">
           <h2 className="text-black font-medium text-2xl">ร้านอาหารแนะนำ</h2>
@@ -58,7 +58,7 @@ export default function Component() {
       <Card
         className="col-span-10 sm:col-span-4 h-[300px]"
         isPressable
-        onPress={() => router.push("/products")}
+        onPress={() => router.push("/restaurant")}
       >
         <CardHeader className="absolute z-10 top-1 flex-col !items-start">
           <h4 className="text-black font-medium text-2xl">ร้านใกล้ฉัน</h4>
