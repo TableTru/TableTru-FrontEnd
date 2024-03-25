@@ -88,7 +88,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
   const [storeData, setStoreData] = useState<object[]>(tempData);
   const [locationData, setLocationData] = useState<string | null>(locationQuery)
-  const [categoryId, setCategoryId] = useState<number | null>(Number(categoryQuery))
+  const [categoryId, setCategoryId] = useState<number>(Number(categoryQuery))
   const [search, setSearch] = useState<string | null>(searchQuery)
   const [filter, setFilter] = useState(1)
 
@@ -101,8 +101,11 @@ export default function Search({ placeholder }: { placeholder: string }) {
     const searchObject = {
       search: search,
       location: locationData,
-      category_id: categoryId
+      category_id: categoryId - 1
     }
+
+    console.log(searchObject);
+    
 
     if(filter == 1){
       //เรียงตาม rating
@@ -338,7 +341,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
               </Grid>
             </Grid>
           </AccordionDetails>
-          <AccordionActions>
+          {/* <AccordionActions>
             <Button
               fullWidth
               variant="contained"
@@ -347,7 +350,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
             >
               ยืนยัน
             </Button>
-          </AccordionActions>
+          </AccordionActions> */}
         </Accordion>
       </div>
 
