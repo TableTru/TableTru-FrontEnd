@@ -85,6 +85,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const locationQuery = searchParams.get('location')
   const searchQuery = searchParams.get('search')
   const categoryQuery = searchParams.get('category')
+  const filterQuery = searchParams.get('filter')
 
   const [storeData, setStoreData] = useState<object[]>(tempData);
   const [locationData, setLocationData] = useState<string | null>(locationQuery)
@@ -240,6 +241,16 @@ export default function Search({ placeholder }: { placeholder: string }) {
     setLocationData(locationData)
     console.log("location update1");
   }, [locationData]);
+
+  useEffect(() => {
+    if(filterQuery != null){
+      setFilter(Number(filterQuery))
+    }
+    console.log(filterQuery);
+    
+    console.log(filter);
+    
+  }, []);
 
   return (
     <>
