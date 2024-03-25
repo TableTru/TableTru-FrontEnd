@@ -20,7 +20,7 @@ import {CheckBookingTime} from '@/services/tableBooking.service'
 
 // Import Promotion Code 
 import { initialItems } from "@/data/promotion"
-import { Promotion } from "@/interfaces/Promo"
+import { Item } from "@/interfaces/Promo"
 
 const openTime = [
     {

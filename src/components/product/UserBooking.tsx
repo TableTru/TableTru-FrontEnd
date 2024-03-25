@@ -14,6 +14,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+// with date-fns v3.x
+
+
 
 import { MultiSectionDigitalClock } from '@mui/x-date-pickers/MultiSectionDigitalClock';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -22,7 +25,7 @@ import { TimePicker, TimePickerProps } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 // import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
-import { Promotion } from "@/interfaces/Promo";
+import { Item } from "@/interfaces/Promo";
 import { initialItems } from "@/data/promotion";
 import Swal from "sweetalert2";
 import Map from "@/components/Map";
@@ -48,7 +51,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
   const [time, setTime] = useState<Dayjs | null>();
   const [seat, setSeat] = useState();
   const [selectPromotion, setSelectPromotion] = useState();
-  const [promotionData, setPromotionData] = useState<Promotion[]>(initialItems);
+  const [promotionData, setPromotionData] = useState<Item[]>(initialItems);
   const seatNumbers = Array.from({ length: seats }, (_, index) => index + 1);
   const userData = localStorage.getItem("userData")
   const userDataJson = JSON.parse(userData || "[]");
@@ -89,7 +92,10 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
       setCombineTime(combineTimeDayjs)
       setTime(combineTimeDayjs)
     }
+
+
   }
+
 
   const handleChangeTime = (timeValue: dayjs.Dayjs) => {
     setDate(timeValue);
@@ -114,14 +120,10 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
       setDate(time)
       console.log(time.format("YYYY-MM-DD HH:mm"));
     }
-  };
 
-  useEffect(() => {
-    fetchData()});
-    
-  useEffect(()=> {
-    fetchDateTime()
-  })
+
+
+  };
 
   const handleChangeSeat = (event: any) => {
     // setSeat(prevState => ({
@@ -331,7 +333,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
             >
               {promotionData.map((item, index) => (
                 <MenuItem key={index} value={index}>
-                  {item.promotion_name}
+                  {item.name}
                 </MenuItem>
               ))}
             </Select>
