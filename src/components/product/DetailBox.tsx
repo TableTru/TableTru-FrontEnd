@@ -35,7 +35,7 @@ import "./TableResponsive.css"
 import dayjs, { Dayjs } from "dayjs";
 import { Review } from "@/interfaces/Review";
 import { createReview, GetAllReviewByStoreId, GetStoreRatingCount } from '@/services/review.service'
-import {editStore} from '@/services/store.service'
+import {GetStoreImageByType, editStore} from '@/services/store.service'
 
 const Root = styled("div")(({ theme }) => ({
     width: "100%", ...theme.typography.body2, color: theme.palette.text.secondary, "& > :not(style) ~ :not(style)": {
@@ -106,6 +106,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
     const [value, setValue] = React.useState("Review");
     const [comment, setComment] = React.useState<string>('');
     const [rating, setRating] = React.useState<number | null>(0);
+    const [menuImage, setMenuImage] = React.useState<any>(menuTemp);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -144,7 +145,25 @@ export default function DetailBox({ description, openTime, review, store_id, sum
         setRating(0);
     }
 
-    const [showReply, setShowReply] = React.useState(false)
+    const fetchData = async () => {
+        console.log(store_id)
+        const ImageArray = [];
+        const Images = await GetStoreImageByType(store_id, "ภาพเมนู");
+        console.log(Images);
+
+        if (Images) {
+            for (const imageObject of Images) {
+                ImageArray.push(imageObject);
+            }
+            setMenuImage(ImageArray);
+            console.log(ImageArray);
+        }
+    }
+
+    React.useEffect(() => {
+        setMenuImage(menuTemp)
+    }, []);
+
     return (
         <>
             <div className="mb-6">
@@ -329,7 +348,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                 <TabPanel value="Menu">
                                     <>
                                     <div  className={"flex-cols items-center"}>
-                                    {menuTemp.map((item, index) => (
+                                    {menuImage.map((item, index) => (
                                         <Image key={index} width={1028} height={2000}
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             src={item.menu_image}

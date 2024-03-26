@@ -34,6 +34,7 @@ import {
     Select,
     FormControl,
     ListItemIcon,
+    CircularProgress,
 
 
 } from "@mui/material";
@@ -124,6 +125,9 @@ const storeTemp: object =
     ]
 }
 
+var utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
+
 const menuImageTemp: StoreImage[] = [
     {
         store_image_id: 1,
@@ -164,6 +168,8 @@ export default function EditStore() {
     const [mainImage, setMainImage] = useState('')
     const [isMainImageUpload, setIsMainImageUpload] = useState(false)
     const [mainProgressUpload, setMainProgressUpload] = useState(0)
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [defaultName, setDefaultName] = useState('')
     const [removeImage, setRemoveImage] = useState<number[]>([])
@@ -269,7 +275,11 @@ export default function EditStore() {
                 for (const openTimeObject of formData.OpenTimes) {
                     await editOpenTime(openTimeObject.openTime_id, openTimeObject)
                 }
-                // window.location.replace('/profile')
+
+                setIsLoading(true);
+                setTimeout(() => {
+                    window.location.replace('/store');
+                }, 5000); // 5000 milliseconds = 5 seconds
             } else {
                 // setCreateError("มีร้านค้าชื่อนี้แล้ว")
                 console.log("error");
@@ -815,7 +825,7 @@ export default function EditStore() {
                                                             <Input
                                                                 type="file"
                                                                 placeholder="Select file to upload"
-                                                                accept="image/png"
+                                                                accept="image/png, image/jpeg"
                                                                 onChange={(files) => handleSelectedMainImage(files.target.files)}
                                                             />
                                                             {isMainImageUpload && <Progress percent={mainProgressUpload} />}
@@ -842,7 +852,7 @@ export default function EditStore() {
                                                                     <Input
                                                                         type="file"
                                                                         placeholder="Select file to upload"
-                                                                        accept="image/png"
+                                                                        accept="image/png, image/jpeg"
                                                                         onChange={(files) => handleSelectedMenuImage(files.target.files)}
                                                                     />
                                                                 </Box>
@@ -885,7 +895,7 @@ export default function EditStore() {
                                                                     <Input
                                                                         type="file"
                                                                         placeholder="Select file to upload"
-                                                                        accept="image/png"
+                                                                        accept="image/png, image/jpeg"
                                                                         onChange={(files) => handleSelectedSubImage(files.target.files)}
                                                                     />
                                                                 </Box>
@@ -936,7 +946,7 @@ export default function EditStore() {
                                                                     <TimePicker
                                                                         label="เวลาเปิด"
                                                                         className={"w-full"}
-                                                                        value={dayjs(item.start_time)}
+                                                                        value={dayjs.utc(item.start_time)}
                                                                         onChange={(newValue) => handleOpenTimeChange(index, newValue)}
                                                                     />
                                                                 </DemoContainer>
@@ -946,7 +956,7 @@ export default function EditStore() {
                                                                     <TimePicker
                                                                         label="เวลาปิด"
                                                                         className={"w-full"}
-                                                                        value={dayjs(item.end_time)}
+                                                                        value={dayjs.utc(item.end_time)}
                                                                         onChange={(newValue) => handleCloseTimeChange(index, newValue)}
                                                                     />
                                                                 </DemoContainer>
@@ -967,7 +977,7 @@ export default function EditStore() {
                                     fullWidth
                                     variant="contained"
                                 >
-                                    แก้ไขร้านค้า
+                                    {isLoading ? <CircularProgress /> : 'แก้ไขร้านค้า'}
                                 </Button>
                             </Link>
                         </Box>

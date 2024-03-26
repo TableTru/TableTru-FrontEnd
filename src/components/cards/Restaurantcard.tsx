@@ -81,7 +81,7 @@ const tempData = [
     store_id: "3",
     store_name: "ร้านค้า3",
     sum_rating: "4",
-    store_cover_image: 'https://pbs.twimg.com/media/GH0mlobbgAARNLo?format=jpg&name=medium',
+    store_cover_image: 'https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2F0eymTDE.png?alt=media&token=41bb21d3-d2f9-4baf-b960-f4fef7b39793',
     category: {
       category_name: "หมวดหมู่"
     },
@@ -118,20 +118,22 @@ export default function Restaurantcard() {
   };
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
   }, []);
 
   return (
     <>
       {storeData.map((item) => (
         <Link href={`/restaurant/${item.store_id}`}  key={item.store_id}>
-          <Card sx={{ maxWidth: 345 }}>
+          <Card sx={{ maxWidth: 345, width:345 }}>
             <CardActionArea>
               <CardMedia
                 component="img"
                 height="194"
+                width={345}
                 image={item.store_cover_image}
                 alt="Paella dish"
+                style={{ maxHeight: '230px' }}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5">

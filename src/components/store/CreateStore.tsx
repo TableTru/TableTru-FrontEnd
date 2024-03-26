@@ -45,6 +45,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CreateStoreDetail from "@/components/store/CreateStoreDetail";
+import CircularProgress from '@mui/material/CircularProgress';
 import Map from "@/components/Map";
 import dayjs, { Dayjs } from 'dayjs';
 import { Loader } from '@googlemaps/js-api-loader';
@@ -106,6 +107,9 @@ interface StoreImage {
     store_image_type: string;
 }
 
+var utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
+
 export default function CreateStore() {
     const [menuUploading, setMenuUploading] = useState(false)
     const [subImageUpload, setSubImageUpload] = useState(false)
@@ -118,6 +122,7 @@ export default function CreateStore() {
     const [mainProgressUpload, setMainProgressUpload] = useState(0)
 
     const [createError, setCreateError] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
 
     const [openTimeData, setOpenTimeData] = useState<Object[]>(OpenTimes)
     const [locationData, setLocationData] = useState<object>({
@@ -126,7 +131,7 @@ export default function CreateStore() {
         longitude: null,
     })
     const [formData, setFormData] = useState<any>({
-        category_id: null,
+        category_id: 1,
         store_name: '',
         table_booking: 0,
         max_people_booking: 0,
@@ -190,7 +195,7 @@ export default function CreateStore() {
                 localStorage.setItem('userData', JSON.stringify(userDataJson));
 
                 // const createStoreRes = { store_id: 1 }
-                
+
                 const newUserData = {
                     user_id: userDataJson.user_id,
                     store_id: createStoreRes.store_id,
@@ -230,7 +235,11 @@ export default function CreateStore() {
                     await createOpenTime(openTimeStoreId)
                 }
 
-                // window.location.replace('/profile')
+
+                setIsLoading(true);
+                setTimeout(() => {
+                    window.location.replace('/store');
+                }, 5000); // 5000 milliseconds = 5 seconds
             }
             else {
                 setCreateError("มีร้านค้าชื่อนี้แล้ว")
@@ -606,9 +615,12 @@ export default function CreateStore() {
                                                             label="เลิอกโค้ตส่วนลด"
                                                             onChange={handleChange}
                                                         >
-                                                            <MenuItem value={1}>หมวดหมู่1</MenuItem>
-                                                            <MenuItem value={2}>หมวดหมู่2</MenuItem>
-                                                            <MenuItem value={3}>หมวดหมู่3</MenuItem>
+                                                            <MenuItem value={1}>ไทย</MenuItem>
+                                                            <MenuItem value={2}>นานาชาติ</MenuItem>
+                                                            <MenuItem value={3}>ญิ่ปุ่น</MenuItem>
+                                                            <MenuItem value={4}>จีน</MenuItem>
+                                                            <MenuItem value={5}>อิตาเลี่ยน</MenuItem>
+                                                            <MenuItem value={6}>ฟิวชั่น</MenuItem>
                                                         </Select>
                                                     </FormControl>
 
@@ -653,7 +665,7 @@ export default function CreateStore() {
                                                             <Input
                                                                 type="file"
                                                                 placeholder="Select file to upload"
-                                                                accept="image/png"
+                                                                accept="image/png, image/jpeg"
                                                                 onChange={(files) => handleSelectedMainImage(files.target.files)}
                                                             />
                                                             {isMainImageUpload && <Progress percent={mainProgressUpload} />}
@@ -680,7 +692,7 @@ export default function CreateStore() {
                                                                     <Input
                                                                         type="file"
                                                                         placeholder="Select file to upload"
-                                                                        accept="image/png"
+                                                                        accept="image/png, image/jpeg"
                                                                         onChange={(files) => handleSelectedMenuImage(files.target.files)}
                                                                     />
                                                                 </Box>
@@ -723,7 +735,7 @@ export default function CreateStore() {
                                                                     <Input
                                                                         type="file"
                                                                         placeholder="Select file to upload"
-                                                                        accept="image/png"
+                                                                        accept="image/png, image/jpeg"
                                                                         onChange={(files) => handleSelectedSubImage(files.target.files)}
                                                                     />
                                                                 </Box>
@@ -774,7 +786,7 @@ export default function CreateStore() {
                                                                     <TimePicker
                                                                         label="เวลาเปิด"
                                                                         className={"w-full"}
-                                                                        value={dayjs(item.start_time)}
+                                                                        value={dayjs.utc(item.start_time)}
                                                                         onChange={(newValue) => handleOpenTimeChange(index, newValue)}
                                                                     />
                                                                 </DemoContainer>
@@ -784,7 +796,7 @@ export default function CreateStore() {
                                                                     <TimePicker
                                                                         label="เวลาปิด"
                                                                         className={"w-full"}
-                                                                        value={dayjs(item.end_time)}
+                                                                        value={dayjs.utc(item.end_time)}
                                                                         onChange={(newValue) => handleCloseTimeChange(index, newValue)}
                                                                     />
                                                                 </DemoContainer>
@@ -808,8 +820,9 @@ export default function CreateStore() {
                                     type="submit"
                                     fullWidth
                                     variant="contained"
+                                    disabled={isLoading}
                                 >
-                                    สร้างร้านค้า
+                                    {isLoading ? <CircularProgress /> : 'สร้างร้านค้า'}
                                 </Button>
                             </Link>
                         </Box>

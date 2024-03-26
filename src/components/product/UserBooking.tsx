@@ -171,7 +171,7 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
 
 
   const handleButtonConfirm = async () => {
-    if (date != null && time != null) {
+    if (date != null && time != null && seat != null) {
       Swal.fire({
         title: "แน่ใจหรือว่าจะยืนยัน",
         text: "โปรดตรวจสอบรายละเอียดการจอง",

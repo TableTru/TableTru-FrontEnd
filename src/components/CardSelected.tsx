@@ -12,6 +12,7 @@ import Link from "next/link";
 import { NextLinkComposed } from "@/components/Link";
 import { useRouter } from "next/navigation";
 import IconBottonSelect from "@/components/botton/MyLocation";
+import { Grid } from "@mui/material";
 
 
 export default function Component() {
@@ -20,9 +21,44 @@ export default function Component() {
 
 
   return (
-    <div className="max-w-[900px] gap-4 grid grid-cols-12 px-8 ">
+    <div className="">
+
+      <Grid container spacing={2} >
+        <Grid item xs={6} sx={{ mt: 2, mb: 2 }}>
+          <Card
+            className="col-span-4 h-[200px] lg:h-[300px]"
+            isPressable isHoverable onPress={() => router.push(`/search/`)}
+          >
+            <CardHeader className="absolute z-10 top-1 flex-col !items-start">
+              <h2 className="text-black font-medium text-xl lg:text-2xl">ร้านอาหารแนะนำ</h2>
+            </CardHeader>
+            <Image
+              removeWrapper
+              alt="Card background"
+              className="z-0 w-full h-full object-cover"
+              src="./images/food_review.png"
+            />
+          </Card>
+        </Grid>
+        <Grid item xs={6} sx={{ mt: 2, mb: 2 }}>
+          <Card
+            className="col-span-4 h-[200px] lg:h-[300px] "
+            isPressable isHoverable onPress={() => router.push('/search')}
+          >
+            <CardHeader className="absolute z-10 top-1 flex-col !items-start">
+              <h4 className="text-black font-medium text-xl lg:text-2xl">ร้านใกล้ฉัน</h4>
+            </CardHeader>
+            <Image
+              removeWrapper
+              alt="Card background"
+              className="z-0 w-full h-full object-cover"
+              src="./images/map.png"
+            />
+          </Card>
+        </Grid>
+      </Grid>
       {/*list โค๊ตส่วนลด*/}
-      
+
       {/* <Card
         className="col-span-4 h-[200px] lg:h-[300px] "
         isPressable
@@ -41,37 +77,11 @@ export default function Component() {
 
       {/*ร้านอาหารแนะนำ*/}
 
-      <Card
-        className="col-span-4 h-[200px] lg:h-[300px]"
-        isPressable isHoverable onPress={() => router.push(`/search/`)}
-      >
-        <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-          <h2 className="text-black font-medium text-xl lg:text-2xl">ร้านอาหารแนะนำ</h2>
-        </CardHeader>
-        <Image
-          removeWrapper
-          alt="Card background"
-          className="z-0 w-full h-full object-cover"
-          src="./images/food_review.png"
-        />
-      </Card>
+
 
       {/*ร้านใกล้ฉัน*/}
 
-      <Card
-        className="col-span-4 h-[200px] lg:h-[300px] "
-        isPressable isHoverable onPress={() => router.push('/search')}
-      >
-        <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-          <h4 className="text-black font-medium text-xl lg:text-2xl">ร้านใกล้ฉัน</h4>
-        </CardHeader>
-        <Image
-          removeWrapper
-          alt="Card background"
-          className="z-0 w-full h-full object-cover"
-          src="./images/map.png"
-        />
-      </Card>
+
     </div>
   );
 }
