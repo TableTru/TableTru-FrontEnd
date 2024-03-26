@@ -35,7 +35,7 @@ import "./TableResponsive.css"
 import dayjs, { Dayjs } from "dayjs";
 import { Review } from "@/interfaces/Review";
 import { createReview, GetAllReviewByStoreId, GetStoreRatingCount } from '@/services/review.service'
-import {GetStoreImageByType, editStore} from '@/services/store.service'
+import { GetStoreImageByType, editStore } from '@/services/store.service'
 
 const Root = styled("div")(({ theme }) => ({
     width: "100%", ...theme.typography.body2, color: theme.palette.text.secondary, "& > :not(style) ~ :not(style)": {
@@ -81,7 +81,8 @@ const menuTemp: Menu[] = [
         menu_id: "1",
         menu_image: "https://images.unsplash.com/photo-1710780953043-4dc3f98d2d50?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         created_date: new Date(),
-        updated_date: new Date(),  },
+        updated_date: new Date(),
+    },
     {
         menu_id: "2",
         menu_image: "https://images.unsplash.com/photo-1711052692809-7f72a69f2791?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -130,7 +131,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
         console.log(formData)
         try {
             const createReviewRes = await createReview(formData)
-            if(rating != 0){
+            if (rating != 0) {
                 const ratingCount = await GetStoreRatingCount(store_id, true)
 
                 const updateStore = {
@@ -162,6 +163,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
 
     React.useEffect(() => {
         setMenuImage(menuTemp)
+        // fetchData()
     }, []);
 
     return (
@@ -347,14 +349,15 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                 </TabPanel>
                                 <TabPanel value="Menu">
                                     <>
-                                    <div  className={"flex-cols items-center"}>
-                                    {menuImage.map((item, index) => (
-                                        <Image key={index} width={1028} height={2000}
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            src={item.menu_image}
-                                            alt={item.menu_id} />
-                                    ))}
-                                    </div>
+                                        <div className={"flex-cols items-center"}>
+                                            {menuImage.map((item, index) => (
+                                                <Image key={index} width={1028} height={2000}
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                    src={item.store_image_name}
+                                                    alt={item.store_image_name}
+                                                />
+                                            ))}
+                                        </div>
                                     </>
                                     {/* <img src={menuTemp.menu_image} alt={menuTemp.menu_id}/> */}
                                     {/* <Skeleton variant="rectangular" width={210} height={118} /> */}

@@ -231,8 +231,8 @@ export default function TabSelect() {
   };
 
   useEffect(() => {
-    // fetchData();
-    fetchTempData()
+    fetchData();
+    // fetchTempData()
   }, []);
 
   return (

@@ -132,7 +132,7 @@ export const deleteStoreImage = async (id: number) => {
 }
 
 export const searchSortRating = async (data: any) => {
-  return await axios.get(url + '/stores/SearchStoreSortRating/', data).then((res: AxiosResponse) => {
+  return await axios.get(url + '/stores/SearchStoreSortRating', data).then((res: AxiosResponse) => {
     return res.data.data.rows;
   }).catch((err: any) => {
     catchError(err, null, "getStore");
@@ -141,7 +141,9 @@ export const searchSortRating = async (data: any) => {
 }
 
 export const searchSortLocation = async (data: any) => {
-  return await axios.get(url + '/stores/SearchStoreSortDistance/', data).then((res: AxiosResponse) => {
+  console.log(data);
+  
+  return await axios.get(url + '/stores/SearchStoreSortDistance', data).then((res: AxiosResponse) => {
     return res.data.data.rows;
   }).catch((err: any) => {
     catchError(err, null, "getStore");

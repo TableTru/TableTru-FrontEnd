@@ -208,26 +208,55 @@ export default function Search({ placeholder }: { placeholder: string }) {
   }
 
   const fetchData = async () => {
-    const storeArray = [];
-    const data = await getAllStore();
-    console.log(data);
-
-    if (data) {
-      const stores = data;
-      for (const storeObj of stores) {
-        storeArray.push(storeObj);
-      }
+    const searchObject = {
+      search: search,
+      location: locationData,
+      category_id: categoryId - 1
     }
-    setStoreData(storeArray);
-    console.log(storeArray);
+
+    console.log(searchObject);
+    if (filter == 1) {
+      //เรียงตาม rating
+      const searchRes = await searchSortRating(searchObject)
+      console.log(searchRes);
+
+      const storeArray = [];
+
+      if (searchRes) {
+        const stores = searchRes;
+        for (const storeObj of stores) {
+          storeArray.push(storeObj);
+        }
+      }
+      setStoreData(storeArray);
+      console.log(storeArray);
+
+    }
+    else {
+      const searchRes = await searchSortLocation(searchObject)
+      console.log(searchRes);
+
+      const storeArray = [];
+
+      if (searchRes) {
+        const stores = searchRes;
+        for (const storeObj of stores) {
+          storeArray.push(storeObj);
+        }
+      }
+      setStoreData(storeArray);
+      console.log(storeArray);
+    }
   };
 
   useEffect(() => {
     if (categoryId == 0) {
       setCategoryId(1)
     }
-    // fetchData()
-  }, [locationData, categoryId, search]);
+    fetchData()
+    console.log("fetch active");
+    
+  }, [locationData, categoryId, filter]);
 
   useEffect(() => {
     loader.load().then(() => {
