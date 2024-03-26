@@ -211,7 +211,7 @@ export default function ProfileCard() {
 
                     </Box>
 
-                    <Box
+                    {/* <Box
                         sx={{
                             marginTop: 4,
                             display: 'flex',
@@ -222,17 +222,17 @@ export default function ProfileCard() {
                         <Typography component="h1" variant="h6">
                             ตำแหน่งของฉัน:
                         </Typography>
-                    </Box>
+                    </Box> */}
 
                     <Box
                         sx={{
-                            marginTop: 4,
+                            marginTop: 2,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'left',
                         }}
                     >
-                        <Typography component="h1" variant="h6">
+                        {/* <Typography component="h1" variant="h6">
                             ร้านที่รีวิว
                         </Typography>
 
@@ -250,7 +250,7 @@ export default function ProfileCard() {
 
                                 </ListItem>
                             </List>
-                        ))}
+                        ))} */}
 
                         {userData.user_status === "user" ? (
                             <Link href="/store/create" sx={{
