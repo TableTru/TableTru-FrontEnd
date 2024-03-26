@@ -148,7 +148,7 @@ export default function RestaurantId() {
     }
 
     useEffect(() => {
-        // fetchData();
+        fetchData();
         console.log(params);
         
     }, []);
@@ -158,7 +158,7 @@ export default function RestaurantId() {
             <section className="my-24 py-10 dark:bg-gray-800">
                 <div className="max-w-6xl px-4 mx-auto">
                     <div className="flex flex-wrap mb-24 -mx-4">
-                        <Galleries />
+                        <Galleries store_id={Number(params.restaurantId)/>
 
                         <div className="w-full px-4 md:w-1/2">
                             <div className="lg:pl-20">

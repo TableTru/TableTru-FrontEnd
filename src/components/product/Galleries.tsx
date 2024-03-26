@@ -23,12 +23,11 @@ const responsiveOptions: GalleriaResponsiveOptions[] = [
         }
     ];
 
-export default function Galleries() {
+export default function Galleries({ store_id }: { store_id: number }) {
     const [images, setImages] = useState();
 
     const fetchData = async () => {
-        const storeId = 1
-        const data = await GetStoreImage(storeId);
+        const data = await GetStoreImage(store_id);
         console.log(data);
 
         if (data) {

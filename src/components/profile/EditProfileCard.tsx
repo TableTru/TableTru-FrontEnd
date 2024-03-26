@@ -64,7 +64,7 @@ export default function EditProfileCard() {
   const [userDataForm, setUserDataForm] = useState({
     username: '',
     password: '',
-    email: '',
+    // email: '',
     phone_num: '',
     profile_image: ''
   });
@@ -150,7 +150,7 @@ export default function EditProfileCard() {
                 onChange={handleChange}
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
@@ -161,7 +161,7 @@ export default function EditProfileCard() {
                 value={userDataForm.email}
                 onChange={handleChange}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
               <TextField
                 required
