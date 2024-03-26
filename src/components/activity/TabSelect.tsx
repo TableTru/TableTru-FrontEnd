@@ -109,22 +109,24 @@ export default function TabSelect() {
   const [value, setValue] = useState('1');
   const [open, setOpen] = useState(false);
 
-  const [storeName, setStoreName] = useState("TeaPot 01");
-  const [seat, setSeat] = useState(2);
+  const [storeName, setStoreName] = useState("temp");
+  const [seat, setSeat] = useState(0);
   const [date, setDate] = useState(new Date().toDateString());
   const [time, setTime] = useState(new Date().toLocaleTimeString());
+  const [location, setLocation] = useState('')
   //เลือกจาก select
   const [promocode, setPromocode] = useState("ส่วนลด 10%");
 
   const [onGoingData, setOnGoingData] = useState<object[]>([])
   const [historicalData, setHistoricalData] = useState<object[]>([])
-  const [bookingModalData, setBookingModalData] = useState<object>({
+  const [bookingModalData, setBookingModalData] = useState<any>({
     store_name: "",
-    table_booking_count: null,
+    table_booking_count: 0,
     table_booking_time: "",
-    latitude: null,
-    longitude: null,
-    promotion: "ส่วนลด 10%"
+    table_booking_date: "",
+    location: '',
+    promotion: "ส่วนลด 10%",
+    store_location: ''
 
   })
 
@@ -193,24 +195,19 @@ export default function TabSelect() {
 
   };
 
-  const handleOpen = () => {
-    const userData = localStorage.getItem("userData")
-    const userDataJson = JSON.parse(userData || "[]");
+  const handleOpen = (bookingData: any) => {
 
-    // if (userData) {
-    //     const store_id = userDataJson.store_id
+    const popupObject = {
+      store_name: bookingData.store_name,
+      table_booking_count: bookingData.table_booking_count,
+      table_booking_time: bookingData.table_booking_time.toLocaleTimeString(undefined, timeOptions),
+      table_booking_date: bookingData.table_booking_time.toDateString(),
+      location: bookingData.location,
+      promotion: "ส่วนลด 10%",
+      store_location: '16/9 ถ. หอวัง แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900 ประเทศไทย'
+    }
 
-    //     const tableBookingArray = [];
-    //     const data = await getTableBookingByStoreId(store_id);
-
-    //     if (data) {
-    //         for (const tableBookingObject of data) {
-    //             tableBookingArray.push(tableBookingObject);
-    //         }
-    //         setModalData(tableBookingArray);
-    //         console.log(tableBookingArray);
-    //     }
-    // }
+    setBookingModalData(popupObject)
     setOpen(true)
   }
 
@@ -234,8 +231,8 @@ export default function TabSelect() {
   };
 
   useEffect(() => {
-    fetchData();
-    // fetchTempData()
+    // fetchData();
+    fetchTempData()
   }, []);
 
   return (
@@ -273,7 +270,7 @@ export default function TabSelect() {
                   </Box>
 
                   <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
-                    <Button onClick={handleOpen}>
+                    <Button onClick={() => handleOpen(item)}>
                       <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
                     </Button>
 
@@ -294,20 +291,20 @@ export default function TabSelect() {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h5" component="h2">{storeName}</Typography>
+            <Typography id="modal-modal-title" variant="h5" component="h2">{bookingModalData.store_name}</Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2, mb: 2 }} variant="h6" component="h3"> รายละเอียด </Typography>
             <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
               <li className="flex items-center">
                 <PersonIcon />
-                {seat} ที่นั่ง
+                {bookingModalData.table_booking_count} ที่นั่ง
               </li>
               <li className="flex items-center">
                 <CalendarMonthIcon />
-                {date}
+                {bookingModalData.table_booking_date}
               </li>
               <li className="flex items-center">
                 <AccessTimeIcon />
-                {time}
+                {bookingModalData.table_booking_time}
               </li>
               <li className="flex items-center">
                 <LoyaltyIcon />
@@ -315,7 +312,7 @@ export default function TabSelect() {
               </li>
             </ul>
             <div className={"mt-8"}>
-              <Map address="1600 Amphitheatre Parkway, Mountain View, CA" className={"width:400, height:400"} />
+              <Map address={bookingModalData.store_location} className={"width:400, height:400"} />
             </div>
           </Box>
         </Modal>
@@ -333,7 +330,7 @@ export default function TabSelect() {
                   </Box>
 
                   <Box sx={{ width: "20%", display: 'flex', flexDirection: 'column', alignItems: 'right' }}>
-                    <Button onClick={handleOpen}>
+                    <Button onClick={() => handleOpen(item)}>
                       <p className="activity">กดดูรายละเอียด<ArrowForwardIcon /></p>
                     </Button>
 

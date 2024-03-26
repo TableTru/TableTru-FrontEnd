@@ -45,7 +45,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone);
 const localTimeZone = 'Asia/Bangkok';
 
-export default function UserBooking({ seats, openTime, store_id }: { seats: number; openTime: Array<TimeTemp>; store_id: number }) {
+export default function UserBooking({ seats, openTime, store_id, address }: { seats: number; openTime: Array<TimeTemp>; store_id: number, address: string }) {
   const now = dayjs();
   const [date, setDate] = useState<Dayjs | null>();
   const [time, setTime] = useState<Dayjs | null>();
@@ -324,9 +324,9 @@ export default function UserBooking({ seats, openTime, store_id }: { seats: numb
         <div className="bg-gray-100 dark:bg-gray-700 rounded-xl">
           <div className="p-3 lg:p-5 ">
             {/* Map */}
-            <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
+            <Map address={address} />
             <div className="p-2 rounded-xl lg:p-6 dark:bg-gray-800 bg-gray-50">
-              123/xyz Location
+              {address}
             </div>
           </div>
         </div>

@@ -24,7 +24,7 @@ function Map({ address }) {
       if (status === "OK") {
         const map = new google.maps.Map(mapRef.current, {
           center: results[0].geometry.location,
-          zoom: 8,
+          zoom: 12,
         });
         const marker = new google.maps.Marker({
           map: map,

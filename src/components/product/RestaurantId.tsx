@@ -80,7 +80,7 @@ export default function RestaurantId() {
         category_id: 1,
         category_name: "temp",
         latitude: 0,
-        location: "",
+        location: "16/9 ถ. หอวัง แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900 ประเทศไทย",
         longitude: 0,
         max_people_booking: 1,
         store_cover_image: "",
@@ -185,7 +185,7 @@ export default function RestaurantId() {
                                     />
                                 </Stack>
 
-                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)}/>
+                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)} address={storeData.location}/>
 
                             </div>
                         </div>
