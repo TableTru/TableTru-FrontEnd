@@ -27,14 +27,17 @@ import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { getUserById, getUserReview, editUser } from "@/services/user.service";
+import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
+import { storage } from '@/services/firebaseConfig'
+import { Input, message, Progress, } from 'antd'
 
 interface User {
   user_id: number;
   username: string;
   password: string;
-  profile_image: string;
+  store_cover_image: string;
   user_status: string;
-  store_id: number| null;
+  store_id: number | null;
   email: string;
   phone_num: string;
   latitude: number;
@@ -50,7 +53,7 @@ const userTemp: User =
   password: "por1234",
   user_status: "merchant",
   store_id: 1,
-  profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+  store_cover_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
   email: "aungpor.napat@gmail.com",
   phone_num: "0813111234",
   latitude: 0,
@@ -66,8 +69,12 @@ export default function EditProfileCard() {
     password: '',
     // email: '',
     phone_num: '',
-    profile_image: ''
+    store_cover_image: 'https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium'
   });
+
+  const [isMainImageUpload, setIsMainImageUpload] = useState(false)
+  const [mainProgressUpload, setMainProgressUpload] = useState(0)
+  const [mainImage, setMainImage] = useState('')
 
   const fetchData = async () => {
     const userData = localStorage.getItem("userData")
@@ -76,7 +83,7 @@ export default function EditProfileCard() {
     console.log(data);
 
     if (data) {
-        setUserDataForm(data);
+      setUserDataForm(data);
     }
     // setUserData(userTemp);
 
@@ -94,10 +101,54 @@ export default function EditProfileCard() {
     const userData = localStorage.getItem("userData")
     const userDataJson = JSON.parse(userData || "[]");
     e.preventDefault();
-    const createRes = await editUser(userDataJson.user_id , userDataForm)
+    const createRes = await editUser(userDataJson.user_id, userDataForm)
     console.log(createRes);
     window.location.replace('/profile')
   };
+
+  const handleSelectedMainImage = async (files: any) => {
+    if (files && files[0].size < 10000000) {
+      const name = files[0].name
+      const storageRef = ref(storage, `image/${name}`)
+      const uploadTask = uploadBytesResumable(storageRef, files[0])
+
+      setIsMainImageUpload(true)
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+          setMainProgressUpload(progress) // to show progress upload
+
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused')
+              break
+            case 'running':
+              console.log('Upload is running')
+              break
+          }
+        },
+        (error) => {
+          message.error(error.message)
+          setIsMainImageUpload(false)
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            //url is download url of file
+            setMainImage(url)
+            setIsMainImageUpload(false)
+
+            setUserDataForm({ ...userDataForm, store_cover_image: url });
+          })
+        },
+      )
+    } else {
+      message.error('File size too large')
+    }
+  }
 
   useEffect(() => {
     fetchData();
@@ -115,7 +166,7 @@ export default function EditProfileCard() {
       >
 
 
-        <Typography sx={{mt: 11}} component="h1" variant="h5">
+        <Typography sx={{ mt: 11 }} component="h1" variant="h5">
           Edit Profile
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -124,7 +175,7 @@ export default function EditProfileCard() {
 
               <Box
                 sx={{ mb: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                <Avatar src={`${userDataForm.profile_image}`} sx={{ width: 200, height: 200, mt: 2, mb: 2, bgcolor: 'secondary.main' }} />
+                <Avatar src={`${userDataForm.store_cover_image}`} sx={{ width: 200, height: 200, mt: 2, mb: 2, bgcolor: 'secondary.main' }} />
               </Box>
 
               <TextField
@@ -173,6 +224,19 @@ export default function EditProfileCard() {
                 value={userDataForm.phone_num}
                 onChange={handleChange}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <div className="container mt-5">
+                <div className="col-lg-8 offset-lg-2">
+                  <Input
+                    type="file"
+                    placeholder="Select file to upload"
+                    accept="image/png, image/jpeg"
+                    onChange={(files) => handleSelectedMainImage(files.target.files)}
+                  />
+                  {isMainImageUpload && <Progress percent={mainProgressUpload} />}
+                </div>
+              </div>
             </Grid>
           </Grid>
           <Button
