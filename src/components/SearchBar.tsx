@@ -106,17 +106,39 @@ export default function Search({ placeholder }: { placeholder: string }) {
     }
 
     console.log(searchObject);
-    
 
-    if(filter == 1){
+
+    if (filter == 1) {
       //เรียงตาม rating
       const searchRes = await searchSortRating(searchObject)
       console.log(searchRes);
-      
+
+      const storeArray = [];
+
+      if (searchRes) {
+        const stores = searchRes;
+        for (const storeObj of stores) {
+          storeArray.push(storeObj);
+        }
+      }
+      setStoreData(storeArray);
+      console.log(storeArray);
+
     }
-    else{
+    else {
       const searchRes = await searchSortLocation(searchObject)
       console.log(searchRes);
+
+      const storeArray = [];
+
+      if (searchRes) {
+        const stores = searchRes;
+        for (const storeObj of stores) {
+          storeArray.push(storeObj);
+        }
+      }
+      setStoreData(storeArray);
+      console.log(storeArray);
     }
   }
 
@@ -159,11 +181,11 @@ export default function Search({ placeholder }: { placeholder: string }) {
         break;
       case 'filter':
         setFilter(value)
-        if(value == 3){
+        if (value == 3) {
           navigator.geolocation.getCurrentPosition((position) => {
             const geocoder = new google.maps.Geocoder();
             const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      
+
             geocoder.geocode({ 'location': latLng }, (results, status) => {
               if (status === 'OK') {
                 if (results[0]) {
@@ -243,13 +265,13 @@ export default function Search({ placeholder }: { placeholder: string }) {
   }, [locationData]);
 
   useEffect(() => {
-    if(filterQuery != null){
+    if (filterQuery != null) {
       setFilter(Number(filterQuery))
     }
     console.log(filterQuery);
-    
+
     console.log(filter);
-    
+
   }, []);
 
   return (
@@ -295,22 +317,22 @@ export default function Search({ placeholder }: { placeholder: string }) {
             <Grid item xs={6}>
               <Typography variant="subtitle1">ค้นหาพิกัดของร้าน</Typography>
               <TextField
-                  inputRef={inputRef}
-                  required
-                  fullWidth
-                  name="location"
-                  value={locationData}
-                  onChange={handleChange}
-                />
-                {predictions.length > 0 && (
-                  <ul>
-                    {predictions.map((prediction, index) => (
-                      <li key={index} onClick={() => handleSelectPrediction(prediction)}>
-                        {prediction.description}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                inputRef={inputRef}
+                required
+                fullWidth
+                name="location"
+                value={locationData}
+                onChange={handleChange}
+              />
+              {predictions.length > 0 && (
+                <ul>
+                  {predictions.map((prediction, index) => (
+                    <li key={index} onClick={() => handleSelectPrediction(prediction)}>
+                      {prediction.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </Grid>
 
             <Grid container spacing={2} >
