@@ -27,7 +27,7 @@ export default function Component() {
         <Grid item xs={6} sx={{ mt: 2, mb: 2 }}>
           <Card
             className="col-span-4 h-[200px] lg:h-[300px]"
-            isPressable isHoverable onPress={() => router.push(`/search/`)}
+            isPressable isHoverable onPress={() => router.push(`/search`)}
           >
             <CardHeader className="absolute z-10 top-1 flex-col !items-start">
               <h2 className="text-black font-medium text-xl lg:text-2xl">ร้านอาหารแนะนำ</h2>
@@ -43,7 +43,7 @@ export default function Component() {
         <Grid item xs={6} sx={{ mt: 2, mb: 2 }}>
           <Card
             className="col-span-4 h-[200px] lg:h-[300px] "
-            isPressable isHoverable onPress={() => router.push('/search')}
+            isPressable isHoverable onPress={() => router.push(`/search?filter=3`)}
           >
             <CardHeader className="absolute z-10 top-1 flex-col !items-start">
               <h4 className="text-black font-medium text-xl lg:text-2xl">ร้านใกล้ฉัน</h4>

@@ -109,14 +109,15 @@ export default function DetailBox({ description, openTime, review, store_id, sum
     const [rating, setRating] = useState<number | null>(0);
     const [menuImage, setMenuImage] = useState<any>(menuTemp);
 
-    const [reviewData, setReviewData] = useState<Review[]>([{
+    const [reviewData, setReviewData] = useState([{
         rating_score: 3,
         rating_status: false,
         review_comment: "ทดสอบ",
         review_id: 1,
         store_id: 1,
         user_id: 38,
-        username: "อังปอ"
+        username: "อังปอ",
+        profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium"
     }])
 
     const [storeData, setStoreData] = useState({
@@ -241,7 +242,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                         <div className="flex flex-col">
                                             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">Overall Review</h3>
                                             <div className="flex items-center mb-4 text-yellow-300">
-                                            <Rating name="read-only" value={storeData.sum_rating} readOnly />
+                                                <Rating name="read-only" value={storeData.sum_rating} readOnly />
                                             </div>
                                         </div>
 
@@ -289,18 +290,25 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                                     <>
                                                         <List key={index} sx={{ width: "100%", bgcolor: "background.paper" }}>
                                                             <ListItem alignItems="flex-start">
-                                                                <ListItemAvatar>
-                                                                    <Avatar alt="Remy Sharp" src={`${item?.store_id}`} />
-                                                                </ListItemAvatar>
 
+
+                                                                <ListItemAvatar>
+                                                                    <Avatar alt="Remy Sharp" src={`${item?.profile_image}`} />
+                                                                </ListItemAvatar>
                                                                 <ListItemText
                                                                     primary={`${item?.username}`}
                                                                     secondary={
                                                                         <>
-                                                                            <Rating name="read-only" value={item.rating_score} readOnly />
+
                                                                             {`${item?.review_comment}`}
                                                                         </>}
                                                                 />
+                                                                <Box sx={{ marginLeft: 'auto' }}>
+                                                                    <Rating name="read-only" value={item.rating_score} readOnly />
+                                                                </Box>
+
+
+
                                                             </ListItem>
                                                         </List>
                                                     </>
