@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
     Tab,
@@ -104,12 +104,39 @@ type TimeTemp = {
 
 export default function DetailBox({ description, openTime, review, store_id, sum_rating }: { description: string, openTime: Array<TimeTemp>, review: Array<Review>, store_id: number, sum_rating: number }) {
 
-    const [value, setValue] = React.useState("Review");
-    const [comment, setComment] = React.useState<string>('');
-    const [rating, setRating] = React.useState<number | null>(0);
-    const [menuImage, setMenuImage] = React.useState<any>(menuTemp);
+    const [value, setValue] = useState("Review");
+    const [comment, setComment] = useState<string>('');
+    const [rating, setRating] = useState<number | null>(0);
+    const [menuImage, setMenuImage] = useState<any>(menuTemp);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    const [reviewData, setReviewData] = useState<Review[]>([{
+        rating_score: 3,
+        rating_status: false,
+        review_comment: "ทดสอบ",
+        review_id: 1,
+        store_id: 1,
+        user_id: 38,
+        username: "อังปอ"
+    }])
+
+    const [storeData, setStoreData] = useState({
+        OpenTimes: openTime,
+        category_id: 1,
+        category_name: "temp",
+        latitude: 0,
+        location: "16/9 ถ. หอวัง แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900 ประเทศไทย",
+        longitude: 0,
+        max_people_booking: 1,
+        store_cover_image: "",
+        store_description: "",
+        store_id: 1,
+        store_name: "temp",
+        sum_rating: 2.1,
+        table_booking: 4,
+        updated_at: ""
+    });
+
+    const handleChange = (event: SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
 
@@ -144,9 +171,18 @@ export default function DetailBox({ description, openTime, review, store_id, sum
         }
         setComment('');
         setRating(0);
+        fetchReview()
     }
 
     const fetchData = async () => {
+        const data = await getStoreById(store_id);
+
+        console.log(data);
+
+        if (data) {
+            setStoreData(data);
+        }
+
         console.log(store_id)
         const ImageArray = [];
         const Images = await GetStoreImageByType(store_id, "ภาพเมนู");
@@ -161,8 +197,23 @@ export default function DetailBox({ description, openTime, review, store_id, sum
         }
     }
 
-    React.useEffect(() => {
+    const fetchReview = async () => {
+        const reviewArray = [];
+        const reviews = await GetAllReviewByStoreId(store_id);
+        console.log(reviews);
+
+        if (reviews) {
+            for (const reviewObject of reviews) {
+                reviewArray.push(reviewObject);
+            }
+            setReviewData(reviewArray);
+            console.log(reviewArray);
+        }
+    }
+
+    useEffect(() => {
         setMenuImage(menuTemp)
+        fetchReview()
         // fetchData()
     }, []);
 
@@ -185,29 +236,16 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                     </TabList>
                                 </Box>
                                 <TabPanel value="Review">
+
                                     <div className="flex flex-row">
                                         <div className="flex flex-col">
                                             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">Overall Review</h3>
                                             <div className="flex items-center mb-4 text-yellow-300">
-                                                <svg className="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                                </svg>
-                                                <svg className="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                                </svg>
-                                                <svg className="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                                </svg>
-                                                <svg className="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                                </svg>
-                                                <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                                </svg>
+                                            <Rating name="read-only" value={storeData.sum_rating} readOnly />
                                             </div>
                                         </div>
 
-                                        <h3 className="text-5xl pl-4 py-2 text-center mg:pl-4">4.8</h3>
+                                        <h3 className="text-5xl pl-4 py-2 text-center mg:pl-4">{storeData.sum_rating}</h3>
                                     </div>
                                     <Divider>การตอบกลับ</Divider>
                                     <div>
@@ -246,7 +284,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
 
                                         {/* Review card Component */}
                                         {
-                                            review.map((item, index) => {
+                                            reviewData.map((item, index) => {
                                                 return (
                                                     <>
                                                         <List key={index} sx={{ width: "100%", bgcolor: "background.paper" }}>
