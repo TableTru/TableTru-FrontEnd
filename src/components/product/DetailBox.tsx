@@ -35,7 +35,7 @@ import "./TableResponsive.css"
 import dayjs, { Dayjs } from "dayjs";
 import { Review } from "@/interfaces/Review";
 import { createReview, GetAllReviewByStoreId, GetStoreRatingCount } from '@/services/review.service'
-import { GetStoreImageByType, editStore } from '@/services/store.service'
+import { GetStoreImageByType, editStore, getStoreById } from '@/services/store.service'
 
 const Root = styled("div")(({ theme }) => ({
     width: "100%", ...theme.typography.body2, color: theme.palette.text.secondary, "& > :not(style) ~ :not(style)": {
