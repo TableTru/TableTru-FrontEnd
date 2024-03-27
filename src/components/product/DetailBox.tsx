@@ -213,8 +213,8 @@ export default function DetailBox({ description, openTime, review, store_id, sum
 
     useEffect(() => {
         setMenuImage(menuTemp)
-        fetchReview()
-        fetchData()
+        // fetchReview()
+        // fetchData()
     }, []);
 
     return (
