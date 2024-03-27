@@ -44,7 +44,7 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import Image from "next/image";
+import { Image } from "@nextui-org/react";
 
 
 dayjs.extend(customParseFormat);
