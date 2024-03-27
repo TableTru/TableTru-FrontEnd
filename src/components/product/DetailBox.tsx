@@ -151,7 +151,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
         const userDataJson = JSON.parse(userData || "[]");
         const formData = {
             review_comment: comment,
-            rating: rating,
+            rating_score: rating,
             user_id: userDataJson.user_id,
             store_id: store_id
         }
@@ -214,7 +214,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
     useEffect(() => {
         setMenuImage(menuTemp)
         fetchReview()
-        // fetchData()
+        fetchData()
     }, []);
 
     return (

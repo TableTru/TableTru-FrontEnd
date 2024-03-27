@@ -73,28 +73,28 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
     }
   }
 
-  const fetchDateTime = async () => {
-    console.log(now.format('dddd'));
-    setDate(now)
+  // const fetchDateTime = async () => {
+  //   console.log(now.format('dddd'));
+  //   setDate(now)
 
-    const initDateData = now.format("YYYY-MM-DD")
+  //   const initDateData = now.format("YYYY-MM-DD")
 
-    const openingHours = openTime.find(item => item.day === dayjs(now).format('dddd'));
-    console.log(openingHours);
-    if (openingHours) {
-      const startTime = openingHours.start_time
-      console.log(startTime);
-      console.log(dayjs(startTime).utcOffset(7).format("HH:mm"));
+  //   const openingHours = openTime.find(item => item.day === dayjs(now).format('dddd'));
+  //   console.log(openingHours);
+  //   if (openingHours) {
+  //     const startTime = openingHours.start_time
+  //     console.log(startTime);
+  //     console.log(dayjs(startTime).utcOffset(7).format("HH:mm"));
 
-      const combineTime = `combineTime = ${initDateData} ${dayjs(startTime).utcOffset(7).format("HH:mm")}`
-      console.log(combineTime);
-      const combineTimeDayjs = dayjs(combineTime)
-      setCombineTime(combineTimeDayjs)
-      setTime(combineTimeDayjs)
-    }
+  //     const combineTime = `combineTime = ${initDateData} ${dayjs(startTime).utcOffset(7).format("HH:mm")}`
+  //     console.log(combineTime);
+  //     const combineTimeDayjs = dayjs(combineTime)
+  //     setCombineTime(combineTimeDayjs)
+  //     setTime(combineTimeDayjs)
+  //   }
 
 
-  }
+  // }
 
 
   const handleChangeTime = (timeValue: dayjs.Dayjs) => {
@@ -134,25 +134,25 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
     console.log(event.target.value);
   };
 
-  const handelDisableTime = (timeValue: dayjs.Dayjs) => {
-    let timeData = timeValue
+  // const handelDisableTime = (timeValue: dayjs.Dayjs) => {
+  //   let timeData = timeValue
 
-    for (let i = 0; i < 23; i++) {
-      timeData = timeData.add(1, 'hour');
-      const openingHours = openTime.find(item => item.day === dayjs(timeData).format('dddd'));
-      if (openingHours) {
-        const startTime = dayjs.utc(openingHours.start_time).hour();
-        const endTime = dayjs.utc(openingHours.end_time).hour();
+  //   for (let i = 0; i < 23; i++) {
+  //     timeData = timeData.add(1, 'hour');
+  //     const openingHours = openTime.find(item => item.day === dayjs(timeData).format('dddd'));
+  //     if (openingHours) {
+  //       const startTime = dayjs.utc(openingHours.start_time).hour();
+  //       const endTime = dayjs.utc(openingHours.end_time).hour();
 
-        if (!openingHours) {
-          return false;
-        }
-        else {
-          return timeData.hour() < startTime || timeData.hour() >= endTime;
-        }
-      }
-    }
-  }
+  //       if (!openingHours) {
+  //         return false;
+  //       }
+  //       else {
+  //         return timeData.hour() < startTime || timeData.hour() >= endTime;
+  //       }
+  //     }
+  //   }
+  // }
 
 
   const handleChangePromotion = (event: any) => {
@@ -163,11 +163,11 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
 
   console.log(openTime)
 
-  const startTime = openTime.map((item) => dayjs.utc(item.start_time).hour())
-  const endTime = openTime.map((item) => dayjs.utc(item.end_time).hour())
+  // const startTime = openTime.map((item) => dayjs.utc(item.start_time).hour())
+  // const endTime = openTime.map((item) => dayjs.utc(item.end_time).hour())
 
-  console.log(startTime);
-  console.log(endTime);
+  // console.log(startTime);
+  // console.log(endTime);
 
 
   const handleButtonConfirm = async () => {
@@ -195,7 +195,7 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
             user_id: userDataJson.user_id,
             table_booking: seat,
             table_booking_status: "ยังไม่ถึงกำหนด",
-            booking_time: dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ssZ"),
+            booking_time: `${dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ss") + "Z"}`,
             promotion: selectPromotion
           };
           console.log("active");
