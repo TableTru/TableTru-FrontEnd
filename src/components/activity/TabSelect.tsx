@@ -84,6 +84,27 @@ const tableBookingTemp: TableBooking[] = [
     table_booking_count: 2,
     table_booking_time: '2024-02-25T17:00',
     store_name: 'บัดดี้ส์ บาร์แอนด์กริล '
+  }
+]
+
+const historicalBookingTemp: TableBooking[] = [
+  {
+    table_booking_id: 1,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'ยังไม่ถึงกำหนด',
+    table_booking_count: 4,
+    table_booking_time: '2024-02-25T17:00',
+    store_name: 'โรลลิ่งริบส์ บริวบาร์ & บาร์บีคิว'
+  },
+  {
+    table_booking_id: 2,
+    store_id: 1,
+    user_id: 1,
+    table_booking_status: 'ยังไม่ถึงกำหนด',
+    table_booking_count: 2,
+    table_booking_time: '2024-02-25T17:00',
+    store_name: 'บัดดี้ส์ บาร์แอนด์กริล '
   },
   {
     table_booking_id: 3,
@@ -160,11 +181,14 @@ export default function TabSelect() {
 
       if (historicalData) {
         for (const tableBookingObject of historicalData) {
-          const tableBookingTempWithDate = {
-            ...tableBookingObject,
-            table_booking_time: new Date(tableBookingObject.table_booking_time)
-          };
-          historicalDataArray.push(tableBookingTempWithDate);
+          if (tableBookingObject.table_booking_status != "ยังไม่ถึงกำหนด") {
+            const tableBookingTempWithDate = {
+              ...tableBookingObject,
+              table_booking_time: new Date(tableBookingObject.table_booking_time)
+            };
+            historicalDataArray.push(tableBookingTempWithDate);
+          }
+
         }
 
         setHistoricalData(historicalDataArray);
@@ -191,6 +215,22 @@ export default function TabSelect() {
 
       setOnGoingData(tableBookingArray);
       console.log(tableBookingArray);
+
+      const historicalDataArray = [];
+      for (const tableBookingObject of historicalBookingTemp) {
+        if (tableBookingObject.table_booking_status != "ยังไม่ถึงกำหนด") {
+          const tableBookingTempWithDate = {
+            ...tableBookingObject,
+            table_booking_time: new Date(tableBookingObject.table_booking_time)
+          };
+          historicalDataArray.push(tableBookingTempWithDate);
+        }
+
+      }
+
+      setHistoricalData(historicalDataArray);
+      console.log(historicalDataArray);
+
     }
 
   };
@@ -231,8 +271,8 @@ export default function TabSelect() {
   };
 
   useEffect(() => {
-    fetchData();
-    // fetchTempData()
+    // fetchData();
+    fetchTempData()
   }, []);
 
   return (

@@ -6,7 +6,7 @@ import { Galleria, GalleriaResponsiveOptions } from 'primereact/galleria';
 import { PhotoService } from '@/data/photo';
 import "./style.css"
 import "./flag.css"
-import { GetStoreImage } from '@/services/store.service'
+import { GetStoreImage, GetStoreImageByType } from '@/services/store.service'
 
 const responsiveOptions: GalleriaResponsiveOptions[] = [
     {
@@ -23,13 +23,13 @@ const responsiveOptions: GalleriaResponsiveOptions[] = [
     }
 ];
 
-const menuImageTemp = [
+const subImageTemp = [
     {
         created_at: "2024-03-26T06:31:25.986Z",
         store_id: 3,
         store_image_id: 3,
-        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2F0eymTDE.png?alt=media&token=41bb21d3-d2f9-4baf-b960-f4fef7b39793",
-        store_image_type: "ภาพเมนู",
+        store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2F1998330_screenshots_20230827235406_1.jpg?alt=media&token=90b51846-cd7e-40c0-8dbd-c56a17033c0c",
+        store_image_type: "ภาพประกอบ",
         updated_at: "2024-03-26T06:31:25.986Z"
     },
     {
@@ -37,7 +37,7 @@ const menuImageTemp = [
         store_id: 3,
         store_image_id: 2,
         store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2F031.png?alt=media&token=13f71b49-3ebb-4fae-b5fb-407a31b67087",
-        store_image_type: "ภาพเมนู",
+        store_image_type: "ภาพประกอบ",
         updated_at: "2024-03-26T06:31:25.964Z"
     },
     {
@@ -45,27 +45,44 @@ const menuImageTemp = [
         store_id: 3,
         store_image_id: 1,
         store_image_name: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2F879627.png?alt=media&token=0b093e57-c822-4eff-a9aa-eb45dcf62a99",
-        store_image_type: "ภาพเมนู",
+        store_image_type: "ภาพประกอบ",
         updated_at: "2024-03-26T06:31:25.949Z"
     }
 ]
 
 export default function Galleries({ store_id }: { store_id: number }) {
     const [images, setImages] = useState<any>();
-
+    
     const fetchData = async () => {
-        const data = await GetStoreImage(store_id);
-        console.log(data);
+        console.log(store_id)
+        const ImageArray = [];
+        const Images = await GetStoreImageByType(store_id, "ภาพเมนู");
+        console.log(Images);
 
-        if (data) {
-            setImages(data);
+        if (Images) {
+            for (const imageObject of Images) {
+                ImageArray.push(imageObject);
+            }
+            setImages(ImageArray);
+            console.log(ImageArray);
         }
-    };
+    }
+
+    const fetchTemp = async () => {
+        const ImageArray = [];
+
+        for (const imageObject of subImageTemp) {
+            ImageArray.push(imageObject);
+        }
+        setImages(ImageArray);
+        console.log(ImageArray);
+
+    }
 
 
     useEffect(() => {
         // fetchData()
-        setImages(menuImageTemp)
+        fetchTemp()
     }, []);
 
     const itemTemplate = (item: any) => {
