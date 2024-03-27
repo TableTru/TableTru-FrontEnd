@@ -99,10 +99,16 @@ export default function Search({ placeholder }: { placeholder: string }) {
     console.log(categoryId);
     console.log(filter);
 
+    var newCategoryId = 0
+
+    if(categoryId != 0){
+      newCategoryId  = categoryId - 1
+    }
+
     const searchObject = {
       search: search,
       location: locationData,
-      category_id: categoryId - 1
+      category_id: newCategoryId
     }
 
     console.log(searchObject);
@@ -126,7 +132,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     }
     else {
-      const searchRes = await searchSortLocation(searchObject)
+      const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
       console.log(searchRes);
 
       const storeArray = [];
@@ -208,10 +214,16 @@ export default function Search({ placeholder }: { placeholder: string }) {
   }
 
   const fetchData = async () => {
+    var newCategoryId = 0
+
+    if(categoryId != 0){
+      newCategoryId  = categoryId - 1
+    }
+    
     const searchObject = {
       search: search,
       location: locationData,
-      category_id: categoryId - 1
+      category_id: newCategoryId
     }
 
     console.log(searchObject);
@@ -233,7 +245,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     }
     else {
-      const searchRes = await searchSortLocation(searchObject)
+      const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
       console.log(searchRes);
 
       const storeArray = [];

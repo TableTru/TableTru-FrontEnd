@@ -140,10 +140,8 @@ export const searchSortRating = async (data: any) => {
   });
 }
 
-export const searchSortLocation = async (data: any) => {
-  console.log(data);
-  
-  return await axios.get(url + '/stores/SearchStoreSortDistance', data).then((res: AxiosResponse) => {
+export const searchSortLocation = async (search: string, categoryId:number, location:string) => {
+  return await axios.get(url + `/stores/SearchStoreSortDistance?search=${search}&categoryID=${categoryId}&location=${location}`).then((res: AxiosResponse) => {
     return res.data.data.rows;
   }).catch((err: any) => {
     catchError(err, null, "getStore");
