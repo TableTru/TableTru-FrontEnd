@@ -137,10 +137,6 @@ export default function SignUp() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

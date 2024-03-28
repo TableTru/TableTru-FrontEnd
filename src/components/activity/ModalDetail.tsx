@@ -63,7 +63,7 @@ export default function BasicModal() {
                             {promocode}
                         </li>
                     </ul>
-                    <Map address="1600 Amphitheatre Parkway, Mountain View, CA" className={"width:200"} />
+                    <Map address="1600 Amphitheatre Parkway, Mountain View, CA" />
                 </Box>
             </Modal>
         </div>

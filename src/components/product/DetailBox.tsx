@@ -76,7 +76,7 @@ const userTemp: User =
 
 }
 
-const menuTemp: Menu[] = [
+const menuTemp = [
     {
         menu_id: "1",
         store_image_name: "https://images.unsplash.com/photo-1710780953043-4dc3f98d2d50?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -137,7 +137,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
         updated_at: ""
     });
 
-    const handleChange = (event: SyntheticEvent, newValue: string) => {
+    const handleChange = (event: any, newValue: string) => {
         setValue(newValue);
     };
 
@@ -161,11 +161,12 @@ export default function DetailBox({ description, openTime, review, store_id, sum
             const createReviewRes = await createReview(formData)
             if (rating != 0) {
                 const ratingCount = await GetStoreRatingCount(store_id, true)
-
-                const updateStore = {
-                    sum_rating: ((sum_rating * (ratingCount - 1)) + rating) / ratingCount
+                if (rating != null) {
+                    const updateStore = {
+                        sum_rating: ((sum_rating * (ratingCount - 1)) + rating) / ratingCount
+                    }
+                    await editStore(store_id, updateStore)
                 }
-                await editStore(store_id, updateStore)
             }
         } catch (error) {
             console.log("error");
@@ -408,7 +409,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                 <TabPanel value="Menu">
                                     <>
                                         <div className={"flex-cols items-center"}>
-                                            {menuImage.map((item, index) => (
+                                            {menuImage.map((item: any, index: any) => (
                                                 <Image
                                                     key={index}
                                                     width={1028}

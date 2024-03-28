@@ -94,7 +94,7 @@ const handleClick = () => {
 };
 
 export default function Restaurantcard() {
-  const [storeData, setStoreData] = useState<object[]>(tempData);
+  const [storeData, setStoreData] = useState<any>(tempData);
 
   const [expanded, setExpanded] = useState(false);
   const handleExpandClick = () => {
@@ -123,7 +123,7 @@ export default function Restaurantcard() {
 
   return (
     <>
-      {storeData.map((item) => (
+      {storeData.map((item:any) => (
         <Link href={`/restaurant/${item.store_id}`}  key={item.store_id}>
           <Card sx={{ maxWidth: 345, width:345 }}>
             <CardActionArea>

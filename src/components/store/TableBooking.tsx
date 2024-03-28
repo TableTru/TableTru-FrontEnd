@@ -101,9 +101,9 @@ export default function TableBooking() {
     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     const timeOptions = { hour: 'numeric', minute: 'numeric' };
 
-    const [onGoingData, setOnGoingData] = useState<object[]>([])
-    const [historicalData, setHistoricalData] = useState<object[]>([])
-    const [bookingModalData, setBookingModalData] = useState<object>({
+    const [onGoingData, setOnGoingData] = useState<any>([])
+    const [historicalData, setHistoricalData] = useState<any>([])
+    const [bookingModalData, setBookingModalData] = useState({
         store_name: "",
         table_booking_count: null,
         table_booking_time: "",
@@ -197,26 +197,26 @@ export default function TableBooking() {
         setValue(newValue);
     };
 
-    const finishButton = (tablebooking: object) => {
+    const finishButton = (tablebooking: any) => {
         const updateData = {
             table_booking_id: tablebooking.table_booking_id,
             promotion_id: tablebooking.promotion_id,
             table_booking_status: 'เสร็จสิ้น'
         }
-        const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebooking.table_booking_id);
+        const updatedStoreBookingTemp = onGoingData.filter((booking: { table_booking_id: any; }) => booking.table_booking_id !== tablebooking.table_booking_id);
         setOnGoingData(updatedStoreBookingTemp);
 
         const updateBookingRes = editTableBooking(tablebooking.table_booking_id, updateData)
         console.log(updateBookingRes);
     }
 
-    const cancleButton = (tablebooking: object) => {
+    const cancleButton = (tablebooking: any) => {
         const updateData = {
             table_booking_id: tablebooking.table_booking_id,
             promotion_id: tablebooking.promotion_id,
             table_booking_status: 'ยกเลิก'
         }
-        const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebooking.table_booking_id);
+        const updatedStoreBookingTemp = onGoingData.filter((booking: { table_booking_id: any; }) => booking.table_booking_id !== tablebooking.table_booking_id);
         setOnGoingData(updatedStoreBookingTemp);
 
         const updateBookingRes = editTableBooking(tablebooking.table_booking_id, updateData)
@@ -267,7 +267,7 @@ export default function TableBooking() {
                         <Box sx={{ marginBottom: 8 }}>
                             <TabPanel value="1">
                                 <List>
-                                    {onGoingData.map((item, index) => (
+                                    {onGoingData.map((item: any, index: any) => (
                                         <Accordion key={index} >
                                             <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon />}
@@ -309,7 +309,7 @@ export default function TableBooking() {
 
                             <TabPanel value="2">
 
-                                {historicalData.map((item, index) => (
+                                {historicalData.map((item: any, index: any) => (
                                     <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
                                         <ListItem>
                                             <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>

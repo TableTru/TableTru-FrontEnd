@@ -138,8 +138,8 @@ export default function TabSelect() {
   //เลือกจาก select
   const [promocode, setPromocode] = useState("ส่วนลด 10%");
 
-  const [onGoingData, setOnGoingData] = useState<object[]>([])
-  const [historicalData, setHistoricalData] = useState<object[]>([])
+  const [onGoingData, setOnGoingData] = useState<any>([])
+  const [historicalData, setHistoricalData] = useState<any>([])
   const [bookingModalData, setBookingModalData] = useState<any>({
     store_name: "",
     table_booking_count: 0,
@@ -298,7 +298,7 @@ export default function TabSelect() {
             </List>
           ))} */}
 
-          {onGoingData.map((item, index) => (
+          {onGoingData.map((item:any, index:any) => (
             <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
               <ListItem>
                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
@@ -352,13 +352,13 @@ export default function TabSelect() {
               </li>
             </ul>
             <div className={"mt-8"}>
-              <Map address={bookingModalData.store_location} className={"width:400, height:400"} />
+              <Map address={bookingModalData.store_location} />
             </div>
           </Box>
         </Modal>
 
         <TabPanel value="2">
-          {historicalData.map((item, index) => (
+          {historicalData.map((item:any, index:any) => (
             <List key={index} className="bottom-line" sx={{ width: '100%', bgcolor: 'background.paper' }}>
               <ListItem>
                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>

@@ -37,7 +37,7 @@ import { getAllStore, getStorePreview, searchSortRating, searchSortLocation } fr
 import MyLocation from './botton/MyLocation';
 
 const loader = new Loader({
-  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'YOUR_DEFAULT_API_KEY',
   version: 'weekly',
   libraries: ['places'], // เพิ่ม libraries places
 });
@@ -87,10 +87,10 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const categoryQuery = searchParams.get('category')
   const filterQuery = searchParams.get('filter')
 
-  const [storeData, setStoreData] = useState<object[]>(tempData);
-  const [locationData, setLocationData] = useState<string | null>(locationQuery)
+  const [storeData, setStoreData] = useState<any>(tempData);
+  const [locationData, setLocationData] = useState<string>(locationQuery || "")
   const [categoryId, setCategoryId] = useState<number>(Number(categoryQuery))
-  const [search, setSearch] = useState<string | null>(searchQuery)
+  const [search, setSearch] = useState<string>(searchQuery || "");
   const [filter, setFilter] = useState(1)
 
   const onClick = async () => {
@@ -132,19 +132,22 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     }
     else {
-      const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
-      console.log(searchRes);
+      if (searchObject.search != null && searchObject.location != null) {
+        const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
+        console.log(searchRes);
 
-      const storeArray = [];
+        const storeArray = [];
 
-      if (searchRes) {
-        const stores = searchRes;
-        for (const storeObj of stores) {
-          storeArray.push(storeObj);
+        if (searchRes) {
+          const stores = searchRes;
+          for (const storeObj of stores) {
+            storeArray.push(storeObj);
+          }
         }
+        setStoreData(storeArray);
+        console.log(storeArray);
       }
-      setStoreData(storeArray);
-      console.log(storeArray);
+
     }
   }
 
@@ -155,17 +158,15 @@ export default function Search({ placeholder }: { placeholder: string }) {
       const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
       geocoder.geocode({ 'location': latLng }, (results, status) => {
-        if (status === 'OK') {
-          if (results[0]) {
-            console.log(results[0].formatted_address); // แสดงชื่อสถานที่
-            setLocationData(results[0].formatted_address)
-          } else {
-            console.log('No results found');
-          }
+        if (status === 'OK' && results && results.length > 0) {
+          const firstResult = results[0];
+          console.log(firstResult.formatted_address); // แสดงชื่อสถานที่
+          setLocationData(firstResult.formatted_address);
         } else {
           console.error('Geocoder failed due to: ' + status);
         }
       });
+
     });
 
   }
@@ -193,17 +194,15 @@ export default function Search({ placeholder }: { placeholder: string }) {
             const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
             geocoder.geocode({ 'location': latLng }, (results, status) => {
-              if (status === 'OK') {
-                if (results[0]) {
-                  console.log(results[0].formatted_address); // แสดงชื่อสถานที่
-                  setLocationData(results[0].formatted_address)
-                } else {
-                  console.log('No results found');
-                }
+              if (status === 'OK' && results && results.length > 0) {
+                const firstResult = results[0];
+                console.log(firstResult.formatted_address); // แสดงชื่อสถานที่
+                setLocationData(firstResult.formatted_address);
               } else {
                 console.error('Geocoder failed due to: ' + status);
               }
             });
+
           });
         }
         console.log('filter:', value);
@@ -245,19 +244,22 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     }
     else {
-      const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
-      console.log(searchRes);
+      if (searchObject.search != null && searchObject.location != null) {
+        const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
+        console.log(searchRes);
 
-      const storeArray = [];
+        const storeArray = [];
 
-      if (searchRes) {
-        const stores = searchRes;
-        for (const storeObj of stores) {
-          storeArray.push(storeObj);
+        if (searchRes) {
+          const stores = searchRes;
+          for (const storeObj of stores) {
+            storeArray.push(storeObj);
+          }
         }
+        setStoreData(storeArray);
+        console.log(storeArray);
       }
-      setStoreData(storeArray);
-      console.log(storeArray);
+
     }
   };
 
@@ -272,19 +274,32 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
   useEffect(() => {
     loader.load().then(() => {
-      const google = window.google;
-      const autocomplete = new google.maps.places.Autocomplete(inputRef.current);
-      autocomplete.addListener('place_changed', () => {
-        const place = autocomplete.getPlace();
-        if (place && place.geometry) {
-          const location = place.geometry.location; //ตำแหน่งแบบ lat long
-          console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
-          setLocationData(place.formatted_address);
-        }
-      });
-      autocomplete.addListener('predictions_changed', () => {
-        setPredictions(autocomplete.getPlacePredictions());
-      });
+      if (inputRef.current) {
+        const google = window.google;
+        const autocomplete = new google.maps.places.Autocomplete(inputRef.current);
+        autocomplete.addListener('place_changed', () => {
+          const place = autocomplete.getPlace();
+          if (place && place.geometry) {
+            const location = place.geometry.location; //ตำแหน่งแบบ lat long
+            console.log(place.formatted_address); //ตำแหน่งแบบชื่อ
+            setLocationData(place.formatted_address ?? '');
+          }
+        });
+        autocomplete.addListener('place_changed', () => {
+          const place = autocomplete.getPlace();
+          if (!place.geometry) {
+            console.error('Place not found or has no geometry');
+            return;
+          }
+          // Handle the selected place
+          console.log(place.name);
+          console.log(place.formatted_address);
+        });
+        
+      } else {
+        console.error("Input element not found");
+      }
+
     });
     console.log("location update2");
   }, [map]);
@@ -430,7 +445,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
       <div className="flex flex-col  m-auto p-auto">
         <div className="w-fit flex item-center justify-around center mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center gap-y-20 gap-x-14 mt-10 mb-5">
-          {storeData.map((item) => (
+          {storeData.map((item: any) => (
             <Link href={`/restaurant/${item.store_id}`} key={item.store_id}>
               <Card sx={{ maxWidth: 345, width: 345 }}>
                 <CardActionArea>
