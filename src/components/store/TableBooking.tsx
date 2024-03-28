@@ -200,11 +200,12 @@ export default function TableBooking() {
     const finishButton = (tablebooking: object) => {
         const updateData = {
             table_booking_id: tablebooking.table_booking_id,
-            promotion_id: tablebooking.promotion_id,
             table_booking_status: 'เสร็จสิ้น'
         }
         const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebooking.table_booking_id);
         setOnGoingData(updatedStoreBookingTemp);
+        console.log(updateData);
+        
 
         const updateBookingRes = editTableBooking(tablebooking.table_booking_id, updateData)
         console.log(updateBookingRes);
@@ -213,7 +214,6 @@ export default function TableBooking() {
     const cancleButton = (tablebooking: object) => {
         const updateData = {
             table_booking_id: tablebooking.table_booking_id,
-            promotion_id: tablebooking.promotion_id,
             table_booking_status: 'ยกเลิก'
         }
         const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebooking.table_booking_id);

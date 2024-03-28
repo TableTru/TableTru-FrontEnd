@@ -227,7 +227,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
         setMenuImage(menuTemp)
         fetchReview()
         fetchData()
-        fetchTemp()
+        // fetchTemp()
     }, []);
 
     return (

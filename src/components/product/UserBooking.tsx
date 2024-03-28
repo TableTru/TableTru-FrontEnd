@@ -193,7 +193,7 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
           const submitObject = {
             store_id: store_id,
             user_id: userDataJson.user_id,
-            table_booking: seat,
+            table_booking_count: seat,
             table_booking_status: "ยังไม่ถึงกำหนด",
             table_booking_time: `${dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ss") + "Z"}`,
             promotion_id: selectPromotion

@@ -56,7 +56,7 @@ export default function Galleries({ store_id }: { store_id: number }) {
     const fetchData = async () => {
         console.log(store_id)
         const ImageArray = [];
-        const Images = await GetStoreImageByType(store_id, "ภาพเมนู");
+        const Images = await GetStoreImageByType(store_id, "ภาพประกอบ");
         console.log(Images);
 
         if (Images) {
@@ -82,7 +82,7 @@ export default function Galleries({ store_id }: { store_id: number }) {
 
     useEffect(() => {
         fetchData()
-        fetchTemp()
+        // fetchTemp()
     }, []);
 
     const itemTemplate = (item: any) => {
