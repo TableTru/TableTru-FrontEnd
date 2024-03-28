@@ -209,6 +209,8 @@ export default function TableBooking() {
 
         const updateBookingRes = editTableBooking(tablebooking.table_booking_id, updateData)
         console.log(updateBookingRes);
+
+        fetchData()
     }
 
     const cancleButton = (tablebooking: object) => {
@@ -221,6 +223,8 @@ export default function TableBooking() {
 
         const updateBookingRes = editTableBooking(tablebooking.table_booking_id, updateData)
         console.log(updateBookingRes);
+
+        fetchData()
     }
 
     const getStatusColor = (status: string) => {
@@ -314,7 +318,7 @@ export default function TableBooking() {
                                         <ListItem>
                                             <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
                                                 <Box sx={{ width: "80%", display: 'flex', flexDirection: 'column' }}>
-                                                    <ListItemText primary={`${item.username} | ${item.phone_num}`} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
+                                                    <ListItemText primary={`${item.user_name} | ${item.phone_number}`} secondary={`${item.table_booking_time.toLocaleDateString(undefined, timeOptions)} จำนวน ${item.table_booking_count} คน`} />
                                                     <Stack direction="row" spacing={1}>
                                                         <Chip label={item.table_booking_status} color={getStatusColor(item.table_booking_status)} />
                                                     </Stack>

@@ -190,21 +190,39 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
             confirmButtonText: "ตกลง",
             confirmButtonColor: "#0E9F6E",
           });
-          const submitObject = {
-            store_id: store_id,
-            user_id: userDataJson.user_id,
-            table_booking_count: seat,
-            table_booking_status: "ยังไม่ถึงกำหนด",
-            table_booking_time: `${dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ss") + "Z"}`,
-            promotion_id: selectPromotion
-          };
-          console.log("active");
+          if (!selectPromotion) {
+
+            const defaultPromotion = 1
+            const submitObject = {
+              store_id: store_id,
+              user_id: userDataJson.user_id,
+              table_booking_count: seat,
+              table_booking_status: "ยังไม่ถึงกำหนด",
+              table_booking_time: `${dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ss") + "Z"}`,
+              promotion_id: defaultPromotion
+            };
+
+            console.log("active");
+            console.log(submitObject);
+            await createTableBooking(submitObject);
+          }
+          else {
+            const submitObject = {
+              store_id: store_id,
+              user_id: userDataJson.user_id,
+              table_booking_count: seat,
+              table_booking_status: "ยังไม่ถึงกำหนด",
+              table_booking_time: `${dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ss") + "Z"}`,
+              promotion_id: selectPromotion
+            };
+            console.log("active");
           console.log(submitObject);
           await createTableBooking(submitObject);
+          }
         }
       });
     }
-    else{
+    else {
       Swal.fire({
         title: "โปรดตรวจสอบรายละเอียดการจอง",
         text: "โปรดตรวจสอบรายละเอียดการจอง",
