@@ -35,7 +35,7 @@ interface User {
   user_id: number;
   username: string;
   password: string;
-  store_cover_image: string;
+  profile_image: string;
   user_status: string;
   store_id: number | null;
   email: string;
@@ -53,7 +53,7 @@ const userTemp: User =
   password: "por1234",
   user_status: "merchant",
   store_id: 1,
-  store_cover_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+  profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
   email: "aungpor.napat@gmail.com",
   phone_num: "0813111234",
   latitude: 0,
@@ -69,7 +69,7 @@ export default function EditProfileCard() {
     password: '',
     // email: '',
     phone_num: '',
-    store_cover_image: 'https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium'
+    profile_image: 'https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium'
   });
 
   const [isMainImageUpload, setIsMainImageUpload] = useState(false)
@@ -101,6 +101,7 @@ export default function EditProfileCard() {
     const userData = localStorage.getItem("userData")
     const userDataJson = JSON.parse(userData || "[]");
     e.preventDefault();
+    console.log(userDataForm);
     const createRes = await editUser(userDataJson.user_id, userDataForm)
     console.log(createRes);
     window.location.replace('/profile')
@@ -141,7 +142,7 @@ export default function EditProfileCard() {
             setMainImage(url)
             setIsMainImageUpload(false)
 
-            setUserDataForm({ ...userDataForm, store_cover_image: url });
+            setUserDataForm({ ...userDataForm, profile_image: url });
           })
         },
       )
@@ -175,7 +176,7 @@ export default function EditProfileCard() {
 
               <Box
                 sx={{ mb: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                <Avatar src={`${userDataForm.store_cover_image}`} sx={{ width: 200, height: 200, mt: 2, mb: 2, bgcolor: 'secondary.main' }} />
+                <Avatar src={`${userDataForm.profile_image}`} sx={{ width: 200, height: 200, mt: 2, mb: 2, bgcolor: 'secondary.main' }} />
               </Box>
 
               <TextField

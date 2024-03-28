@@ -81,7 +81,7 @@ export default function Galleries({ store_id }: { store_id: number }) {
 
 
     useEffect(() => {
-        // fetchData()
+        fetchData()
         fetchTemp()
     }, []);
 

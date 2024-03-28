@@ -271,7 +271,7 @@ export default function TabSelect() {
   };
 
   useEffect(() => {
-    // fetchData();
+    fetchData();
     fetchTempData()
   }, []);
 

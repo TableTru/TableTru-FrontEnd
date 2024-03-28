@@ -30,7 +30,7 @@ interface User {
   user_id: number;
   username: string;
   password: string;
-  store_cover_image: string;
+  profile_image: string;
   user_status: string;
   store_id: number| null;
   email: string;
@@ -48,7 +48,7 @@ const userTemp: User =
   password: "por1234",
   user_status: "merchant",
   store_id: 1,
-  store_cover_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
+  profile_image: "https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium",
   email: "aungpor.napat@gmail.com",
   phone_num: "0813111234",
   latitude: 0,
@@ -64,7 +64,7 @@ export default function SignUp() {
     password: "",
     email: "",
     phone_num: "",
-    store_cover_image: "",
+    profile_image: "",
     user_status: "user"
   });
 
@@ -107,7 +107,7 @@ export default function SignUp() {
             setMainImage(url)
             setIsMainImageUpload(false)
 
-            setUserData({ ...userData, store_cover_image: url });
+            setUserData({ ...userData, profile_image: url });
           })
         },
       )
@@ -138,7 +138,7 @@ export default function SignUp() {
   };
 
   useEffect(() => {
-    // fetchData();
+    fetchData();
   }, []);
 
   return (
@@ -162,7 +162,7 @@ export default function SignUp() {
 
               <Box
                 sx={{ mb: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                <Avatar src={`${userData.store_cover_image}`} sx={{ width: 200, height: 200, mt: 2, mb: 2, bgcolor: 'secondary.main' }} />
+                <Avatar src={`${userData.profile_image}`} sx={{ width: 200, height: 200, mt: 2, mb: 2, bgcolor: 'secondary.main' }} />
               </Box>
 
               <TextField

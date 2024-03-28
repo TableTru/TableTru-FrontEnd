@@ -148,7 +148,7 @@ export default function RestaurantId() {
     }
 
     useEffect(() => {
-        // fetchData();
+        fetchData();
         console.log(params);
         
     }, []);

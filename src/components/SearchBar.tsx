@@ -265,7 +265,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     if (categoryId == 0) {
       setCategoryId(1)
     }
-    // fetchData()
+    fetchData()
     console.log("fetch active");
 
   }, [locationData, categoryId, filter]);
