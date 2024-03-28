@@ -318,7 +318,10 @@ export default function EditStore() {
                 }
                 await createStoreImage(subImageWithStoreId)
             }
-            // window.location.replace('/profile')
+            setIsLoading(true);
+                setTimeout(() => {
+                    window.location.replace('/store');
+                }, 5000); // 5000 milliseconds = 5 seconds
         }
 
 

@@ -1,5 +1,5 @@
 "use client";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs, { Dayjs } from "dayjs";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
@@ -7,11 +7,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useParams } from "next/navigation";
-import {createPromotion, GetAllPromotionByStoreId} from "@/services/promotion.service";
+import { createPromotion, GetAllPromotionByStoreId } from "@/services/promotion.service";
 import Link from 'next/link'
 export default function CreatePromo() {
-    const [promoName, setPromoName] = useState<string| null >("")
-    const [promoDescription, setPromoDescription] = useState<string| null >("")
+    const [promoName, setPromoName] = useState<string | null>("")
+    const [promoDescription, setPromoDescription] = useState<string | null>("")
     const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null)
     const params = useParams();
 
@@ -20,12 +20,12 @@ export default function CreatePromo() {
         console.log(event.target.value as string)
     };
 
-    const handleChangeDescription = (event:any) => {
+    const handleChangeDescription = (event: any) => {
         setPromoDescription(event.target.value as string)
         console.log(event.target.value as string)
     }
 
-    const handleChangeDate = (newValue:any) => {
+    const handleChangeDate = (newValue: any) => {
         setSelectedDate(dayjs(newValue).hour(23).minute(59));
         console.log(dayjs(newValue).format("YYYY-MM-DD HH:mm"));
     }
@@ -33,19 +33,17 @@ export default function CreatePromo() {
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-        const storeData = localStorage.getItem("storeData")
-        const storeDataJson = JSON.parse(storeData || "[]");
-        const formData= {
-            promo_name: promoName,
-            store_id: storeDataJson.store_id,
-            promo_description: promoDescription,
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+        const formData = {
+            promotion_name: promoName,
+            store_id: userDataJson.store_id,
+            promotion_description: promoDescription,
             expiration_date: selectedDate
         };
         console.log(formData);
         try {
             const createPromotionRes = await createPromotion(formData)
-            storeDataJson.promotion_id = createPromotionRes.promotion_id;
-            localStorage.setItem('storeData', JSON.stringify(storeDataJson));
             console.log(createPromotionRes)
             window.location.replace("store/promo");
         } catch (error) {
@@ -62,7 +60,6 @@ export default function CreatePromo() {
                         flexDirection: "column",
                         alignItems: "center",
                     }}
-                    onSubmit={handleSubmit}
                 >
                     <Typography component="h1" variant="h5">
                         สร้างโปรโมชั่น
@@ -78,7 +75,7 @@ export default function CreatePromo() {
                             autoComplete="promo_name"
                             autoFocus
                             value={promoName}
-                            onChange={(newValue)=>handleChangeName(newValue)}
+                            onChange={(newValue) => handleChangeName(newValue)}
                         />
                         <TextField
                             margin="normal"
@@ -91,7 +88,7 @@ export default function CreatePromo() {
                             id="promo_description"
                             autoComplete="description"
                             value={promoDescription}
-                            onChange={(newValue)=>handleChangeDescription(newValue)}
+                            onChange={(newValue) => handleChangeDescription(newValue)}
                         />
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={["DatePicker"]}>
@@ -106,12 +103,12 @@ export default function CreatePromo() {
                                 />
                             </DemoContainer>
                         </LocalizationProvider>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}>
-                                บันทึก
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}>
+                            บันทึก
                         </Button>
                     </Box>
                 </Box>

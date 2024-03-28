@@ -10,10 +10,10 @@ import {
 } from "@nextui-org/react";
 
 import { Button } from "flowbite-react";
-import { useRouter, usePathname,useParams } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { GetAllPromotionByStoreId, getAllPromotion } from "@/services/promotion.service";
 import { withRouter } from "next/router";
-import { getStoreById,getStoreImageByType } from "@/services/store.service";
+import { getStoreById, getStoreImageByType } from "@/services/store.service";
 import { Promotion } from "@/interfaces/Promo";
 type PromotionCode = {
   promotion_code: number;
@@ -43,19 +43,20 @@ export default function MyComponent() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
-  const [promoData, setPromoData] = useState<Promotion[]>(initialItems);
-  const fetchData = async () => {
+  const [promoData, setPromoData] = useState<any>([]);
 
-    const storeData = localStorage.getItem("storeData");
-    const storeDataJson = JSON.parse(storeData || "[]");
-    const storePromos = await GetAllPromotionByStoreId(storeDataJson);
+  const fetchData = async () => {
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+    const storePromos = await GetAllPromotionByStoreId(userDataJson.store_id);
     const promoArray = [];
 
-      if(storePromos){
-        for (const promoObj of storePromos) {
-          promoArray.push(promoObj);
-        }
+    if (storePromos) {
+      for (const promoObj of storePromos) {
+        promoArray.push(promoObj);
       }
+    }
+    setPromoData(promoArray)
     console.log(promoArray);
   };
 
@@ -78,15 +79,15 @@ export default function MyComponent() {
     checkLoginStatus();
   }, []);
 
-  const handleButtonClick = (id: number) => {
-      pathname === "/store/promo"
-        ? null
-        : setPromoData((prevItems) =>
-            prevItems.map((item) =>
-              item.promotion_id === id ? { ...item, set: false } : item
-            )
-          );
-    }
+  // const handleButtonClick = (id: number) => {
+  //   pathname === "/store/promo"
+  //     ? null
+  //     : setPromoData((prevItems) =>
+  //       prevItems.map((item) =>
+  //         item.promotion_id === id ? { ...item, set: false } : item
+  //       )
+  //     );
+  // }
   return (
     <>
       {promoData.map((item) => (
@@ -110,13 +111,13 @@ export default function MyComponent() {
               </div>
             </CardHeader>
             <CardBody className="px-3 py-3 text-small text-default-400">
-              <p>{item.promotion_name}</p>
+              <p>{item.promotion_description}</p>
               <p className="mt-8 text-black">
                 วันหมดอายุ:{" "}
                 {`${new Date(item.expiration_date).toLocaleDateString("en-CA")}`}
               </p>
             </CardBody>
-            <CardFooter className="gap-3">
+            {/* <CardFooter className="gap-3">
               {pathname === "/store/promo" ? null : (
                 <>
                   {isLogin ? (
@@ -124,8 +125,8 @@ export default function MyComponent() {
                       color="failure"
                       pill
                       onClick={() => handleButtonClick(item.promotion_id)}
-                      //ตัว set ปุ่ม
-                      // disabled={!item.set} 
+                    //ตัว set ปุ่ม
+                    // disabled={!item.set} 
                     >
                       เก็บโค้ด
                     </Button>
@@ -134,17 +135,18 @@ export default function MyComponent() {
                       color="failure"
                       pill
                       onClick={() => router.push("/login")}
-                      //ตัว set ปุ่ม
-                      // disabled={!item.set}
+                    //ตัว set ปุ่ม
+                    // disabled={!item.set}
                     >
                       เข้าสู่ระบบ
                     </Button>
                   )}{" "}
                 </>
               )}
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </div>
       ))}
     </>
-  )}
+  )
+}

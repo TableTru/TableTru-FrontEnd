@@ -63,10 +63,18 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
     const promotionArray = [];
     const promotions = await GetAllPromotionByStoreId(store_id);
     console.log(promotions);
+    const currentDate = new Date();
 
     if (promotions) {
       for (const promotionObject of promotions) {
-        promotionArray.push(promotionObject);
+        const expireDate = new Date(promotionObject.expiration_date)
+        if (currentDate < expireDate) {
+          console.log("expireDate ยังไม่เป็นเวลาที่ผ่านมา");
+          promotionArray.push(promotionObject);
+        } else {
+          console.log("expireDate เป็นเวลาที่ผ่านมาแล้ว");
+        }
+        
       }
       setPromotionData(promotionArray);
       console.log(promotionArray);
@@ -270,6 +278,7 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
   useEffect(() => {
     // fetchDateTime()
     console.log(date);
+    fetchData()
 
     if (date) {
       shouldDisableTime
@@ -366,8 +375,8 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
               onChange={handleChangePromotion}
             >
               {promotionData.map((item, index) => (
-                <MenuItem key={index} value={index}>
-                  {item.name}
+                <MenuItem key={index} value={item.promotion_id}>
+                  {item.promotion_name}
                 </MenuItem>
               ))}
             </Select>

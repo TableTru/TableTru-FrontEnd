@@ -146,7 +146,8 @@ export default function TabSelect() {
     table_booking_time: "",
     table_booking_date: "",
     location: '',
-    promotion: "ส่วนลด 10%",
+    promotion: "",
+    promotion_id: null,
     store_location: ''
 
   })
@@ -243,9 +244,11 @@ export default function TabSelect() {
       table_booking_time: bookingData.table_booking_time.toLocaleTimeString(undefined, timeOptions),
       table_booking_date: bookingData.table_booking_time.toDateString(),
       location: bookingData.location,
-      promotion: "ส่วนลด 10%",
+      promotion: bookingData.promotion_name,
+      promotion_id: bookingData.promotion_id,
       store_location: '16/9 ถ. หอวัง แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900 ประเทศไทย'
     }
+    console.log(popupObject);
 
     setBookingModalData(popupObject)
     setOpen(true)
@@ -346,10 +349,13 @@ export default function TabSelect() {
                 <AccessTimeIcon />
                 {bookingModalData.table_booking_time}
               </li>
-              <li className="flex items-center">
-                <LoyaltyIcon />
-                {promocode}
-              </li>
+              {bookingModalData.promotion_id != 1 ? (
+                <li className="flex items-center">
+                  <LoyaltyIcon />
+                  {bookingModalData.promotion}
+                </li>
+              ) : (null)}
+
             </ul>
             <div className={"mt-8"}>
               <Map address={bookingModalData.store_location} className={"width:400, height:400"} />
