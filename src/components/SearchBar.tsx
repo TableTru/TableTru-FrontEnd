@@ -116,7 +116,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     if (filter == 1) {
       //เรียงตาม rating
-      const searchRes = await searchSortRating(searchObject)
+      const searchRes = await searchSortRating(searchObject.search ?? '', searchObject.category_id)
       console.log(searchRes);
 
       const storeArray = [];
@@ -229,7 +229,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     console.log(searchObject);
     if (filter == 1) {
       //เรียงตาม rating
-      const searchRes = await searchSortRating(searchObject)
+      const searchRes = await searchSortRating(searchObject.search ?? '', searchObject.category_id)
       console.log(searchRes);
 
       const storeArray = [];

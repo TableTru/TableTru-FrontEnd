@@ -131,8 +131,8 @@ export const deleteStoreImage = async (id: number) => {
   });
 }
 
-export const searchSortRating = async (data: any) => {
-  return await axios.get(url + '/stores/SearchStoreSortRating', data).then((res: AxiosResponse) => {
+export const searchSortRating = async (search: string, categoryId:number) => {
+  return await axios.get(url + `/stores/SearchStoreSortRating?search=${search}&categoryID=${categoryId}`).then((res: AxiosResponse) => {
     return res.data.data.rows;
   }).catch((err: any) => {
     catchError(err, null, "getStore");
