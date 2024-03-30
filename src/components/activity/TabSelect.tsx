@@ -152,7 +152,7 @@ export default function TabSelect() {
 
   })
 
-  const timeOptions = { hour: 'numeric', minute: 'numeric' };
+  const timeOptions = { hour: 'numeric', minute: 'numeric',timeZone: 'UTC'};
 
   const fetchData = async () => {
     const userData = localStorage.getItem("userData")

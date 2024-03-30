@@ -99,7 +99,7 @@ const storeBookingTemp: StoreTableBooking[] = [
 export default function TableBooking() {
     const [value, setValue] = useState('1');
     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric',timeZone: 'UTC' };
 
     const [onGoingData, setOnGoingData] = useState<object[]>([])
     const [historicalData, setHistoricalData] = useState<object[]>([])
@@ -280,7 +280,7 @@ export default function TableBooking() {
                                             >
                                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                                     <Typography>{item.username}</Typography>
-                                                    <Typography variant="subtitle1">เบอร์โทรศัพท์: {item.phone_num}</Typography>
+                                                    <Typography variant="subtitle1">เบอร์โทรศัพท์: {item.phone_number}</Typography>
                                                     <Typography variant="subtitle1">จำนวนคน: {item.table_booking_count}</Typography>
                                                     <Typography variant="subtitle1">เวลาจอง: {item.table_booking_time.toLocaleDateString(undefined, timeOptions)}</Typography>
                                                 </Box>
