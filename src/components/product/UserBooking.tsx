@@ -41,6 +41,21 @@ type TimeTemp = {
   end_time: string;
 };
 
+const disableTimeTemp = [
+  {
+    end_time: "2024-03-30T09:00:00Z",
+    start_time: "2024-03-30T08:00:00Z"
+  },
+  {
+    end_time: "2024-03-30T10:00:00Z",
+    start_time: "2024-03-30T09:00:00Z"
+  },
+  {
+    end_time: "2024-03-30T10:30:00Z",
+    start_time: "2024-03-30T09:30:00Z"
+  }
+]
+
 dayjs.extend(utc)
 dayjs.extend(timezone);
 const localTimeZone = 'Asia/Bangkok';
@@ -74,7 +89,7 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
         } else {
           console.log("expireDate เป็นเวลาที่ผ่านมาแล้ว");
         }
-        
+
       }
       setPromotionData(promotionArray);
       console.log(promotionArray);
@@ -142,25 +157,6 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
     console.log(event.target.value);
   };
 
-  // const handelDisableTime = (timeValue: dayjs.Dayjs) => {
-  //   let timeData = timeValue
-
-  //   for (let i = 0; i < 23; i++) {
-  //     timeData = timeData.add(1, 'hour');
-  //     const openingHours = openTime.find(item => item.day === dayjs(timeData).format('dddd'));
-  //     if (openingHours) {
-  //       const startTime = dayjs.utc(openingHours.start_time).hour();
-  //       const endTime = dayjs.utc(openingHours.end_time).hour();
-
-  //       if (!openingHours) {
-  //         return false;
-  //       }
-  //       else {
-  //         return timeData.hour() < startTime || timeData.hour() >= endTime;
-  //       }
-  //     }
-  //   }
-  // }
 
 
   const handleChangePromotion = (event: any) => {
@@ -170,12 +166,6 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
 
 
   console.log(openTime)
-
-  // const startTime = openTime.map((item) => dayjs.utc(item.start_time).hour())
-  // const endTime = openTime.map((item) => dayjs.utc(item.end_time).hour())
-
-  // console.log(startTime);
-  // console.log(endTime);
 
 
   const handleButtonConfirm = async () => {
@@ -224,8 +214,8 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
               promotion_id: selectPromotion
             };
             console.log("active");
-          console.log(submitObject);
-          await createTableBooking(submitObject);
+            console.log(submitObject);
+            await createTableBooking(submitObject);
           }
         }
       });
@@ -252,10 +242,33 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
   ) => {
     console.log(value);
 
+    const isDisabledDate = disableTimeTemp.some(
+      range =>
+        dayjs(date).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'), 'day')
+    );
+
+    if (!isDisabledDate) {
+      console.log("date is not disabled");
+    } else {
+      const isDisabledTime = disableTimeTemp.some(
+        range =>
+          (dayjs(value).isAfter(dayjs.utc(range.start_time).subtract(7, 'hour')) ||
+            dayjs(value).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'))) &&
+          dayjs(value).isBefore(dayjs.utc(range.end_time).subtract(7, 'hour'))
+      );
+
+      console.log(isDisabledTime);
+
+      if (isDisabledTime) {
+        console.log("full booking");
+        return isDisabledTime;
+      }
+    }
+
 
     // Find the opening hours for the current day
     const openingHours = openTime.find(item => item.day === dayjs(date).format('dddd'));
-    console.log(openingHours);
+    // console.log(openingHours);
 
 
     // If no opening hours are defined for the current day, enable all times
