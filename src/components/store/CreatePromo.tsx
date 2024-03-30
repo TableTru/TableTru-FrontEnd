@@ -45,7 +45,7 @@ export default function CreatePromo() {
         try {
             const createPromotionRes = await createPromotion(formData)
             console.log(createPromotionRes)
-            window.location.replace("store/promo");
+            window.location.replace("/store/promo");
         } catch (error) {
             console.log("error");
         }
