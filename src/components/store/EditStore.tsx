@@ -436,6 +436,7 @@ export default function EditStore() {
     const inputRef = useRef<HTMLInputElement>(null);
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+    const markerRef = useRef(null);
 
     useEffect(() => {
         loader.load().then(() => {
@@ -452,10 +453,16 @@ export default function EditStore() {
                 geocoder.geocode({ 'location': latLng }, (results, status) => {
                     if (status === 'OK') {
                         if (results[0]) {
-                            const marker = new google.maps.Marker({
+                            if (markerRef.current) {
+                                markerRef.current.setMap(null); // เอาออกจากแผนที่
+                            }
+
+                            const newMarker = new google.maps.Marker({
                                 map: newMap,
                                 position: latLng,
                             });
+                            markerRef.current = newMarker;
+                            
                             setMap(newMap);
                             console.log(results[0].formatted_address);
                             inputRef.current.value = results[0].formatted_address;
@@ -489,10 +496,18 @@ export default function EditStore() {
                             longitude: place.geometry.location.lng(),
                         })
                         map.setCenter(location);
-                        new google.maps.Marker({
+                        if (markerRef.current) {
+                            markerRef.current.setMap(null); // เอาออกจากแผนที่
+                        }
+                
+                        // เพิ่ม Marker ใหม่
+                        const newMarker = new google.maps.Marker({
                             position: location,
                             map: map,
                         });
+                
+                        // เก็บ Marker ใหม่ลงใน ref
+                        markerRef.current = newMarker;
                     }
                 });
                 autocomplete.addListener('predictions_changed', () => {
