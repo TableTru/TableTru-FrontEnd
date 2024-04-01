@@ -96,7 +96,7 @@ export default function Home() {
     <>
       <BackgroundCard />
       <div className="min-h-screen mt-8 space-x-4">
-        <div className={"flex item-center justify-center space-x-4"}>
+        <div className={"flex item-center justify-center space-x-4 mx-auto"}>
           <CardHomePage />
         </div>
         <div className="flex flex-col m-auto p-auto">
