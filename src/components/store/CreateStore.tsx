@@ -67,36 +67,43 @@ const OpenTimes = [
         day: 'Monday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Tuesday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Wednesday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Thursday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Friday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Saturday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Sunday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
 ]
 

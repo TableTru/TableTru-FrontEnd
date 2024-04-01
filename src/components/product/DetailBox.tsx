@@ -383,6 +383,10 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                                     <tbody className="flex-1 sm:flex-none">
                                                         {
                                                             openTime.map((time) => {
+                                                                if(time.day == "Monday"){
+                                                                    console.log("aungpor");
+                                                                    
+                                                                }
 
                                                                 const openTimes = dayjs.utc(time.start_time).format("hh:mm")
                                                                 const closeTimes = dayjs.utc(time.end_time).format("HH:mm")

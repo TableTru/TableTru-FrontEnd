@@ -27,7 +27,7 @@ const openTime = [
         end_time: "2024-02-23T21:00:00Z",
         openTime_id: 1,
         start_time: "2024-02-23T08:00:00Z",
-        store_id: 1,
+        store_id: 1
     },
     {
         day: "Tuesday",
