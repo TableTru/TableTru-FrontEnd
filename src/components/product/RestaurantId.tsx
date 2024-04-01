@@ -88,7 +88,7 @@ export default function RestaurantId() {
         store_id: 1,
         store_name: "temp",
         sum_rating: 2.1,
-        table_booking: 4,
+        table_booking: null,
         updated_at: ""
     });
     const [reviewData, setReviewData] = useState<Review[]>([{
