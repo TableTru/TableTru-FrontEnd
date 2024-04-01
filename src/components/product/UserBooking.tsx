@@ -187,8 +187,20 @@ export default function UserBooking({ seats, openTime, store_id, address, table_
   const handleButtonConfirm = async () => {
     const userData = localStorage.getItem("userData")
     const userDataJson = JSON.parse(userData || "[]");
+    const isDisabledTime = disableTimeData.some(
+      range =>
+        (dayjs(combineTime).isAfter(dayjs.utc(range.start_time).subtract(7, 'hour')) ||
+          dayjs(combineTime).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'))) &&
+        dayjs(combineTime).isBefore(dayjs.utc(range.end_time).subtract(7, 'hour'))
+    );
+
+    const openingHours = openTime.find(item => item.day === dayjs(date).format('dddd'));
+    const startTime = dayjs.utc(openingHours.start_time).hour();
+    const endTime = dayjs.utc(openingHours.end_time).hour();
+    const isStoreOpen = combineTime.hour() < startTime || combineTime.hour() >= endTime
+
     if (userData) {
-      if (date != null && time != null && seat != null) {
+      if (date != null && time != null && seat != null && !isDisabledTime && !isStoreOpen ) {
         Swal.fire({
           title: "แน่ใจหรือว่าจะยืนยัน",
           text: "โปรดตรวจสอบรายละเอียดการจอง",
