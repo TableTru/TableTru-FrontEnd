@@ -82,12 +82,14 @@ export default function UserBooking({ seats, openTime, store_id, address, disabl
 
     if (promotions) {
       for (const promotionObject of promotions) {
-        const expireDate = new Date(promotionObject.expiration_date)
-        if (currentDate < expireDate) {
-          console.log("expireDate ยังไม่เป็นเวลาที่ผ่านมา");
-          promotionArray.push(promotionObject);
-        } else {
-          console.log("expireDate เป็นเวลาที่ผ่านมาแล้ว");
+        if (promotionObject.promotion_id != 1) {
+          const expireDate = new Date(promotionObject.expiration_date)
+          if (currentDate < expireDate) {
+            console.log("expireDate ยังไม่เป็นเวลาที่ผ่านมา");
+            promotionArray.push(promotionObject);
+          } else {
+            console.log("expireDate เป็นเวลาที่ผ่านมาแล้ว");
+          }
         }
 
       }

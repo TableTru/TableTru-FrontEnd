@@ -53,7 +53,10 @@ export default function MyComponent() {
 
     if (storePromos) {
       for (const promoObj of storePromos) {
-        promoArray.push(promoObj);
+        if (promoObj.promotion_id != 1) {
+          promoArray.push(promoObj);
+        }
+        
       }
     }
     setPromoData(promoArray)
