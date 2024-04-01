@@ -689,7 +689,7 @@ export default function EditStore() {
                 <Container component="main" maxWidth="md">
                     <CssBaseline />
 
-                    <Box sx={{ mt: 8, mb: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                    <Box sx={{ mt: 16, mb: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
                         <Box sx={{ display: "flex", alignItems: "left" }}>
                             <Typography component="h1" variant="h4">
                                 แก้ไขร้านค้า
@@ -781,9 +781,17 @@ export default function EditStore() {
                                                             label="เลิอกโค้ตส่วนลด"
                                                             onChange={handleChange}
                                                         >
-                                                            <MenuItem value={1}>หมวดหมู่1</MenuItem>
-                                                            <MenuItem value={2}>หมวดหมู่2</MenuItem>
-                                                            <MenuItem value={3}>หมวดหมู่3</MenuItem>
+
+                                                            {/*<MenuItem value={1}>หมวดหมู่1</MenuItem>*/}
+                                                            {/*<MenuItem value={2}>หมวดหมู่2</MenuItem>*/}
+                                                            {/*<MenuItem value={3}>หมวดหมู่3</MenuItem>*/}
+
+                                                            <MenuItem value={1}>ไทย</MenuItem>
+                                                            <MenuItem value={2}>นานาชาติ</MenuItem>
+                                                            <MenuItem value={3}>ญิ่ปุ่น</MenuItem>
+                                                            <MenuItem value={4}>จีน</MenuItem>
+                                                            <MenuItem value={5}>อิตาเลี่ยน</MenuItem>
+                                                            <MenuItem value={6}>ฟิวชั่น</MenuItem>
                                                         </Select>
                                                     </FormControl>
 
@@ -823,8 +831,8 @@ export default function EditStore() {
 
                                                 <Grid item xs={12}>
                                                     <Typography variant="subtitle1">รูปภาพปกร้าน</Typography>
-                                                    <div className="container mt-5">
-                                                        <div className="col-lg-8 offset-lg-2">
+                                                    <div className="container my-5">
+                                                        <div className="col-lg-8 space-y-5 offset-lg-2 ">
                                                             <Input
                                                                 type="file"
                                                                 placeholder="Select file to upload"
@@ -876,7 +884,7 @@ export default function EditStore() {
                                                                                 style={{ width: 100, height: 100, objectFit: 'cover' }}
                                                                             />
                                                                         </ListItemAvatar>
-                                                                        <ListItemText primary={item.store_image_name} />
+                                                                        <ListItemText primary={`รูปที่ ${index+1}`} sx={{margin:2}} />
                                                                         <ListItemIcon>
                                                                             <Button onClick={() => removeMenuImage(item)} size="small">Remove</Button>
                                                                         </ListItemIcon>
@@ -919,7 +927,7 @@ export default function EditStore() {
                                                                                 style={{ width: 100, height: 100, objectFit: 'cover' }}
                                                                             />
                                                                         </ListItemAvatar>
-                                                                        <ListItemText primary={item.store_image_name} />
+                                                                        <ListItemText primary={`รูปที่ ${index+1}`} sx={{margin:2}}/>
                                                                         <ListItemIcon>
                                                                             <Button onClick={() => removeSubImage(item)} size="small">Remove</Button>
                                                                         </ListItemIcon>

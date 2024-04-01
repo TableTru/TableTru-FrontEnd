@@ -264,7 +264,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                     <div>
                                         <form onSubmit={handleSubmit}>
                                             <div className={"my-4 flex flex-warp "}>
-                                                <Avatar alt="Leonic" src="/static/images/avatar/1.jpg" />
+                                                <Avatar alt="Profile" src="/static/images/avatar/1.jpg" />
                                                 <div className={"mx-4 flex-cols"}>
                                                     <Typography component="h3">ให้คะแนนรีวิว</Typography>
 
@@ -302,27 +302,25 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                                     <>
                                                         <List key={index} sx={{ width: "100%", bgcolor: "background.paper" }}>
                                                             <ListItem alignItems="flex-start">
-
-
                                                                 <ListItemAvatar>
                                                                     <Avatar alt="Remy Sharp" src={`${item?.profile_image}`} />
                                                                 </ListItemAvatar>
+
                                                                 <ListItemText
                                                                     primary={`${item?.username}`}
                                                                     secondary={
                                                                         <>
-
+                                                                            <Rating name="read-only" value={item.rating_score} readOnly />
+                                                                            <br/>
+                                                                            <Typography variant={"body2"}>
                                                                             {`${item?.review_comment}`}
+                                                                            </Typography>
                                                                         </>}
+                                                                    sx={{ flexWrap: 'nowrap' }}
                                                                 />
-                                                                <Box sx={{ marginLeft: 'auto' }}>
-                                                                    <Rating name="read-only" value={item.rating_score} readOnly />
-                                                                </Box>
-
-
-
                                                             </ListItem>
                                                         </List>
+
                                                     </>
                                                 );
                                             })

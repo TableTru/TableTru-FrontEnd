@@ -184,7 +184,6 @@ export default function RestaurantId() {
                                         label={storeData.category_name}
                                     />
                                 </Stack>
-
                                 <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)} address={storeData.location}/>
 
                             </div>

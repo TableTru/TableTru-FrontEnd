@@ -513,7 +513,7 @@ export default function CreateStore() {
                 <Container component="main" maxWidth="md">
                     <CssBaseline />
 
-                    <Box sx={{ mt: 8, mb: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                    <Box sx={{ mt: 16, mb: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
                         <Box sx={{ display: "flex", alignItems: "left" }}>
                             <Typography component="h1" variant="h4">
                                 สร้างร้านค้า
@@ -660,22 +660,27 @@ export default function CreateStore() {
 
                                                 <Grid item xs={12}>
                                                     <Typography variant="subtitle1">รูปภาพปกร้าน</Typography>
-                                                    <div className="container mt-5">
-                                                        <div className="col-lg-8 offset-lg-2">
+                                                    <div className="container my-5">
+                                                        <div className="col-lg-8 space-y-5 offset-lg-2 ">
                                                             <Input
                                                                 type="file"
                                                                 placeholder="Select file to upload"
                                                                 accept="image/png, image/jpeg"
                                                                 onChange={(files) => handleSelectedMainImage(files.target.files)}
                                                             />
-                                                            {isMainImageUpload && <Progress percent={mainProgressUpload} />}
+                                                            {isMainImageUpload &&
+                                                                <Progress percent={mainProgressUpload}/>}
 
                                                             {mainImage && (
                                                                 <>
                                                                     <Image
                                                                         src={mainImage}
                                                                         alt={mainImage}
-                                                                        style={{ width: "100%", height: 200, objectFit: 'cover' }}
+                                                                        style={{
+                                                                            width: "100%",
+                                                                            height: 200,
+                                                                            objectFit: "cover"
+                                                                        }}
                                                                     />
                                                                 </>
                                                             )}

@@ -94,7 +94,7 @@ export default function StoreHome() {
                     <CssBaseline/>
 
                     {/*<Box sx={{ marginTop: 8, marginBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'left' }}>*/}
-                    <div className={"w-fit item-center justify-around center mx-auto mt-20"}>
+                    <div className={"w-fit item-center justify-around center mx-auto mt-24"}>
 
                         <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                             <div
@@ -126,7 +126,7 @@ export default function StoreHome() {
                             flexDirection: 'column',
                             alignItems: 'left'
                         }}>
-                            <Grid item xs={12} sm container>
+                            <Grid item xs={10} sm container>
                                 <List sx={{width: '100%'}}>
                                     <ListItem disablePadding>
                                         <ListItemButton component="a" href="/store/tableBooking">
@@ -159,7 +159,6 @@ export default function StoreHome() {
                         </Box>
                         {/*</Box>*/}
                     </Container>
-
                 </Container>
             </ThemeProvider>
         </>
