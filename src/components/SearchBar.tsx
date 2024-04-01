@@ -308,24 +308,27 @@ export default function Search({ placeholder }: { placeholder: string }) {
   useEffect(() => {
     if (filterQuery != null) {
       setFilter(Number(filterQuery))
-      if(Number(filterQuery) == 3){
-        navigator.geolocation.getCurrentPosition((position) => {
-          const geocoder = new google.maps.Geocoder();
-          const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      if (Number(filterQuery) == 3) {
+        loader.load().then(() => {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const geocoder = new google.maps.Geocoder();
+            const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-          geocoder.geocode({ 'location': latLng }, (results, status) => {
-            if (status === 'OK') {
-              if (results[0]) {
-                console.log(results[0].formatted_address); // แสดงชื่อสถานที่
-                setLocationData(results[0].formatted_address)
+            geocoder.geocode({ 'location': latLng }, (results, status) => {
+              if (status === 'OK') {
+                if (results[0]) {
+                  console.log(results[0].formatted_address); // แสดงชื่อสถานที่
+                  setLocationData(results[0].formatted_address)
+                } else {
+                  console.log('No results found');
+                }
               } else {
-                console.log('No results found');
+                console.error('Geocoder failed due to: ' + status);
               }
-            } else {
-              console.error('Geocoder failed due to: ' + status);
-            }
+            });
           });
-        });
+        })
+
       }
     }
     console.log(filterQuery);
