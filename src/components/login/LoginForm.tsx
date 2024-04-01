@@ -146,7 +146,7 @@ export default function LoginForm() {
             </Grid>
             
           </Grid>
-          {/* <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={tempLogin}>Temp Login</Button> */}
+          <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={tempLogin}>Temp Login</Button>
         </div>
       </Container>
     </div>

@@ -145,9 +145,9 @@ export default function HeaderAppBar() {
                 }}
               >
                 {pages.filter((page) => page.name !== "ร้านของฉัน" || isLogin).map((page) => (
-                    <MenuItem key={page.name} onClick={() => router.push(page.path)}>
-                      <Typography textAlign="center">{page.name}</Typography>
-                    </MenuItem>
+                  <MenuItem key={page.name} onClick={() => router.push(page.path)}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                  </MenuItem>
                 ))}
 
               </Menu>
@@ -202,14 +202,15 @@ export default function HeaderAppBar() {
             <Box sx={{ flexGrow: 0 }}>
 
               <Tooltip title="profile">
-                <IconButton onClick={() => profileClick("/profile")} sx={{ p: 0 }}>
-                  {isLogin ? (
+                {isLogin ? (
+                  <IconButton onClick={() => profileClick("/profile")} sx={{ p: 0 }}>
                     <Avatar alt="Remy Sharp" src={`${userData.profile_image}`} />
-                  ) : (
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                  )}
-
-                </IconButton>
+                  </IconButton>
+                ) : (
+                  <Button onClick={() => profileClick("/profile")} sx={{ my: 2, color: 'white', display: 'block' }}>
+                    Login
+                  </Button>
+                )}
               </Tooltip>
             </Box>
           </Toolbar>
