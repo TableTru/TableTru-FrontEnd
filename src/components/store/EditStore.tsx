@@ -370,6 +370,7 @@ export default function EditStore() {
             for (const menuImageObject of menuImage) {
                 const newMenuImage = {
                     store_id: menuImageObject.store_id,
+                    store_image_id: menuImageObject.store_image_id,
                     store_image_name: menuImageObject.store_image_name,
                     store_image_type: menuImageObject.store_image_type,
                     data_type: "old"
@@ -383,6 +384,7 @@ export default function EditStore() {
             for (const subImageObject of subImage) {
                 const newSubImage = {
                     store_id: subImageObject.store_id,
+                    store_image_id: subImageObject.store_image_id,
                     store_image_name: subImageObject.store_image_name,
                     store_image_type: subImageObject.store_image_type,
                     data_type: "old"
@@ -586,7 +588,9 @@ export default function EditStore() {
         console.log(image);
         if (image.data_type == "old") {
             const newArray = menuData.filter(item => item.store_image_name !== image.store_image_name);
-            setRemoveImage([...removeImage, image.store_id])
+            console.log([...removeImage, image.store_image_id]);
+            
+            setRemoveImage([...removeImage, image.store_image_id])
             setMenuData(newArray)
         } else {
             const newArray = menuData.filter(item => item.store_image_name !== image.store_image_name);
@@ -646,8 +650,10 @@ export default function EditStore() {
 
         if (image.data_type == "old") {
             const newArray = subImageData.filter(item => item.store_image_name !== image.store_image_name);
+            console.log([...removeImage, image.store_image_id]);
+            
             setSubImageData(newArray)
-            setRemoveImage([...removeImage, image.store_id])
+            setRemoveImage([...removeImage, image.store_image_id])
         } else {
             const newArray = subImageData.filter(item => item.store_image_name !== image.store_image_name);
             setSubImageData(newArray)
