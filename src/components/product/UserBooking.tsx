@@ -60,7 +60,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone);
 const localTimeZone = 'Asia/Bangkok';
 
-export default function UserBooking({ seats, openTime, store_id, address }: { seats: number; openTime: Array<TimeTemp>; store_id: number, address: string }) {
+export default function UserBooking({ seats, openTime, store_id, address, disableTime }: { seats: number; openTime: Array<TimeTemp>; store_id: number, address: string, disableTime: Array<any>; }) {
   const now = dayjs();
   const [date, setDate] = useState<Dayjs | null>();
   const [time, setTime] = useState<Dayjs | null>();
@@ -242,7 +242,7 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
   ) => {
     console.log(value);
 
-    const isDisabledDate = disableTimeTemp.some(
+    const isDisabledDate = disableTime.some(
       range =>
         dayjs(date).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'), 'day')
     );
@@ -250,7 +250,7 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
     if (!isDisabledDate) {
       console.log("date is not disabled");
     } else {
-      const isDisabledTime = disableTimeTemp.some(
+      const isDisabledTime = disableTime.some(
         range =>
           (dayjs(value).isAfter(dayjs.utc(range.start_time).subtract(7, 'hour')) ||
             dayjs(value).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'))) &&

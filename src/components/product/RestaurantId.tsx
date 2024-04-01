@@ -101,15 +101,7 @@ export default function RestaurantId() {
         username: "อังปอ"
     }])
 
-    const [disableTimeData, setDisableTimeData] = useState<Review[]>([{
-        rating_score: 3,
-        rating_status: false,
-        review_comment: "ทดสอบ",
-        review_id: 1,
-        store_id: 1,
-        user_id: 38,
-        username: "อังปอ"
-    }])
+    const [disableTimeData, setDisableTimeData] = useState<any>([])
 
     const fetchData = async () => {
         const storeId = Number(params.restaurantId)
@@ -185,7 +177,7 @@ export default function RestaurantId() {
                                     />
                                 </Stack>
 
-                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)} address={storeData.location}/>
+                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)} address={storeData.location} disableTime={disableTimeData}/>
 
                             </div>
                         </div>
