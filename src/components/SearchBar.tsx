@@ -87,7 +87,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const categoryQuery = searchParams.get('category')
   const filterQuery = searchParams.get('filter')
 
-  const [storeData, setStoreData] = useState<object[]>(tempData);
+  const [storeData, setStoreData] = useState<object[]>([]);
   const [locationData, setLocationData] = useState<string | null>(locationQuery)
   const [categoryId, setCategoryId] = useState<number>(Number(categoryQuery))
   const [search, setSearch] = useState<string | null>(searchQuery)

@@ -94,7 +94,7 @@ const handleClick = () => {
 };
 
 export default function Restaurantcard() {
-  const [storeData, setStoreData] = useState<object[]>(tempData);
+  const [storeData, setStoreData] = useState<object[]>([]);
 
   const [expanded, setExpanded] = useState(false);
   const handleExpandClick = () => {
