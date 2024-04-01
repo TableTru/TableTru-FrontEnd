@@ -90,37 +90,37 @@ const storeTemp: object =
         {
             day: 'วันจันทร์',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
         },
         {
             day: 'วันอังคาร',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
         },
         {
             day: 'วันพุธ',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
         },
         {
             day: 'วันพฤหัส',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
         },
         {
             day: 'วันศุกร์',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
         },
         {
             day: 'วันเสาร์',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
         },
         {
             day: 'วันอาทิตย์',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
         },
     ]
 }
@@ -462,7 +462,7 @@ export default function EditStore() {
                                 position: latLng,
                             });
                             markerRef.current = newMarker;
-                            
+
                             setMap(newMap);
                             console.log(results[0].formatted_address);
                             inputRef.current.value = results[0].formatted_address;
