@@ -252,7 +252,7 @@ export default function TableBooking() {
             <Container component="main" maxWidth="md">
                 <CssBaseline />
 
-                <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                <Box sx={{ marginTop: 16, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
                     <Typography component="h1" variant="h4">
                         รายการจองโต๊ะ
                     </Typography>
