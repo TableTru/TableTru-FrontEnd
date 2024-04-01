@@ -37,7 +37,7 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import {getStoreById, getStoreImageByType } from '@/services/store.service'
-
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
 
 interface Store {
     store_id: number;
@@ -58,31 +58,6 @@ interface StoreImage {
     store_id: number;
     store_image_name: string;
     store_image_type: string;
-}
-
-const storeTemp: Store =
-{
-    store_id: 1,
-    category_id: 1,
-    location_id: 1,
-    store_name: "ร้านค้าของฉัน",
-    store_description: 'hahahahahahahahahaha',
-    table_booking: 4,
-    sum_rating: 3.25,
-    Latitude: '',
-    longitude: '',
-    OpenTimes: [
-        {
-            day: 'วันจันทร์',
-            open_time: '',
-            close_time: ''
-        },
-        {
-            day: 'วันอังคาร',
-            open_time: '',
-            close_time: ''
-        }
-    ]
 }
 
 const storeImageTemp: StoreImage = {
@@ -116,60 +91,77 @@ export default function StoreHome() {
         <>
             <ThemeProvider theme={createTheme()}>
                 <Container component="main" maxWidth="md">
-                    <CssBaseline />
+                    <CssBaseline/>
 
-                    <Box sx={{ marginTop: 8, marginBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'left', }}>
+                    {/*<Box sx={{ marginTop: 8, marginBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'left' }}>*/}
+                    <div className={"w-fit item-center justify-around center mx-auto mt-20"}>
 
-                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
+                        <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                            <div
+                                className={"w-fit item-center justify-around center grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center space-y-4 space-x-4 mt-2 mb-2"}>
+                                <Box
+                                    sx={{width: '20%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                    <Avatar src={storeData?.store_cover_image}
+                                            sx={{width: 150, height: 150, m: 1, bgcolor: 'secondary.main'}}/>
+                                </Box>
 
-                            <Box sx={{ width: '20%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <Avatar src={storeData?.store_cover_image} sx={{ width: 150, height: 150, m: 1, bgcolor: 'secondary.main' }} />
-                            </Box>
-
-                            <Box sx={{ margin: 2, width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
-                                <Typography component="h1" variant="h5"> {storeData?.store_name} </Typography>
-                                {/* <Stack direction="row" spacing={1}>
-                                    <Chip label="ยืนยัน" color="success" />
-                                    <Chip label="ยืนยัน" color="success" />
-                                </Stack> */}
-                            </Box>
-
+                                <Box sx={{
+                                    margin: 10,
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left'
+                                }}>
+                                    <Typography component="h1" variant="h5"> {storeData?.store_name} </Typography>
+                                </Box>
+                            </div>
                         </Box>
+                    </div>
+                    {/*List*/}
+                    <Container component="main" maxWidth="md">
+                        <Box sx={{
+                            marginTop: 2,
+                            marginBottom: 2,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'left'
+                        }}>
+                            <Grid item xs={12} sm container>
+                                <List sx={{width: '100%'}}>
+                                    <ListItem disablePadding>
+                                        <ListItemButton component="a" href="/store/tableBooking">
+                                            <ListItemIcon>
+                                                <PeopleAltIcon/>
+                                            </ListItemIcon>
+                                            <ListItemText primary="คิวจองโต๊ะ"/>
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <ListItem disablePadding>
+                                        <ListItemButton component="a" href="/store/edit">
+                                            <ListItemIcon>
+                                                <EditIcon/>
+                                            </ListItemIcon>
+                                            <ListItemText primary="แก้ไขรายละเอียด" secondary="กดเพื่อดูหน้าร้านค้า"/>
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <ListItem disablePadding>
+                                        <ListItemButton component="a" href="/store/promo">
+                                            <ListItemIcon>
+                                                <LoyaltyIcon/>
+                                            </ListItemIcon>
+                                            <ListItemText primary="เพิ่มโปรโมชั่น"
+                                                          secondary="กดเพื่อดูรายการโปรโมชั่น"/>
+                                        </ListItemButton>
+                                    </ListItem>
 
-
-                        <Box sx={{ marginTop: 2, marginBottom: 2, display: 'flex', flexDirection: 'column' }}>
-                            <List>
-                                <ListItem disablePadding>
-                                    <ListItemButton component="a" href="/store/tableBooking">
-                                        <ListItemIcon>
-                                            <PeopleAltIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="คิวจองโต๊ะ" />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding>
-                                    <ListItemButton component="a" href="/store/edit">
-                                        <ListItemIcon>
-                                            <EditIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="แก้ไขรายละเอียด" secondary="กดเพื่อดูหน้าร้านค้า" />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding>
-                                    <ListItemButton component="a" href="/store/promo">
-                                        <ListItemIcon>
-                                            <LoyaltyIcon/>
-                                        </ListItemIcon>
-                                        <ListItemText primary="เพิ่มโปรโมชั่น" secondary="กดเพื่อดูรายการโปรโมชั่น" />
-                                    </ListItemButton>
-                                </ListItem>
-
-                            </List>
+                                </List>
+                            </Grid>
                         </Box>
-                    </Box>
+                        {/*</Box>*/}
+                    </Container>
 
                 </Container>
             </ThemeProvider>
         </>
-    );
+);
 }
