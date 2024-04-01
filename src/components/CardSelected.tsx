@@ -21,7 +21,7 @@ export default function Component() {
 
 
   return (
-    <div className="">
+    <div className="px-4">
 
       <Grid container spacing={2} >
         <Grid item xs={6} sx={{ mt: 2, mb: 2 }}>
