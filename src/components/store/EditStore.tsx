@@ -57,7 +57,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { Input, message, Image, Progress, } from 'antd'
 import { storage } from '@/services/firebaseConfig'
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
-import { getStoreById, editStore, editOpenTime, createStoreImage, checkStoreByName, GetStoreImageByType } from '@/services/store.service'
+import { getStoreById, editStore, editOpenTime, createStoreImage, checkStoreByName, GetStoreImageByType, deleteStoreImage } from '@/services/store.service'
 
 const loader = new Loader({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -272,6 +272,12 @@ export default function EditStore() {
                     await createStoreImage(subImageWithStoreId)
                 }
 
+                for (const removeImageNumber of removeImage) {
+                    console.log("datete"+ removeImageNumber);
+                    
+                    await deleteStoreImage(removeImageNumber)
+                }
+
                 for (const openTimeObject of formData.OpenTimes) {
                     await editOpenTime(openTimeObject.openTime_id, openTimeObject)
                 }
@@ -318,6 +324,16 @@ export default function EditStore() {
                 }
                 await createStoreImage(subImageWithStoreId)
             }
+            for (const removeImageNumber of removeImage) {
+                console.log("datete"+ removeImageNumber);
+                
+                await deleteStoreImage(removeImageNumber)
+            }
+
+            for (const openTimeObject of formData.OpenTimes) {
+                await editOpenTime(openTimeObject.openTime_id, openTimeObject)
+            }
+            
             setIsLoading(true);
                 setTimeout(() => {
                     window.location.replace('/store');
@@ -669,8 +685,8 @@ export default function EditStore() {
 
     useEffect(() => {
         if (formData.store_id === null) {
-            fetchData();
-            // fetchTempData()
+            // fetchData();
+            fetchTempData()
         } else {
             setFormData({
                 ...formData,
@@ -781,9 +797,12 @@ export default function EditStore() {
                                                             label="เลิอกโค้ตส่วนลด"
                                                             onChange={handleChange}
                                                         >
-                                                            <MenuItem value={1}>หมวดหมู่1</MenuItem>
-                                                            <MenuItem value={2}>หมวดหมู่2</MenuItem>
-                                                            <MenuItem value={3}>หมวดหมู่3</MenuItem>
+                                                            <MenuItem value={1}>ไทย</MenuItem>
+                                                            <MenuItem value={2}>นานาชาติ</MenuItem>
+                                                            <MenuItem value={3}>ญิ่ปุ่น</MenuItem>
+                                                            <MenuItem value={4}>จีน</MenuItem>
+                                                            <MenuItem value={5}>อิตาเลี่ยน</MenuItem>
+                                                            <MenuItem value={6}>ฟิวชั่น</MenuItem>
                                                         </Select>
                                                     </FormControl>
 
