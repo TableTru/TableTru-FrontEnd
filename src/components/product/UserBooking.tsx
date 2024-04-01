@@ -29,7 +29,7 @@ import { Item } from "@/interfaces/Promo";
 import { initialItems } from "@/data/promotion";
 import Swal from "sweetalert2";
 import Map from "@/components/Map";
-import { createTableBooking } from '@/services/tableBooking.service'
+import { CheckBookingTime, createTableBooking } from '@/services/tableBooking.service'
 import { GetAllPromotionByStoreId } from '@/services/promotion.service'
 import timezone from "dayjs/plugin/timezone";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -60,7 +60,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone);
 const localTimeZone = 'Asia/Bangkok';
 
-export default function UserBooking({ seats, openTime, store_id, address, disableTime }: { seats: number; openTime: Array<TimeTemp>; store_id: number, address: string, disableTime: Array<any>; }) {
+export default function UserBooking({ seats, openTime, store_id, address, table_booking_num }: { seats: number; openTime: Array<TimeTemp>; store_id: number, address: string, table_booking_num: number; }) {
   const now = dayjs();
   const [date, setDate] = useState<Dayjs | null>();
   const [time, setTime] = useState<Dayjs | null>();
@@ -73,6 +73,8 @@ export default function UserBooking({ seats, openTime, store_id, address, disabl
 
   const [dateString, setDateString] = useState('')
   const [combineTime, setCombineTime] = useState<Dayjs | null>()
+
+  const [disableTimeData, setDisableTimeData] = useState<any>([])
 
   const fetchData = async () => {
     const promotionArray = [];
@@ -96,6 +98,18 @@ export default function UserBooking({ seats, openTime, store_id, address, disabl
       setPromotionData(promotionArray);
       console.log(promotionArray);
     }
+
+    const disableBookingTimeArray = [];
+        const disableBookingTimes = await CheckBookingTime(store_id, table_booking_num);
+        console.log(disableBookingTimes);
+
+        if (disableBookingTimes) {
+            for (const disableBookingTimeObject of disableBookingTimes) {
+                disableBookingTimeArray.push(disableBookingTimeObject);
+            }
+            setDisableTimeData(disableBookingTimeArray);
+            console.log(disableBookingTimeArray);
+        }
   }
 
   // const fetchDateTime = async () => {
@@ -208,6 +222,7 @@ export default function UserBooking({ seats, openTime, store_id, address, disabl
               console.log("active");
               console.log(submitObject);
               await createTableBooking(submitObject);
+              fetchData()
             }
             else {
               const submitObject = {
@@ -221,6 +236,7 @@ export default function UserBooking({ seats, openTime, store_id, address, disabl
               console.log("active");
               console.log(submitObject);
               await createTableBooking(submitObject);
+              fetchData()
             }
           }
         });
@@ -253,7 +269,7 @@ export default function UserBooking({ seats, openTime, store_id, address, disabl
   ) => {
     console.log(value);
 
-    const isDisabledDate = disableTime.some(
+    const isDisabledDate = disableTimeData.some(
       range =>
         dayjs(date).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'), 'day')
     );
@@ -261,7 +277,7 @@ export default function UserBooking({ seats, openTime, store_id, address, disabl
     if (!isDisabledDate) {
       console.log("date is not disabled");
     } else {
-      const isDisabledTime = disableTime.some(
+      const isDisabledTime = disableTimeData.some(
         range =>
           (dayjs(value).isAfter(dayjs.utc(range.start_time).subtract(7, 'hour')) ||
             dayjs(value).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'))) &&
