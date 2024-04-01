@@ -23,7 +23,7 @@ export const createUser = async (data: any) => {
 
 export const editUser = async (id: number, data: any) => {
   return await axios.put(url + `/users/${id}`, data).then((res: AxiosResponse) => {
-    return res.data;
+    return res.data.data;
   }).catch((err: { response: { data: any; }; }) => {
     console.log("err: ", err.response);
     return err?.response?.data ? err?.response?.data : {};

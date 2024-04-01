@@ -132,7 +132,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     }
     else {
-      const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
+      const searchRes = await searchSortLocation(searchObject.search?? '', searchObject.category_id, searchObject.location)
       console.log(searchRes);
 
       const storeArray = [];
@@ -245,7 +245,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     }
     else {
-      const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
+      const searchRes = await searchSortLocation(searchObject.search ?? '', searchObject.category_id, searchObject.location)
       console.log(searchRes);
 
       const storeArray = [];

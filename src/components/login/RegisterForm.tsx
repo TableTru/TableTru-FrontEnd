@@ -64,7 +64,7 @@ export default function SignUp() {
     password: "",
     email: "",
     phone_num: "",
-    profile_image: "",
+    profile_image: "https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2F9.png?alt=media&token=bce8dee8-fb5a-4764-aae2-be8fb794d216",
     user_status: "user"
   });
 

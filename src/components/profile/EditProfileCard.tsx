@@ -69,7 +69,7 @@ export default function EditProfileCard() {
     password: '',
     // email: '',
     phone_num: '',
-    profile_image: 'https://pbs.twimg.com/media/FXTTYWfVUAAjIph?format=png&name=medium'
+    profile_image: 'https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2F9.png?alt=media&token=bce8dee8-fb5a-4764-aae2-be8fb794d216'
   });
 
   const [isMainImageUpload, setIsMainImageUpload] = useState(false)
@@ -104,6 +104,9 @@ export default function EditProfileCard() {
     console.log(userDataForm);
     const createRes = await editUser(userDataJson.user_id, userDataForm)
     console.log(createRes);
+
+    localStorage.removeItem('userData');
+    localStorage.setItem('userData', JSON.stringify(createRes));
     window.location.replace('/profile')
   };
 
