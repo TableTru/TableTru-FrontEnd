@@ -99,17 +99,20 @@ export default function UserBooking({ seats, openTime, store_id, address, table_
       console.log(promotionArray);
     }
 
-    const disableBookingTimeArray = [];
-    const disableBookingTimes = await CheckBookingTime(store_id, table_booking_num);
-    console.log(disableBookingTimes);
+    if (table_booking_num != null) {
+      const disableBookingTimeArray = [];
+      const disableBookingTimes = await CheckBookingTime(store_id, table_booking_num);
+      console.log(disableBookingTimes);
 
-    if (disableBookingTimes) {
-      for (const disableBookingTimeObject of disableBookingTimes) {
-        disableBookingTimeArray.push(disableBookingTimeObject);
+      if (disableBookingTimes) {
+        for (const disableBookingTimeObject of disableBookingTimes) {
+          disableBookingTimeArray.push(disableBookingTimeObject);
+        }
+        setDisableTimeData(disableBookingTimeArray);
+        console.log(disableBookingTimeArray);
       }
-      setDisableTimeData(disableBookingTimeArray);
-      console.log(disableBookingTimeArray);
     }
+
   }
 
   // const fetchDateTime = async () => {
@@ -267,6 +270,8 @@ export default function UserBooking({ seats, openTime, store_id, address, table_
             reverseButtons: true,
             showConfirmButton: false
           })
+          console.log("!isStoreOpen");
+
         }
 
       }
@@ -282,6 +287,8 @@ export default function UserBooking({ seats, openTime, store_id, address, table_
           reverseButtons: true,
           showConfirmButton: false
         })
+        console.log("date != null && time != null && seat != null && !isDisabledTime");
+
       }
     }
     else {
