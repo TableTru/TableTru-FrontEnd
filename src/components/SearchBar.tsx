@@ -268,7 +268,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     fetchData()
     console.log("fetch active");
 
-  }, [locationData, categoryId, filter]);
+  }, [categoryId, filter]);
 
   useEffect(() => {
     loader.load().then(() => {
