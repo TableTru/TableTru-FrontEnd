@@ -381,29 +381,19 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                                         </tr>
                                                     </thead>
                                                     <tbody className="flex-1 sm:flex-none">
-                                                        {
-                                                            openTime.map((time) => {
-                                                                if(time.day == "Monday"){
-                                                                    console.log("aungpor");
-                                                                    
-                                                                }
-
-                                                                const openTimes = dayjs.utc(time.start_time).format("hh:mm")
-                                                                const closeTimes = dayjs.utc(time.end_time).format("HH:mm")
-
-                                                                return (
-                                                                    <>
-                                                                        <tr className="flex flex-col flex-no wrap  sm:table-row mb-2 sm:mb-0">
-                                                                            <td className="ิborder-grey-light border bg-gray-100  p-3">{time.day}</td>
-                                                                            <td className="border-grey-light border  p-3">{openTimes}</td>
-                                                                            <td className="border-grey-light border  p-3">{closeTimes}</td>
-                                                                        </tr>
-                                                                    </>
-
-                                                                );
-                                                            })
-                                                        }
+                                                        {openTime.map((time) => {
+                                                            const openTimes = time.open_status ? dayjs.utc(time.start_time).format("hh:mm") : "ร้านปิด";
+                                                            const closeTimes = time.open_status ? dayjs.utc(time.end_time).format("HH:mm") : "ร้านปิด";
+                                                            return (
+                                                                <tr key={time.day} className="flex flex-col flex-no wrap  sm:table-row mb-2 sm:mb-0">
+                                                                    <td className="border-grey-light border bg-gray-100  p-3">{time.day}</td>
+                                                                    <td className="border-grey-light border  p-3">{openTimes}</td>
+                                                                    <td className="border-grey-light border  p-3">{closeTimes}</td>
+                                                                </tr>
+                                                            );
+                                                        })}
                                                     </tbody>
+
                                                 </table>
                                             </div>
                                         </div>

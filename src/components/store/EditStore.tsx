@@ -723,8 +723,8 @@ export default function EditStore() {
 
     useEffect(() => {
         if (formData.store_id === null) {
-            // fetchData();
-            fetchTempData()
+            fetchData();
+            // fetchTempData()
         } else {
             setFormData({
                 ...formData,
