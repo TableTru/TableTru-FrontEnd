@@ -816,7 +816,7 @@ export default function CreateStore() {
                                 </Grid>
 
                                 <Grid item xs={12}>
-                                    <Typography variant="subtitle1">{createError}</Typography>
+                                    <Typography variant="subtitle1" color="#ff1744" >{createError}</Typography>
                                 </Grid>
                             </Grid>
                             <Link href="/store">

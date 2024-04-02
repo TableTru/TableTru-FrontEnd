@@ -71,6 +71,7 @@ export default function SignUp() {
   const [isMainImageUpload, setIsMainImageUpload] = useState(false)
   const [mainProgressUpload, setMainProgressUpload] = useState(0)
   const [mainImage, setMainImage] = useState('')
+  const [createError, setCreateError] = useState("");
 
   const handleSelectedMainImage = async (files: any) => {
     if (files && files[0].size < 10000000) {
@@ -134,6 +135,7 @@ export default function SignUp() {
       window.location.replace('/')
     } else{
       console.log("already have user");
+      setCreateError("อีเมล์นี้อยู่ในบัญชีอยู่แล้ว กรุณาเปลี่ยนอีเมล์")
     }
   };
 
@@ -195,6 +197,9 @@ export default function SignUp() {
                 value={userData.email}
                 onChange={handleChange}
               />
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" color="#ff1744">{createError}</Typography>
+              </Grid>
             </Grid>
             <Grid item xs={12}>
               <TextField

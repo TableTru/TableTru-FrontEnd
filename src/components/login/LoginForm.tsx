@@ -9,9 +9,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import { Button, TextField, Container, Paper, Typography } from '@mui/material';
+import {Button, TextField, Container, Paper, Typography} from "@mui/material";
 import { styled } from "@mui/material/styles";
-
+import { withStyles } from "@material-ui/core/styles";
 import { getLoginUser } from '@/utills/auth'
 import { useRouter } from "next/router";
 
@@ -53,6 +53,8 @@ export default function LoginForm() {
     password: '',
   });
 
+  const [createError, setCreateError] = useState("");
+
   const Login = async () => {
     if (formData.username != '' || formData.username != '') {
       const user = await getLoginUser(formData)
@@ -61,10 +63,12 @@ export default function LoginForm() {
         console.log("login pass " + user.username);
         window.location.replace('/')
       } else {
+        setCreateError("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง")
         console.log("username or password is incorect");
       }
     }
   }
+
 
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
@@ -128,23 +132,22 @@ export default function LoginForm() {
               label="Remember me"
 
             /> */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" color="#ff1744">{createError}</Typography>
+            </Grid>
+
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>
           </form>
 
           <Grid container>
-            {/* <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid> */}
-            <Grid item>
+            <Grid item xs={12}>
               <Link href="/register" variant="body2">
                 {"Sign Up"}
               </Link>
             </Grid>
-            
+
           </Grid>
           {/* <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={tempLogin}>Temp Login</Button> */}
         </div>
