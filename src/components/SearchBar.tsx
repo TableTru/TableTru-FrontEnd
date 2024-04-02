@@ -87,7 +87,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const categoryQuery = searchParams.get('category')
   const filterQuery = searchParams.get('filter')
 
-  const [storeData, setStoreData] = useState<object[]>(tempData);
+  const [storeData, setStoreData] = useState<object[]>([]);
   const [locationData, setLocationData] = useState<string | null>(locationQuery)
   const [categoryId, setCategoryId] = useState<number>(Number(categoryQuery))
   const [search, setSearch] = useState<string | null>(searchQuery)
@@ -132,7 +132,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     }
     else {
-      const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
+      const searchRes = await searchSortLocation(searchObject.search?? '', searchObject.category_id, searchObject.location)
       console.log(searchRes);
 
       const storeArray = [];
@@ -245,7 +245,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     }
     else {
-      const searchRes = await searchSortLocation(searchObject.search, searchObject.category_id, searchObject.location)
+      const searchRes = await searchSortLocation(searchObject.search ?? '', searchObject.category_id, searchObject.location)
       console.log(searchRes);
 
       const storeArray = [];
@@ -308,6 +308,28 @@ export default function Search({ placeholder }: { placeholder: string }) {
   useEffect(() => {
     if (filterQuery != null) {
       setFilter(Number(filterQuery))
+      if (Number(filterQuery) == 3) {
+        loader.load().then(() => {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const geocoder = new google.maps.Geocoder();
+            const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+            geocoder.geocode({ 'location': latLng }, (results, status) => {
+              if (status === 'OK') {
+                if (results[0]) {
+                  console.log(results[0].formatted_address); // แสดงชื่อสถานที่
+                  setLocationData(results[0].formatted_address)
+                } else {
+                  console.log('No results found');
+                }
+              } else {
+                console.error('Geocoder failed due to: ' + status);
+              }
+            });
+          });
+        })
+
+      }
     }
     console.log(filterQuery);
 

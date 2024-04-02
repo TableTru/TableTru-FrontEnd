@@ -23,53 +23,46 @@ import { initialItems } from "@/data/promotion"
 
 const openTime = [
     {
-        day: "Monday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T08:00:00Z",
-        store_id: 1,
+        day: 'Monday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: false
     },
     {
-        day: "Tuesday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Tuesday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
-        day: "Wednesday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Wednesday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
-        day: "Thursday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Thursday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
-        day: "Friday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Friday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
-        day: "Saturday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Saturday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: false
     },
     {
-        day: "Sunday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Sunday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: false
     },
 ]
 
@@ -88,7 +81,7 @@ export default function RestaurantId() {
         store_id: 1,
         store_name: "temp",
         sum_rating: 2.1,
-        table_booking: 4,
+        table_booking: null,
         updated_at: ""
     });
     const [reviewData, setReviewData] = useState<Review[]>([{
@@ -101,15 +94,7 @@ export default function RestaurantId() {
         username: "อังปอ"
     }])
 
-    const [disableTimeData, setDisableTimeData] = useState<Review[]>([{
-        rating_score: 3,
-        rating_status: false,
-        review_comment: "ทดสอบ",
-        review_id: 1,
-        store_id: 1,
-        user_id: 38,
-        username: "อังปอ"
-    }])
+    const [disableTimeData, setDisableTimeData] = useState<any>([])
 
     const fetchData = async () => {
         const storeId = Number(params.restaurantId)
@@ -184,7 +169,8 @@ export default function RestaurantId() {
                                         label={storeData.category_name}
                                     />
                                 </Stack>
-                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)} address={storeData.location}/>
+
+                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)} address={storeData.location} table_booking_num={storeData.table_booking}/>
 
                             </div>
                         </div>

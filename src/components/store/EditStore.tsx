@@ -35,6 +35,7 @@ import {
     FormControl,
     ListItemIcon,
     CircularProgress,
+    Checkbox,
 
 
 } from "@mui/material";
@@ -57,7 +58,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { Input, message, Image, Progress, } from 'antd'
 import { storage } from '@/services/firebaseConfig'
 import { ref, uploadBytesResumable, getDownloadURL } from '@firebase/storage'
-import { getStoreById, editStore, editOpenTime, createStoreImage, checkStoreByName, GetStoreImageByType } from '@/services/store.service'
+import { getStoreById, editStore, editOpenTime, createStoreImage, checkStoreByName, GetStoreImageByType, deleteStoreImage } from '@/services/store.service'
 
 const loader = new Loader({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -88,39 +89,46 @@ const storeTemp: object =
     location: 'บางตลาด อำเภอปากเกร็ด นนทบุรี 11120 ประเทศไทย',
     OpenTimes: [
         {
-            day: 'วันจันทร์',
+            day: 'Monday',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
+            open_status: false
         },
         {
-            day: 'วันอังคาร',
+            day: 'Tuesday',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
+            open_status: false
         },
         {
-            day: 'วันพุธ',
+            day: 'Wednesday',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
+            open_status: true
         },
         {
-            day: 'วันพฤหัส',
+            day: 'Thursday',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
+            open_status: true
         },
         {
-            day: 'วันศุกร์',
+            day: 'Friday',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
+            open_status: true
         },
         {
-            day: 'วันเสาร์',
+            day: 'Saturday',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
+            open_status: true
         },
         {
-            day: 'วันอาทิตย์',
+            day: 'Sunday',
             start_time: '2024-02-23T08:00:00Z',
-            end_time: '2024-02-23T17:00:00Z',
+            end_time: '2024-02-23T22:00:00Z',
+            open_status: true
         },
     ]
 }
@@ -213,13 +221,22 @@ export default function EditStore() {
         console.log(formData);
     };
 
+    const handleCheckBoxChange = (index) => {
+        const updatedOpenTimeData = [...formData.OpenTimes];
+        updatedOpenTimeData[index] = {
+            ...updatedOpenTimeData[index],
+            open_status: !updatedOpenTimeData[index].open_status,
+        };
+        setFormData({ ...formData, OpenTimes: updatedOpenTimeData });
+    };
+
     const handleOpenTimeChange = (index: number, newValue: any) => {
         const newOpenTimes = [...formData.OpenTimes];
         newOpenTimes[index].start_time = newValue.format('YYYY-MM-DDTHH:mm:ssZ');
         setFormData({ ...formData, OpenTimes: newOpenTimes });
         console.log(newValue.format('YYYY-MM-DDTHH:mm:ssZ'))
         console.log(formData);
-        
+
     };
 
     const handleCloseTimeChange = (index: number, newValue: any) => {
@@ -245,7 +262,7 @@ export default function EditStore() {
                 for (const openTimeObject of formData.OpenTimes) {
                     const editOpenTimeRes = await editOpenTime(openTimeObject.openTime_id, openTimeObject)
                     console.log(editOpenTimeRes);
-                    
+
                 }
 
                 const newmenuImageData = menuData.filter(item => item.data_type !== "old");
@@ -272,6 +289,12 @@ export default function EditStore() {
                     await createStoreImage(subImageWithStoreId)
                 }
 
+                for (const removeImageNumber of removeImage) {
+                    console.log("datete" + removeImageNumber);
+
+                    await deleteStoreImage(removeImageNumber)
+                }
+
                 for (const openTimeObject of formData.OpenTimes) {
                     await editOpenTime(openTimeObject.openTime_id, openTimeObject)
                 }
@@ -284,7 +307,7 @@ export default function EditStore() {
                 // setCreateError("มีร้านค้าชื่อนี้แล้ว")
                 console.log("error");
             }
-        } else{
+        } else {
             const userData = localStorage.getItem("userData")
             const userDataJson = JSON.parse(userData || "[]");
 
@@ -299,7 +322,7 @@ export default function EditStore() {
             const newSubImageData = subImageData.filter(item => item.data_type !== "old");
 
             console.log(newmenuImageData);
-                console.log(newSubImageData);
+            console.log(newSubImageData);
 
             for (const menuImageObject of newmenuImageData) {
                 const menuImageWithStoreId = {
@@ -318,10 +341,20 @@ export default function EditStore() {
                 }
                 await createStoreImage(subImageWithStoreId)
             }
+            for (const removeImageNumber of removeImage) {
+                console.log("datete" + removeImageNumber);
+
+                await deleteStoreImage(removeImageNumber)
+            }
+
+            for (const openTimeObject of formData.OpenTimes) {
+                await editOpenTime(openTimeObject.openTime_id, openTimeObject)
+            }
+
             setIsLoading(true);
-                setTimeout(() => {
-                    window.location.replace('/store');
-                }, 5000); // 5000 milliseconds = 5 seconds
+            setTimeout(() => {
+                window.location.replace('/store');
+            }, 5000); // 5000 milliseconds = 5 seconds
         }
 
 
@@ -354,6 +387,7 @@ export default function EditStore() {
             for (const menuImageObject of menuImage) {
                 const newMenuImage = {
                     store_id: menuImageObject.store_id,
+                    store_image_id: menuImageObject.store_image_id,
                     store_image_name: menuImageObject.store_image_name,
                     store_image_type: menuImageObject.store_image_type,
                     data_type: "old"
@@ -367,6 +401,7 @@ export default function EditStore() {
             for (const subImageObject of subImage) {
                 const newSubImage = {
                     store_id: subImageObject.store_id,
+                    store_image_id: subImageObject.store_image_id,
                     store_image_name: subImageObject.store_image_name,
                     store_image_type: subImageObject.store_image_type,
                     data_type: "old"
@@ -420,6 +455,7 @@ export default function EditStore() {
     const inputRef = useRef<HTMLInputElement>(null);
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+    const markerRef = useRef(null);
 
     useEffect(() => {
         loader.load().then(() => {
@@ -436,10 +472,16 @@ export default function EditStore() {
                 geocoder.geocode({ 'location': latLng }, (results, status) => {
                     if (status === 'OK') {
                         if (results[0]) {
-                            const marker = new google.maps.Marker({
+                            if (markerRef.current) {
+                                markerRef.current.setMap(null); // เอาออกจากแผนที่
+                            }
+
+                            const newMarker = new google.maps.Marker({
                                 map: newMap,
                                 position: latLng,
                             });
+                            markerRef.current = newMarker;
+
                             setMap(newMap);
                             console.log(results[0].formatted_address);
                             inputRef.current.value = results[0].formatted_address;
@@ -473,10 +515,18 @@ export default function EditStore() {
                             longitude: place.geometry.location.lng(),
                         })
                         map.setCenter(location);
-                        new google.maps.Marker({
+                        if (markerRef.current) {
+                            markerRef.current.setMap(null); // เอาออกจากแผนที่
+                        }
+
+                        // เพิ่ม Marker ใหม่
+                        const newMarker = new google.maps.Marker({
                             position: location,
                             map: map,
                         });
+
+                        // เก็บ Marker ใหม่ลงใน ref
+                        markerRef.current = newMarker;
                     }
                 });
                 autocomplete.addListener('predictions_changed', () => {
@@ -555,7 +605,9 @@ export default function EditStore() {
         console.log(image);
         if (image.data_type == "old") {
             const newArray = menuData.filter(item => item.store_image_name !== image.store_image_name);
-            setRemoveImage([...removeImage, image.store_id])
+            console.log([...removeImage, image.store_image_id]);
+
+            setRemoveImage([...removeImage, image.store_image_id])
             setMenuData(newArray)
         } else {
             const newArray = menuData.filter(item => item.store_image_name !== image.store_image_name);
@@ -615,8 +667,10 @@ export default function EditStore() {
 
         if (image.data_type == "old") {
             const newArray = subImageData.filter(item => item.store_image_name !== image.store_image_name);
+            console.log([...removeImage, image.store_image_id]);
+
             setSubImageData(newArray)
-            setRemoveImage([...removeImage, image.store_id])
+            setRemoveImage([...removeImage, image.store_image_id])
         } else {
             const newArray = subImageData.filter(item => item.store_image_name !== image.store_image_name);
             setSubImageData(newArray)
@@ -781,11 +835,6 @@ export default function EditStore() {
                                                             label="เลิอกโค้ตส่วนลด"
                                                             onChange={handleChange}
                                                         >
-
-                                                            {/*<MenuItem value={1}>หมวดหมู่1</MenuItem>*/}
-                                                            {/*<MenuItem value={2}>หมวดหมู่2</MenuItem>*/}
-                                                            {/*<MenuItem value={3}>หมวดหมู่3</MenuItem>*/}
-
                                                             <MenuItem value={1}>ไทย</MenuItem>
                                                             <MenuItem value={2}>นานาชาติ</MenuItem>
                                                             <MenuItem value={3}>ญิ่ปุ่น</MenuItem>
@@ -950,28 +999,43 @@ export default function EditStore() {
                                                 <div >
 
                                                     {formData.OpenTimes.map((item, index) => (
-                                                        <Box key={index} className="grid grid-cols-1 gap-4 md:grid-cols-3 gap-4">
-                                                            <p>{item.day}</p>
-                                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                <DemoContainer components={["TimePicker"]}>
-                                                                    <TimePicker
-                                                                        label="เวลาเปิด"
-                                                                        className={"w-full"}
-                                                                        value={dayjs.utc(item.start_time)}
-                                                                        onChange={(newValue) => handleOpenTimeChange(index, newValue)}
-                                                                    />
-                                                                </DemoContainer>
-                                                            </LocalizationProvider>
-                                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                <DemoContainer components={["TimePicker"]}>
-                                                                    <TimePicker
-                                                                        label="เวลาปิด"
-                                                                        className={"w-full"}
-                                                                        value={dayjs.utc(item.end_time)}
-                                                                        onChange={(newValue) => handleCloseTimeChange(index, newValue)}
-                                                                    />
-                                                                </DemoContainer>
-                                                            </LocalizationProvider>
+                                                        <Box key={index}>
+                                                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                                                                <Checkbox
+                                                                    size="small"
+                                                                    sx={{ height: '40px' }}
+                                                                    checked={item.open_status}
+                                                                    onClick={() => handleCheckBoxChange(index)}
+                                                                    inputProps={{ 'aria-label': 'controlled' }}
+                                                                />
+                                                                <Box className="grid grid-cols-1 gap-2 md:grid-cols-3 gap-4">
+                                                                    <p>{item.day}</p>
+                                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                        <DemoContainer components={["TimePicker"]}>
+                                                                            <TimePicker
+                                                                                label="เวลาเปิด"
+                                                                                className={"w-full"}
+                                                                                disabled={!item.open_status}
+                                                                                value={dayjs.utc(item.start_time)}
+                                                                                onChange={(newValue) => handleOpenTimeChange(index, newValue)}
+                                                                            />
+                                                                        </DemoContainer>
+                                                                    </LocalizationProvider>
+                                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                        <DemoContainer components={["TimePicker"]}>
+                                                                            <TimePicker
+                                                                                label="เวลาปิด"
+                                                                                className={"w-full"}
+                                                                                disabled={!item.open_status}
+                                                                                value={dayjs.utc(item.end_time)}
+                                                                                onChange={(newValue) => handleCloseTimeChange(index, newValue)}
+                                                                            />
+                                                                        </DemoContainer>
+                                                                    </LocalizationProvider>
+                                                                </Box>
+                                                            </Box>
+
+
                                                         </Box>
 
                                                     ))}

@@ -29,7 +29,7 @@ import { Item } from "@/interfaces/Promo";
 import { initialItems } from "@/data/promotion";
 import Swal from "sweetalert2";
 import Map from "@/components/Map";
-import { createTableBooking } from '@/services/tableBooking.service'
+import { CheckBookingTime, createTableBooking } from '@/services/tableBooking.service'
 import { GetAllPromotionByStoreId } from '@/services/promotion.service'
 import timezone from "dayjs/plugin/timezone";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -41,11 +41,26 @@ type TimeTemp = {
   end_time: string;
 };
 
+const disableTimeTemp = [
+  {
+    end_time: "2024-03-30T09:00:00Z",
+    start_time: "2024-03-30T08:00:00Z"
+  },
+  {
+    end_time: "2024-03-30T10:00:00Z",
+    start_time: "2024-03-30T09:00:00Z"
+  },
+  {
+    end_time: "2024-03-30T10:30:00Z",
+    start_time: "2024-03-30T09:30:00Z"
+  }
+]
+
 dayjs.extend(utc)
 dayjs.extend(timezone);
 const localTimeZone = 'Asia/Bangkok';
 
-export default function UserBooking({ seats, openTime, store_id, address }: { seats: number; openTime: Array<TimeTemp>; store_id: number, address: string }) {
+export default function UserBooking({ seats, openTime, store_id, address, table_booking_num }: { seats: number; openTime: Array<TimeTemp>; store_id: number, address: string, table_booking_num: number; }) {
   const now = dayjs();
   const [date, setDate] = useState<Dayjs | null>();
   const [time, setTime] = useState<Dayjs | null>();
@@ -59,6 +74,8 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
   const [dateString, setDateString] = useState('')
   const [combineTime, setCombineTime] = useState<Dayjs | null>()
 
+  const [disableTimeData, setDisableTimeData] = useState<any>([])
+
   const fetchData = async () => {
     const promotionArray = [];
     const promotions = await GetAllPromotionByStoreId(store_id);
@@ -67,18 +84,32 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
 
     if (promotions) {
       for (const promotionObject of promotions) {
-        const expireDate = new Date(promotionObject.expiration_date)
-        if (currentDate < expireDate) {
-          console.log("expireDate ยังไม่เป็นเวลาที่ผ่านมา");
-          promotionArray.push(promotionObject);
-        } else {
-          console.log("expireDate เป็นเวลาที่ผ่านมาแล้ว");
+        if (promotionObject.promotion_id != 1) {
+          const expireDate = new Date(promotionObject.expiration_date)
+          if (currentDate < expireDate) {
+            console.log("expireDate ยังไม่เป็นเวลาที่ผ่านมา");
+            promotionArray.push(promotionObject);
+          } else {
+            console.log("expireDate เป็นเวลาที่ผ่านมาแล้ว");
+          }
         }
-        
+
       }
       setPromotionData(promotionArray);
       console.log(promotionArray);
     }
+
+    const disableBookingTimeArray = [];
+        const disableBookingTimes = await CheckBookingTime(store_id, table_booking_num);
+        console.log(disableBookingTimes);
+
+        if (disableBookingTimes) {
+            for (const disableBookingTimeObject of disableBookingTimes) {
+                disableBookingTimeArray.push(disableBookingTimeObject);
+            }
+            setDisableTimeData(disableBookingTimeArray);
+            console.log(disableBookingTimeArray);
+        }
   }
 
   // const fetchDateTime = async () => {
@@ -142,25 +173,6 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
     console.log(event.target.value);
   };
 
-  // const handelDisableTime = (timeValue: dayjs.Dayjs) => {
-  //   let timeData = timeValue
-
-  //   for (let i = 0; i < 23; i++) {
-  //     timeData = timeData.add(1, 'hour');
-  //     const openingHours = openTime.find(item => item.day === dayjs(timeData).format('dddd'));
-  //     if (openingHours) {
-  //       const startTime = dayjs.utc(openingHours.start_time).hour();
-  //       const endTime = dayjs.utc(openingHours.end_time).hour();
-
-  //       if (!openingHours) {
-  //         return false;
-  //       }
-  //       else {
-  //         return timeData.hour() < startTime || timeData.hour() >= endTime;
-  //       }
-  //     }
-  //   }
-  // }
 
 
   const handleChangePromotion = (event: any) => {
@@ -171,79 +183,103 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
 
   console.log(openTime)
 
-  // const startTime = openTime.map((item) => dayjs.utc(item.start_time).hour())
-  // const endTime = openTime.map((item) => dayjs.utc(item.end_time).hour())
-
-  // console.log(startTime);
-  // console.log(endTime);
-
 
   const handleButtonConfirm = async () => {
-    if (date != null && time != null && seat != null) {
-      Swal.fire({
-        title: "แน่ใจหรือว่าจะยืนยัน",
-        text: "โปรดตรวจสอบรายละเอียดการจอง",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "ยืนยัน",
-        confirmButtonColor: "#0E9F6E",
-        cancelButtonText: "ย้อนกลับ",
-        reverseButtons: true,
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: "ยืนยันสำเร็จ",
-            text: "",
-            icon: "success",
-            confirmButtonText: "ตกลง",
-            confirmButtonColor: "#0E9F6E",
-          });
-          if (!selectPromotion) {
+    const userData = localStorage.getItem("userData")
+    const userDataJson = JSON.parse(userData || "[]");
+    const isDisabledTime = disableTimeData.some(
+      range =>
+        (dayjs(combineTime).isAfter(dayjs.utc(range.start_time).subtract(7, 'hour')) ||
+          dayjs(combineTime).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'))) &&
+        dayjs(combineTime).isBefore(dayjs.utc(range.end_time).subtract(7, 'hour'))
+    );
 
-            const defaultPromotion = 1
-            const submitObject = {
-              store_id: store_id,
-              user_id: userDataJson.user_id,
-              table_booking_count: seat,
-              table_booking_status: "ยังไม่ถึงกำหนด",
-              table_booking_time: `${dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ss") + "Z"}`,
-              promotion_id: defaultPromotion
-            };
+    const openingHours = openTime.find(item => item.day === dayjs(date).format('dddd'));
+    const startTime = dayjs.utc(openingHours.start_time).hour();
+    const endTime = dayjs.utc(openingHours.end_time).hour();
+    const isStoreOpen = combineTime.hour() < startTime || combineTime.hour() >= endTime
 
-            console.log("active");
-            console.log(submitObject);
-            await createTableBooking(submitObject);
+    if (userData) {
+      if (date != null && time != null && seat != null && !isDisabledTime && !isStoreOpen ) {
+        Swal.fire({
+          title: "แน่ใจหรือว่าจะยืนยัน",
+          text: "โปรดตรวจสอบรายละเอียดการจอง",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "ยืนยัน",
+          confirmButtonColor: "#0E9F6E",
+          cancelButtonText: "ย้อนกลับ",
+          reverseButtons: true,
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "ยืนยันสำเร็จ",
+              text: "",
+              icon: "success",
+              confirmButtonText: "ตกลง",
+              confirmButtonColor: "#0E9F6E",
+            });
+            if (!selectPromotion) {
+
+              const defaultPromotion = 1
+              const submitObject = {
+                store_id: store_id,
+                user_id: userDataJson.user_id,
+                table_booking_count: seat,
+                table_booking_status: "ยังไม่ถึงกำหนด",
+                table_booking_time: `${dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ss") + "Z"}`,
+                promotion_id: defaultPromotion
+              };
+
+              console.log("active");
+              console.log(submitObject);
+              await createTableBooking(submitObject);
+              fetchData()
+            }
+            else {
+              const submitObject = {
+                store_id: store_id,
+                user_id: userDataJson.user_id,
+                table_booking_count: seat,
+                table_booking_status: "ยังไม่ถึงกำหนด",
+                table_booking_time: `${dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ss") + "Z"}`,
+                promotion_id: selectPromotion
+              };
+              console.log("active");
+              console.log(submitObject);
+              await createTableBooking(submitObject);
+              fetchData()
+            }
           }
-          else {
-            const submitObject = {
-              store_id: store_id,
-              user_id: userDataJson.user_id,
-              table_booking_count: seat,
-              table_booking_status: "ยังไม่ถึงกำหนด",
-              table_booking_time: `${dayjs(combineTime).format("YYYY-MM-DDTHH:mm:ss") + "Z"}`,
-              promotion_id: selectPromotion
-            };
-            console.log("active");
-          console.log(submitObject);
-          await createTableBooking(submitObject);
-          }
-        }
-      });
+        });
+      }
+      else {
+        Swal.fire({
+          title: "โปรดตรวจสอบรายละเอียดการจอง",
+          text: "โปรดตรวจสอบรายละเอียดการจอง",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "ยืนยัน",
+          confirmButtonColor: "#0E9F6E",
+          cancelButtonText: "ย้อนกลับ",
+          reverseButtons: true,
+          showConfirmButton: false
+        })
+      }
     }
     else {
-      Swal.fire({
-        title: "โปรดตรวจสอบรายละเอียดการจอง",
-        text: "โปรดตรวจสอบรายละเอียดการจอง",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "ยืนยัน",
-        confirmButtonColor: "#0E9F6E",
-        cancelButtonText: "ย้อนกลับ",
-        reverseButtons: true,
-        showConfirmButton: false
-      })
+      console.log("not login");
+      window.location.replace('/login')
     }
 
+
+  };
+
+  const shouldDisableDate = (date: Dayjs) => {
+    const day = date.day();
+    const isOpen = openTime.find((item) => item.day === date.format("dddd") && item.open_status);
+  
+    return !isOpen
   };
 
   const shouldDisableTime: TimePickerProps<Dayjs>['shouldDisableTime'] = (
@@ -252,10 +288,33 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
   ) => {
     console.log(value);
 
+    const isDisabledDate = disableTimeData.some(
+      range =>
+        dayjs(date).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'), 'day')
+    );
+
+    if (!isDisabledDate) {
+      console.log("date is not disabled");
+    } else {
+      const isDisabledTime = disableTimeData.some(
+        range =>
+          (dayjs(value).isAfter(dayjs.utc(range.start_time).subtract(7, 'hour')) ||
+            dayjs(value).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'))) &&
+          dayjs(value).isBefore(dayjs.utc(range.end_time).subtract(7, 'hour'))
+      );
+
+      console.log(isDisabledTime);
+
+      if (isDisabledTime) {
+        console.log("full booking");
+        return isDisabledTime;
+      }
+    }
+
 
     // Find the opening hours for the current day
     const openingHours = openTime.find(item => item.day === dayjs(date).format('dddd'));
-    console.log(openingHours);
+    // console.log(openingHours);
 
 
     // If no opening hours are defined for the current day, enable all times
@@ -305,6 +364,7 @@ export default function UserBooking({ seats, openTime, store_id, address }: { se
                     format="YYYY/MM/DD"
                     minDate={now}
                     value={date}
+                    shouldDisableDate={shouldDisableDate}
                     onChange={(newValue) => handleChangeTime(newValue)}
                   />
 
