@@ -100,16 +100,16 @@ export default function UserBooking({ seats, openTime, store_id, address, table_
     }
 
     const disableBookingTimeArray = [];
-        const disableBookingTimes = await CheckBookingTime(store_id, table_booking_num);
-        console.log(disableBookingTimes);
+    const disableBookingTimes = await CheckBookingTime(store_id, table_booking_num);
+    console.log(disableBookingTimes);
 
-        if (disableBookingTimes) {
-            for (const disableBookingTimeObject of disableBookingTimes) {
-                disableBookingTimeArray.push(disableBookingTimeObject);
-            }
-            setDisableTimeData(disableBookingTimeArray);
-            console.log(disableBookingTimeArray);
-        }
+    if (disableBookingTimes) {
+      for (const disableBookingTimeObject of disableBookingTimes) {
+        disableBookingTimeArray.push(disableBookingTimeObject);
+      }
+      setDisableTimeData(disableBookingTimeArray);
+      console.log(disableBookingTimeArray);
+    }
   }
 
   // const fetchDateTime = async () => {
@@ -187,20 +187,20 @@ export default function UserBooking({ seats, openTime, store_id, address, table_
   const handleButtonConfirm = async () => {
     const userData = localStorage.getItem("userData")
     const userDataJson = JSON.parse(userData || "[]");
-    const isDisabledTime = disableTimeData.some(
-      range =>
-        (dayjs(combineTime).isAfter(dayjs.utc(range.start_time).subtract(7, 'hour')) ||
-          dayjs(combineTime).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'))) &&
-        dayjs(combineTime).isBefore(dayjs.utc(range.end_time).subtract(7, 'hour'))
-    );
-
-    const openingHours = openTime.find(item => item.day === dayjs(date).format('dddd'));
-    const startTime = dayjs.utc(openingHours.start_time).hour();
-    const endTime = dayjs.utc(openingHours.end_time).hour();
-    const isStoreOpen = combineTime.hour() < startTime || combineTime.hour() >= endTime
 
     if (userData) {
-      if (date != null && time != null && seat != null && !isDisabledTime && !isStoreOpen ) {
+      const isDisabledTime = disableTimeData.some(
+        range =>
+          (dayjs(combineTime).isAfter(dayjs.utc(range.start_time).subtract(7, 'hour')) ||
+            dayjs(combineTime).isSame(dayjs.utc(range.start_time).subtract(7, 'hour'))) &&
+          dayjs(combineTime).isBefore(dayjs.utc(range.end_time).subtract(7, 'hour'))
+      );
+
+      const openingHours = openTime.find(item => item.day === dayjs(date).format('dddd'));
+      const startTime = dayjs.utc(openingHours.start_time).hour();
+      const endTime = dayjs.utc(openingHours.end_time).hour();
+      const isStoreOpen = combineTime.hour() < startTime || combineTime.hour() >= endTime
+      if (date != null && time != null && seat != null && !isDisabledTime && !isStoreOpen) {
         Swal.fire({
           title: "แน่ใจหรือว่าจะยืนยัน",
           text: "โปรดตรวจสอบรายละเอียดการจอง",
@@ -278,7 +278,7 @@ export default function UserBooking({ seats, openTime, store_id, address, table_
   const shouldDisableDate = (date: Dayjs) => {
     const day = date.day();
     const isOpen = openTime.find((item) => item.day === date.format("dddd") && item.open_status);
-  
+
     return !isOpen
   };
 
