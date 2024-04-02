@@ -275,6 +275,13 @@ export default function UserBooking({ seats, openTime, store_id, address, table_
 
   };
 
+  const shouldDisableDate = (date: Dayjs) => {
+    const day = date.day();
+    const isOpen = openTime.find((item) => item.day === date.format("dddd") && item.open_status);
+  
+    return !isOpen
+  };
+
   const shouldDisableTime: TimePickerProps<Dayjs>['shouldDisableTime'] = (
     value,
     view,
@@ -357,6 +364,7 @@ export default function UserBooking({ seats, openTime, store_id, address, table_
                     format="YYYY/MM/DD"
                     minDate={now}
                     value={date}
+                    shouldDisableDate={shouldDisableDate}
                     onChange={(newValue) => handleChangeTime(newValue)}
                   />
 

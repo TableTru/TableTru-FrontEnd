@@ -34,6 +34,7 @@ import {
     Select,
     FormControl,
     ListItemIcon,
+    Checkbox,
 
 
 } from "@mui/material";
@@ -67,36 +68,43 @@ const OpenTimes = [
         day: 'Monday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Tuesday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Wednesday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Thursday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Friday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Saturday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
         day: 'Sunday',
         start_time: '2024-02-23T08:00:00Z',
         end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
 ]
 
@@ -162,6 +170,16 @@ export default function CreateStore() {
         // console.log(formData.OpenTimes);
     };
 
+    const handleCheckBoxChange = (index) => {
+        const updatedOpenTimeData = [...openTimeData];
+        updatedOpenTimeData[index] = {
+            ...updatedOpenTimeData[index],
+            open_status: !updatedOpenTimeData[index].open_status,
+        };
+        setOpenTimeData(updatedOpenTimeData);
+    };
+
+
     const handleOpenTimeChange = (index: number, newValue: any) => {
         const newOpenTimes = openTimeData
         newOpenTimes[index].start_time = newValue.format('YYYY-MM-DDTHH:mm:ssZ');
@@ -180,6 +198,7 @@ export default function CreateStore() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         console.log(formData);
+        console.log(openTimeData);
 
         if (
             formData.store_name !== ""
@@ -322,13 +341,13 @@ export default function CreateStore() {
                         if (markerRef.current) {
                             markerRef.current.setMap(null); // เอาออกจากแผนที่
                         }
-                
+
                         // เพิ่ม Marker ใหม่
                         const newMarker = new google.maps.Marker({
                             position: location,
                             map: map,
                         });
-                
+
                         // เก็บ Marker ใหม่ลงใน ref
                         markerRef.current = newMarker;
                     }
@@ -788,28 +807,45 @@ export default function CreateStore() {
                                                 <div >
 
                                                     {openTimeData.map((item, index) => (
-                                                        <Box key={index} className="grid grid-cols-1 gap-4 md:grid-cols-3 gap-4">
-                                                            <p>{item.day}</p>
-                                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                <DemoContainer components={["TimePicker"]}>
-                                                                    <TimePicker
-                                                                        label="เวลาเปิด"
-                                                                        className={"w-full"}
-                                                                        value={dayjs.utc(item.start_time)}
-                                                                        onChange={(newValue) => handleOpenTimeChange(index, newValue)}
-                                                                    />
-                                                                </DemoContainer>
-                                                            </LocalizationProvider>
-                                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                <DemoContainer components={["TimePicker"]}>
-                                                                    <TimePicker
-                                                                        label="เวลาปิด"
-                                                                        className={"w-full"}
-                                                                        value={dayjs.utc(item.end_time)}
-                                                                        onChange={(newValue) => handleCloseTimeChange(index, newValue)}
-                                                                    />
-                                                                </DemoContainer>
-                                                            </LocalizationProvider>
+                                                        <Box key={index} >
+                                                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                                                                <Checkbox
+                                                                    size="small"
+                                                                    sx={{ height: '40px' }}
+                                                                    checked={item.open_status}
+                                                                    onClick={() => handleCheckBoxChange(index)}
+                                                                    inputProps={{ 'aria-label': 'controlled' }}
+                                                                />
+                                                                <Box className="grid grid-cols-1 gap-2 md:grid-cols-3 gap-4">
+                                                                    <p className="flex item-center text-center">{item.day}</p>
+                                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                        <DemoContainer components={["TimePicker"]}>
+                                                                            <TimePicker
+                                                                                label="เวลาเปิด"
+                                                                                className={"w-full"}
+                                                                                disabled={!item.open_status}
+                                                                                value={dayjs.utc(item.start_time)}
+                                                                                onChange={(newValue) => handleOpenTimeChange(index, newValue)}
+                                                                            />
+                                                                        </DemoContainer>
+                                                                    </LocalizationProvider>
+                                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                        <DemoContainer components={["TimePicker"]}>
+                                                                            <TimePicker
+                                                                                label="เวลาปิด"
+                                                                                className={"w-full"}
+                                                                                disabled={!item.open_status}
+                                                                                value={dayjs.utc(item.end_time)}
+                                                                                onChange={(newValue) => handleCloseTimeChange(index, newValue)}
+                                                                            />
+                                                                        </DemoContainer>
+                                                                    </LocalizationProvider>
+                                                                </Box>
+                                                            </Box>
+
+
+
+
                                                         </Box>
 
                                                     ))}

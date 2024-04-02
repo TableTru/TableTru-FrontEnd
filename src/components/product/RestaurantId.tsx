@@ -23,53 +23,46 @@ import { initialItems } from "@/data/promotion"
 
 const openTime = [
     {
-        day: "Monday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T08:00:00Z",
-        store_id: 1,
+        day: 'Monday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: false
     },
     {
-        day: "Tuesday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Tuesday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
-        day: "Wednesday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Wednesday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
-        day: "Thursday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Thursday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
-        day: "Friday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Friday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: true
     },
     {
-        day: "Saturday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Saturday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: false
     },
     {
-        day: "Sunday",
-        end_time: "2024-02-23T21:00:00Z",
-        openTime_id: 1,
-        start_time: "2024-02-23T09:00:00Z",
-        store_id: 1,
+        day: 'Sunday',
+        start_time: '2024-02-23T08:00:00Z',
+        end_time: '2024-02-23T22:00:00Z',
+        open_status: false
     },
 ]
 
