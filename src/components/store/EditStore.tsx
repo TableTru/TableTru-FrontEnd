@@ -86,7 +86,7 @@ const storeTemp: object =
     sum_rating: 3.25,
     latitude: 13.8920878,
     longitude: 100.5267991,
-    location: 'บางตลาด อำเภอปากเกร็ด นนทบุรี 11120 ประเทศไทย',
+    location: 'อิมแพคเมืองทองธานี Hall7-8 ถนน ถนนป๊อปปูล่า 3 ตำบลบ้านใหม่ อำเภอปากเกร็ด นนทบุรี ประเทศไทย',
     OpenTimes: [
         {
             day: 'Monday',
@@ -196,11 +196,17 @@ export default function EditStore() {
         max_people_booking: 0,
         sum_rating: null,
         store_description: '',
-        latitude: 13.8920878,
-        longitude: 100.5267991,
-        location: '50 ถนน งามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900 ประเทศไทย',
+        latitude: 13.7563,
+        longitude: 100.5018,
+        location: 'กรุงเทพมหานคร',
         OpenTimes: [],
     })
+
+    const mapRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [map, setMap] = useState<google.maps.Map | null>(null);
+    const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+    const markerRef = useRef(null);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -374,6 +380,51 @@ export default function EditStore() {
             setDefaultName(data.store_name)
             console.log(data);
         }
+
+        const newLocation = {
+            location: data.location,
+                latitude: data.latitude,
+                longitude: data.longitude,
+        }
+
+        loader.load().then(() => {
+            const google = window.google;
+            if (mapRef.current && !map) {
+                const geolocation = navigator.geolocation;
+                const newMap = new google.maps.Map(mapRef.current, {
+                    center: { lat: newLocation.latitude, lng: newLocation.longitude }, // ตำแหน่งเริ่มต้นที่กรุงเทพมหานคร,
+                    zoom: 12,
+                });
+
+                const geocoder = new google.maps.Geocoder();
+                const latLng = new google.maps.LatLng(newLocation.latitude, newLocation.longitude);
+                geocoder.geocode({ 'location': latLng }, (results, status) => {
+                    if (status === 'OK') {
+                        if (results[0]) {
+                            if (markerRef.current) {
+                                markerRef.current.setMap(null); // เอาออกจากแผนที่
+                            }
+
+                            const newMarker = new google.maps.Marker({
+                                map: newMap,
+                                position: latLng,
+                            });
+                            markerRef.current = newMarker;
+
+                            setMap(newMap);
+                            console.log(results[0].formatted_address);
+                            inputRef.current.value = results[0].formatted_address;
+                        } else {
+                            console.log('No results found');
+                        }
+                    } else {
+                        console.error('Geocoder failed due to: ' + status);
+                    }
+                });
+            }
+        });
+        setLocationData(newLocation)
+
         const menuImage = await GetStoreImageByType(userDataJson.store_id, "ภาพเมนู")
         const subImage = await GetStoreImageByType(userDataJson.store_id, "ภาพประกอบ")
 
@@ -446,30 +497,24 @@ export default function EditStore() {
             subImageArray.push(newSubImage)
 
         }
-        setMenuData(menuImageArray)
-        setFormData(storeTemp)
-        setSubImageData(subImageArray)
-        setMainImage("https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FFc71O5zaIAEsFzE.png?alt=media&token=781cb1e2-2044-4bf2-8038-b8b841413915")
-    };
 
-    const mapRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [map, setMap] = useState<google.maps.Map | null>(null);
-    const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
-    const markerRef = useRef(null);
+        const newLocation = {
+            location: storeTemp.location,
+                latitude: storeTemp.latitude,
+                longitude: storeTemp.longitude,
+        }
 
-    useEffect(() => {
         loader.load().then(() => {
             const google = window.google;
             if (mapRef.current && !map) {
                 const geolocation = navigator.geolocation;
                 const newMap = new google.maps.Map(mapRef.current, {
-                    center: { lat: formData.latitude, lng: formData.longitude }, // ตำแหน่งเริ่มต้นที่กรุงเทพมหานคร,
+                    center: { lat: newLocation.latitude, lng: newLocation.longitude }, // ตำแหน่งเริ่มต้นที่กรุงเทพมหานคร,
                     zoom: 12,
                 });
 
                 const geocoder = new google.maps.Geocoder();
-                const latLng = new google.maps.LatLng(formData.latitude, formData.longitude);
+                const latLng = new google.maps.LatLng(newLocation.latitude, newLocation.longitude);
                 geocoder.geocode({ 'location': latLng }, (results, status) => {
                     if (status === 'OK') {
                         if (results[0]) {
@@ -494,6 +539,18 @@ export default function EditStore() {
                     }
                 });
             }
+        });
+        setLocationData(newLocation)
+        setMenuData(menuImageArray)
+        setFormData(storeTemp)
+        setSubImageData(subImageArray)
+        setMainImage("https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2FFc71O5zaIAEsFzE.png?alt=media&token=781cb1e2-2044-4bf2-8038-b8b841413915")
+    };
+
+    useEffect(() => {
+        loader.load().then(() => {
+            const google = window.google;
+           
             if (inputRef.current && google) {
 
                 const autocomplete = new google.maps.places.Autocomplete(inputRef.current);
