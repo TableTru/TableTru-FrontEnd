@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Appbar from "@/components/HeaderAppBar";
 import RestaurantCard from "@/components/cards/Restaurantcard";
+import RestaurantcardPreview from '@/components/cards/RestaurantcardPreview'
 import CardHomePage from "@/components/CardSelected";
 import CategoriesScrollCards from "@/components/cards/active/HorizontalScrollCards";
 import { Button } from "@nextui-org/react";
@@ -147,7 +148,8 @@ export default function Home() {
             id="Projects"
             className="w-fit flex item-center justify-around center mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center gap-y-20 gap-x-14 mt-10 mb-5"
           >
-            <RestaurantCard />
+            {/* <RestaurantCard /> */}
+            <RestaurantcardPreview/>
 
           </section>
           <div className="flex item-center justify-center gap-4 py-8">

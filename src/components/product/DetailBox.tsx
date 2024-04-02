@@ -108,6 +108,8 @@ export default function DetailBox({ description, openTime, review, store_id, sum
     const [comment, setComment] = useState<string>('');
     const [rating, setRating] = useState<number | null>(0);
     const [menuImage, setMenuImage] = useState<any>(menuTemp);
+    const [isLogin, setIsLogin] = useState(false);
+    const [userData, setUserData] = useState()
 
     const [reviewData, setReviewData] = useState([{
         rating_score: 3,
@@ -196,6 +198,16 @@ export default function DetailBox({ description, openTime, review, store_id, sum
             setMenuImage(ImageArray);
             console.log(ImageArray);
         }
+
+        const userData = localStorage.getItem("userData")
+        const userDataJson = JSON.parse(userData || "[]");
+        if (userData) {
+            console.log(userDataJson);
+            setIsLogin(true)
+            setUserData(userDataJson)
+        } else {
+            console.log("not login");
+        }
     }
 
     const fetchTemp = async () => {
@@ -264,7 +276,11 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                     <div>
                                         <form onSubmit={handleSubmit}>
                                             <div className={"my-4 flex flex-warp "}>
-                                                <Avatar alt="Profile" src="/static/images/avatar/1.jpg" />
+                                                {isLogin ? (
+                                                    <Avatar alt="Profile" src={`${userData.profile_image}`} />
+                                                ) : (
+                                                    <Avatar alt="Profile" src="https://firebasestorage.googleapis.com/v0/b/fir-upload-file-8e06e.appspot.com/o/image%2F9.png?alt=media&token=bce8dee8-fb5a-4764-aae2-be8fb794d216" />
+                                                )}
                                                 <div className={"mx-4 flex-cols"}>
                                                     <Typography component="h3">ให้คะแนนรีวิว</Typography>
 
@@ -311,9 +327,9 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                                                     secondary={
                                                                         <>
                                                                             <Rating name="read-only" value={item.rating_score} readOnly />
-                                                                            <br/>
+                                                                            <br />
                                                                             <Typography variant={"body2"}>
-                                                                            {`${item?.review_comment}`}
+                                                                                {`${item?.review_comment}`}
                                                                             </Typography>
                                                                         </>}
                                                                     sx={{ flexWrap: 'nowrap' }}

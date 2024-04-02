@@ -178,6 +178,7 @@ export default function EditStore() {
     const [mainProgressUpload, setMainProgressUpload] = useState(0)
 
     const [isLoading, setIsLoading] = useState(false);
+    const [createError, setCreateError] = useState('')
 
     const [defaultName, setDefaultName] = useState('')
     const [removeImage, setRemoveImage] = useState<number[]>([])
@@ -304,7 +305,7 @@ export default function EditStore() {
                     window.location.replace('/store');
                 }, 5000); // 5000 milliseconds = 5 seconds
             } else {
-                // setCreateError("มีร้านค้าชื่อนี้แล้ว")
+                setCreateError("มีร้านค้าชื่อนี้แล้ว")
                 console.log("error");
             }
         } else {
@@ -1043,6 +1044,10 @@ export default function EditStore() {
                                             </Grid>
                                         </AccordionDetails>
                                     </Accordion>
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle1" color="#ff1744" >{createError}</Typography>
                                 </Grid>
                             </Grid>
                             <Link href="/store">

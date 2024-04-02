@@ -32,7 +32,7 @@ interface User {
   password: string;
   profile_image: string;
   user_status: string;
-  store_id: number| null;
+  store_id: number | null;
   email: string;
   phone_num: string;
   latitude: number;
@@ -127,16 +127,19 @@ export default function SignUp() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    
+
     const checkRegisterRes = await getRegisterCheck(userData.email)
     console.log(!checkRegisterRes);
-    if(!checkRegisterRes) {
-      await createUser(userData)
-      window.location.replace('/')
-    } else{
-      console.log("already have user");
-      setCreateError("อีเมล์นี้อยู่ในบัญชีอยู่แล้ว กรุณาเปลี่ยนอีเมล์")
+    if (userData.username != '' && userData.password != '' && userData.phone_num != '') {
+      if (!checkRegisterRes) {
+        await createUser(userData)
+        window.location.replace('/')
+      } else {
+        console.log("already have user");
+        setCreateError("มีอีเมล์นี้อยู่ในบัญชีแล้ว")
+      }
     }
+
   };
 
   return (
@@ -197,9 +200,6 @@ export default function SignUp() {
                 value={userData.email}
                 onChange={handleChange}
               />
-              <Grid item xs={12}>
-                <Typography variant="subtitle1" color="#ff1744">{createError}</Typography>
-              </Grid>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -226,6 +226,9 @@ export default function SignUp() {
                 </div>
               </div>
             </Grid>
+            <Grid item xs={12}>
+                <Typography variant="subtitle1" color="#ff1744">{createError}</Typography>
+              </Grid>
           </Grid>
           <Button
             type="submit"
