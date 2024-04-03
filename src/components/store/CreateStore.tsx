@@ -201,7 +201,7 @@ export default function CreateStore() {
         console.log(openTimeData);
 
         if (
-            formData.store_name !== ""
+            formData.store_name !== "" && formData.location != ""
         ) {
             const checkStoreNameRes = await checkStoreByName(formData.store_name)
             if (!checkStoreNameRes) {
