@@ -170,7 +170,7 @@ export default function RestaurantId() {
                                     />
                                 </Stack>
 
-                                <UserBooking seats={storeData.table_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)} address={storeData.location} table_booking_num={storeData.table_booking}/>
+                                <UserBooking seats={storeData.max_people_booking} openTime={storeData.OpenTimes} store_id={Number(params.restaurantId)} address={storeData.location} table_booking_num={storeData.table_booking}/>
 
                             </div>
                         </div>
