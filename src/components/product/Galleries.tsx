@@ -86,12 +86,12 @@ export default function Galleries({ store_id }: { store_id: number }) {
     }, []);
 
     const itemTemplate = (item: any) => {
-        return <img src={item.store_image_name} alt={item.store_image_id} style={{ width: '100%', height: '300px', display: 'block' }} />;
+        return <img src={item.store_image_name} alt={item.store_image_id} style={{  height: '300px', display: 'block' }} />;
     };
 
 
     const thumbnailTemplate = (item: any) => {
-        return <img src={item.store_image_name} alt={item.store_image_id} style={{ width: '100%', height: '100px', display: 'block' }}/>
+        return <img src={item.store_image_name} alt={item.store_image_id} style={{ height: '100px', display: 'block' }}/>
     }
 
     return (

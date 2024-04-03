@@ -99,7 +99,7 @@ const storeBookingTemp: StoreTableBooking[] = [
 export default function TableBooking() {
     const [value, setValue] = useState('1');
     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric',timeZone: 'UTC' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', timeZone: 'UTC' };
 
     const [onGoingData, setOnGoingData] = useState<object[]>([])
     const [historicalData, setHistoricalData] = useState<object[]>([])
@@ -205,7 +205,7 @@ export default function TableBooking() {
         const updatedStoreBookingTemp = onGoingData.filter(booking => booking.table_booking_id !== tablebooking.table_booking_id);
         setOnGoingData(updatedStoreBookingTemp);
         console.log(updateData);
-        
+
 
         const updateBookingRes = editTableBooking(tablebooking.table_booking_id, updateData)
         console.log(updateBookingRes);
@@ -283,6 +283,10 @@ export default function TableBooking() {
                                                     <Typography variant="subtitle1">เบอร์โทรศัพท์: {item.phone_number}</Typography>
                                                     <Typography variant="subtitle1">จำนวนคน: {item.table_booking_count}</Typography>
                                                     <Typography variant="subtitle1">เวลาจอง: {item.table_booking_time.toLocaleDateString(undefined, timeOptions)}</Typography>
+                                                    {item.promotion_id != 1 ? (
+                                                        <Typography>โปรโมชั่น: {item.promotion_name}</Typography>
+                                                    ) : (null)}
+
                                                 </Box>
                                             </AccordionSummary>
                                             {/* <AccordionDetails>
