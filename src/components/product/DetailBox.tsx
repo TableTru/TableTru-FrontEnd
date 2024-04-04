@@ -165,7 +165,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                 const ratingCount = await GetStoreRatingCount(store_id, true)
 
                 const updateStore = {
-                    sum_rating: ((sum_rating * (ratingCount - 1)) + rating) / ratingCount
+                    sum_rating: Number((((sum_rating * (ratingCount - 1)) + rating) / ratingCount).toFixed(2))
                 }
                 await editStore(store_id, updateStore)
             }
@@ -270,7 +270,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                             </div>
                                         </div>
 
-                                        <h3 className="text-5xl pl-4 py-2 text-center mg:pl-4">{storeData.sum_rating.toFixed(2)}</h3>
+                                        <h3 className="text-5xl pl-4 py-2 text-center mg:pl-4">{storeData.sum_rating}</h3>
                                     </div>
                                     <Divider>การตอบกลับ</Divider>
                                     <div>
@@ -304,7 +304,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                                         placeholder="Write a comment..." required />
                                                 </div>
                                                 <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-                                                    <button type="submit" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-900 hover:bg-red-800">
+                                                    <button disabled={!isLogin} type="submit" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-900 hover:bg-red-800">
                                                         Post comment
                                                     </button>
                                                 </div>
