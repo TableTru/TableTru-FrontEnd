@@ -159,7 +159,7 @@ export default function RestaurantId() {
                                         <a
                                             className="mb-4 text-xs dark:text-gray-400 dark:hover:text-gray-300 lg:mb-0"
                                         >
-                                            {storeData.sum_rating} reviews
+                                            {storeData.sum_rating.toFixed(2)} Stars
                                         </a>
                                     </div>
                                 </div>

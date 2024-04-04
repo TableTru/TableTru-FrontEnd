@@ -104,7 +104,7 @@ export default function Restaurantcard() {
   const fetchData = async () => {
     const storeArray = [];
     // const data = await getStorePreview();
-    const data = await getAllStore(); 
+    const data = await getAllStore();
     console.log(data);
 
     if (data) {
@@ -124,8 +124,8 @@ export default function Restaurantcard() {
   return (
     <>
       {storeData.map((item) => (
-        <Link href={`/restaurant/${item.store_id}`}  key={item.store_id}>
-          <Card sx={{ maxWidth: 345, width:345 }}>
+        <Link href={`/restaurant/${item.store_id}`} key={item.store_id}>
+          <Card sx={{ maxWidth: 345, width: 345 }}>
             <CardActionArea>
               <CardMedia
                 component="img"
@@ -140,13 +140,23 @@ export default function Restaurantcard() {
                   {item.store_name}
                 </Typography>
                 <Stack direction="row" spacing={1}>
-                <Rating name="read-only" value={item.sum_rating} readOnly />
-                <Typography component="legend">{item.sum_rating} reviews</Typography>
+                  <Rating name="read-only" value={item.sum_rating} readOnly />
+
+                  {item.sum_rating > 0 ? (
+                    <div className="bg-zinc-50 min-h-full">
+                      <Typography component="legend">{item.sum_rating.toFixed(2)} Stars</Typography>
+                    </div>
+                  ) : (
+                    <div className="bg-zinc-50 min-h-full">
+                      <Typography component="legend">{item.sum_rating} Stars</Typography>
+                    </div>
+                  )}
+                {/* <Typography component="legend">{item.sum_rating.toFixed(2)} reviews</Typography> */}
                 </Stack>
               </CardContent>
 
-              <CardActions sx={{ my:2 }}>
-                  <Chip icon={<RestaurantIcon />} label={item.category_name} />
+              <CardActions sx={{ my: 2 }}>
+                <Chip icon={<RestaurantIcon />} label={item.category_name} />
               </CardActions>
             </CardActionArea>
           </Card>

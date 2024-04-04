@@ -270,7 +270,7 @@ export default function DetailBox({ description, openTime, review, store_id, sum
                                             </div>
                                         </div>
 
-                                        <h3 className="text-5xl pl-4 py-2 text-center mg:pl-4">{storeData.sum_rating}</h3>
+                                        <h3 className="text-5xl pl-4 py-2 text-center mg:pl-4">{storeData.sum_rating.toFixed(2)}</h3>
                                     </div>
                                     <Divider>การตอบกลับ</Divider>
                                     <div>

@@ -138,7 +138,15 @@ export default function RestaurantcardPreview() {
                 </Typography>
                 <Stack direction="row" spacing={1}>
                 <Rating name="read-only" value={item.sum_rating} readOnly />
-                <Typography component="legend">{item.sum_rating} reviews</Typography>
+                {item.sum_rating > 0 ? (
+                    <div className="bg-zinc-50 min-h-full">
+                      <Typography component="legend">{item.sum_rating.toFixed(2)} Stars</Typography>
+                    </div>
+                  ) : (
+                    <div className="bg-zinc-50 min-h-full">
+                      <Typography component="legend">{item.sum_rating} Stars</Typography>
+                    </div>
+                  )}
                 </Stack>
               </CardContent>
 
